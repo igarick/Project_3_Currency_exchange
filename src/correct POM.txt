@@ -1,0 +1,111 @@
+Что нужно исправить и добавить
+1. ❌ Удалить устаревшую зависимость JUnit 3.8.1
+xml
+Копировать
+Редактировать
+<dependency>
+  <groupId>junit</groupId>
+  <artifactId>junit</artifactId>
+  <version>3.8.1</version>
+  <scope>test</scope>
+</dependency>
+📌 Это очень старая версия. Можно либо удалить, либо заменить на JUnit 5 позже, если нужны тесты.
+
+2. ✅ Добавить необходимые зависимости
+Добавь библиотеки, которые понадобятся:
+
+xml
+Копировать
+Редактировать
+<dependencies>
+    <!-- Servlet API -->
+    <dependency>
+        <groupId>jakarta.servlet</groupId>
+        <artifactId>jakarta.servlet-api</artifactId>
+        <version>5.0.0</version>
+        <scope>provided</scope>
+    </dependency>
+
+    <!-- JSON -->
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.10.1</version>
+    </dependency>
+
+    <!-- SQLite JDBC (или другую, если выберешь другую БД) -->
+    <dependency>
+        <groupId>org.xerial</groupId>
+        <artifactId>sqlite-jdbc</artifactId>
+        <version>3.43.2.0</version>
+    </dependency>
+</dependencies>
+3. ✅ Добавить Java-версию (17 — рекомендуемая)
+xml
+Копировать
+Редактировать
+<properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+</properties>
+4. 🔁 Итоговый pom.xml (после доработки)
+xml
+Копировать
+Редактировать
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.example</groupId>
+  <artifactId>Project_3_Currency</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>Project_3_Currency Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>5.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.43.2.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>Project_3_Currency</finalName>
+  </build>
+</project>
+📌 Что делать дальше
+Убедись, что в структуре есть src/main/webapp/WEB-INF/web.xml
+
+Создай пакет org.example.servlet и добавь сервлет-классы
+
+Подключи Tomcat локально для запуска и тестирования
+
+Создай БД-файл currency.db (или другой), положи в resources/
+
+Если хочешь — могу выдать шаблон сервлета и web.xml, чтобы ты быстрее начал разработку.
