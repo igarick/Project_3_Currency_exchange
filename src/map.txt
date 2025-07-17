@@ -1,0 +1,179 @@
+ 1. Подготовка проекта
+🔹 Создай Java Maven/Gradle проект
+
+🔹 Структура:
+
+css
+Копировать
+Редактировать
+src/
+  main/
+    java/
+      org.example/
+    webapp/
+      WEB-INF/
+        web.xml
+🔹 Добавь зависимости:
+
+sqlite-jdbc
+
+org.json (или Gson / Jackson)
+
+🔹 Установи сервер: Tomcat (или Jetty, если через плагин)
+
+✅ 2. Спроектируй базу данных
+🔸 Таблица currencies:
+
+sql
+Копировать
+Редактировать
+CREATE TABLE currencies (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    code TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL
+);
+🔸 Таблица exchange_rates:
+
+sql
+Копировать
+Редактировать
+CREATE TABLE exchange_rates (
+    from_currency TEXT,
+    to_currency TEXT,
+    rate REAL NOT NULL,
+    PRIMARY KEY (from_currency, to_currency),
+    FOREIGN KEY (from_currency) REFERENCES currencies(code),
+    FOREIGN KEY (to_currency) REFERENCES currencies(code)
+);
+💾 Сохрани в файл: currency.db
+
+✅ 3. Создай модели (Model)
+Классы:
+
+java
+Копировать
+Редактировать
+public class Currency {
+    private String code;
+    private String name;
+}
+
+public class ExchangeRate {
+    private String fromCurrency;
+    private String toCurrency;
+    private double rate;
+}
+✅ 4. Реализуй слой доступа к БД (DAO / Repository)
+🔸 CurrencyRepository с методами:
+
+findAll()
+
+findByCode(String)
+
+insert(Currency)
+
+update(...)
+
+🔸 ExchangeRateRepository:
+
+getRate(from, to)
+
+setRate(from, to, rate)
+
+getAllRates()
+
+Используй JDBC + SQLite.
+
+✅ 5. Реализуй сервисы (Service)
+🔸 CurrencyService — логика вокруг валют
+
+🔸 ExchangeService — логика конвертации:
+
+java
+Копировать
+Редактировать
+public double convert(String from, String to, double amount)
+✅ 6. Создай сервлеты (Controllers)
+🔸 CurrencyServlet:
+
+GET /currencies → список
+
+POST /currencies → добавить валюту
+
+🔸 ExchangeRateServlet:
+
+GET /rates → все курсы
+
+POST /rates → добавить/обновить курс
+
+🔸 ConvertServlet:
+
+GET /convert?from=USD&to=EUR&amount=100
+
+✅ 7. Пропиши web.xml
+xml
+Копировать
+Редактировать
+<web-app>
+    <servlet>
+        <servlet-name>CurrencyServlet</servlet-name>
+        <servlet-class>org.example.CurrencyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CurrencyServlet</servlet-name>
+        <url-pattern>/currencies</url-pattern>
+    </servlet-mapping>
+    ...
+</web-app>
+✅ 8. Форматируй JSON-ответы
+Используй org.json, Gson, Jackson — по желанию
+
+Не пиши JSON вручную
+
+✅ 9. Обрабатывай ошибки и HTTP-ответы
+200 — OK
+
+201 — Created
+
+400 — Bad request
+
+404 — Not found
+
+500 — Server error
+
+✅ 10. Протестируй через Postman или curl
+GET http://localhost:8080/convert?from=USD&to=EUR&amount=100
+
+POST /currencies с JSON:
+
+json
+Копировать
+Редактировать
+{
+  "code": "USD",
+  "name": "US Dollar"
+}
+✅ 11. (Дополнительно)
+✏️ Логирование (System.out.println или java.util.logging)
+
+🧪 Напиши юнит-тесты для CurrencyService и ExchangeService
+
+📦 Сделай .war и задеплой на Tomcat
+
+🏁 Готовая структура кода:
+css
+Копировать
+Редактировать
+src/main/java/org.example/
+├── model/
+│   ├── Currency.java
+│   └── ExchangeRate.java
+├── dao/
+│   ├── CurrencyRepository.java
+│   └── ExchangeRateRepository.java
+├── service/
+│   └── ExchangeService.java
+├── servlet/
+│   ├── CurrencyServlet.java
+│   ├── ExchangeRateServlet.java
+│   └── ConvertServlet.java
