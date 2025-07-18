@@ -1,0 +1,160 @@
+Отличный вопрос. Да, ты абсолютно прав: в IntelliJ IDEA Community Edition (CE) нет встроенной поддержки Tomcat через графический интерфейс, в отличие от Ultimate.
+Но ты всё равно можешь полностью работать с Tomcat — просто вручную (через Maven и запуск вне IntelliJ).
+
+💡 Что мы сделаем
+Создадим Maven-проект WAR-типа, подключим jakarta.servlet, напишем простый Servlet, соберём .war, положим его в webapps Tomcat и запустим. Всё из Community Edition — работает на 100%.
+
+🔧 Пошаговая настройка Tomcat + IntelliJ CE
+✅ Шаг 1: Создай Maven Web-проект
+В IntelliJ CE:
+
+File → New → Project
+
+Слева выбери Maven
+
+Поставь галку Create from archetype
+
+Выбери maven-archetype-webapp
+(если его нет — нажми "Add Archetype" и добавь вручную):
+
+makefile
+Копировать
+Редактировать
+GroupId: org.apache.maven.archetypes
+ArtifactId: maven-archetype-webapp
+Version: 1.4
+Введи:
+
+GroupId: org.example
+
+ArtifactId: currency-exchange
+
+Packaging: будет war
+
+Нажми Finish — IntelliJ создаст каркас Web-проекта.
+
+✅ Шаг 2: Обнови pom.xml
+Открой pom.xml и замени содержимое на следующее:
+
+xml
+Копировать
+Редактировать
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>currency-exchange</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- Для сервлетов -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
+✅ Шаг 3: Создай сервлет и структуру
+Создай папки, если их нет:
+
+css
+Копировать
+Редактировать
+src
+└── main
+    ├── java
+    └── webapp
+        └── WEB-INF
+            └── web.xml
+Создай класс-сервлет:
+
+java
+Копировать
+Редактировать
+package org.example;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+
+public class HelloServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        resp.getWriter().println("Привет, Tomcat!");
+    }
+}
+Создай web.xml:
+
+xml
+Копировать
+Редактировать
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+         https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <servlet>
+        <servlet-name>hello</servlet-name>
+        <servlet-class>org.example.HelloServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>hello</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+</web-app>
+✅ Шаг 4: Собери проект
+Открой терминал и собери .war:
+
+bash
+Копировать
+Редактировать
+mvn clean package
+Результат: target/currency-exchange.war
+
+✅ Шаг 5: Подключи к Tomcat
+Скачай Tomcat 11 (https://tomcat.apache.org/download-11.cgi) и распакуй, например, в C:\tomcat11
+
+Скопируй .war:
+
+bash
+Копировать
+Редактировать
+copy target\currency-exchange.war C:\tomcat11\webapps\
+Запусти Tomcat:
+
+bash
+Копировать
+Редактировать
+cd C:\tomcat11\bin
+startup.bat
+Открой в браузере:
+
+📌 http://localhost:8080/currency-exchange/hello
+
+✅ Готово!
+Ты работаешь в IntelliJ CE и деплоишь на Tomcat без встроенного плагина. Это ручной способ, но он полностью аналогичен продакшен-развертыванию.
+
+🛠 Альтернатива: автоматизация
+Можно создать .bat или .sh скрипт:
+
+bash
+Копировать
+Редактировать
+mvn clean package ^
+&& copy target\currency-exchange.war C:\tomcat11\webapps\ ^
+&& C:\tomcat11\bin\startup.bat
