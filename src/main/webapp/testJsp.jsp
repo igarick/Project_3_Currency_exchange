@@ -1,4 +1,5 @@
-<%@ page import="java.util.Date" %><%--
+
+<%--
   Created by IntelliJ IDEA.
   User: Игорь
   Date: 20.07.2025
@@ -11,12 +12,6 @@
     <title>First Jsp</title>
   </head>
   <body>
-    <h1>First Jsp</h1>
-    <p>
-      <% for (int i = 0; i < 2; i++) {
-          out.println("<p>" + "hi my friend" + i + "</p>");
-          }
-      %>
-    </p>
+    <h1>Testing Jsp</h1>
   </body>
 </html>

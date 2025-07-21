@@ -15,9 +15,18 @@
 
   <servlet-mapping>
     <servlet-name>FirstServlet</servlet-name>
-    <url-pattern>/hello</url-pattern>
+    <url-pattern>/test-servlet</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>firstJsp</servlet-name>
+    <jsp-file>/testJsp.jsp</jsp-file>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>firstJsp</servlet-name>
+    <url-pattern>/hello-jsp</url-pattern>
+  </servlet-mapping>
 
   <display-name>Archetype Created Web Application</display-name>
 </web-app>
