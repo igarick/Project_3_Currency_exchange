@@ -12,7 +12,6 @@
     <servlet-name>FirstServlet</servlet-name>
     <servlet-class>FirstServlet</servlet-class>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>FirstServlet</servlet-name>
     <url-pattern>/test-servlet</url-pattern>
@@ -22,10 +21,36 @@
     <servlet-name>firstJsp</servlet-name>
     <jsp-file>/testJsp.jsp</jsp-file>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>firstJsp</servlet-name>
     <url-pattern>/hello-jsp</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SetCookiesServlet</servlet-name>
+    <servlet-class>SetCookiesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SetCookiesServlet</servlet-name>
+    <url-pattern>/set-cookies</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>1</servlet-name>
+    <servlet-class>GetCookiesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>1</servlet-name>
+    <url-pattern>/get-cookies</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DeleteCookiesServlet</servlet-name>
+    <servlet-class>DeleteCookiesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteCookiesServlet</servlet-name>
+    <url-pattern>/delete-cookies</url-pattern>
   </servlet-mapping>
 
   <display-name>Archetype Created Web Application</display-name>
