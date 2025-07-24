@@ -53,5 +53,14 @@
     <url-pattern>/delete-cookies</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>LibraryServlet</servlet-name>
+    <servlet-class>LibraryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LibraryServlet</servlet-name>
+    <url-pattern>/library</url-pattern>
+  </servlet-mapping>
+
   <display-name>Archetype Created Web Application</display-name>
 </web-app>
