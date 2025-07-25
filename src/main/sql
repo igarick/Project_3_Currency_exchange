@@ -1,0 +1,27 @@
+CREATE TABLE Currencies (
+          ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,
+          Code varchar(30) NOT NULL UNIQUE,
+          FullName varchar(30) not null ,
+          Sign varchar(5) not null
+      )
+      Если таблица уже содержит такие Code, и они уникальны:
+      Ты получишь ошибку UNIQUE constraint failed. Чтобы избежать этого:
+
+      Вариант 1 — заменить на INSERT OR IGNORE
+      sql
+      Копировать
+      Редактировать
+      INSERT OR IGNORE INTO Currencies (Code, FullName, Sign)
+      VALUES
+        ('USD', 'United States Dollar', '$'),
+        ('EUR', 'Euro', '€');
+      Такая форма пропустит строки, которые нарушают ограничение UNIQUE.
+
+      Вариант 2 — использовать INSERT OR REPLACE
+      sql
+      Копировать
+      Редактировать
+      INSERT OR REPLACE INTO Currencies (Code, FullName, Sign)
+      VALUES
+        ('USD', 'US Dollar', '$');
+      Такая форма перезапишет строку с тем же Code.

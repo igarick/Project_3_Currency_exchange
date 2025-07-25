@@ -10,7 +10,7 @@
          version="6.0">
   <servlet>
     <servlet-name>FirstServlet</servlet-name>
-    <servlet-class>FirstServlet</servlet-class>
+    <servlet-class>FirstServlet_1</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>FirstServlet</servlet-name>
@@ -28,7 +28,7 @@
 
   <servlet>
     <servlet-name>SetCookiesServlet</servlet-name>
-    <servlet-class>SetCookiesServlet</servlet-class>
+    <servlet-class>SetCookiesServlet_1</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>SetCookiesServlet</servlet-name>
@@ -37,7 +37,7 @@
 
   <servlet>
     <servlet-name>1</servlet-name>
-    <servlet-class>GetCookiesServlet</servlet-class>
+    <servlet-class>GetCookiesServlet_1</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>1</servlet-name>
@@ -46,7 +46,7 @@
 
   <servlet>
     <servlet-name>DeleteCookiesServlet</servlet-name>
-    <servlet-class>DeleteCookiesServlet</servlet-class>
+    <servlet-class>DeleteCookiesServlet_1</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DeleteCookiesServlet</servlet-name>
@@ -55,7 +55,7 @@
 
   <servlet>
     <servlet-name>LibraryServlet</servlet-name>
-    <servlet-class>LibraryServlet</servlet-class>
+    <servlet-class>LibraryServlet_1</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LibraryServlet</servlet-name>
