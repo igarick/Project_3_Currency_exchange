@@ -1,5 +1,7 @@
 package logic;
 
+import dao.CurrencyDao;
+import entities.Currency;
 import logic.utils.ConnectionManager;
 
 import java.sql.Connection;
@@ -9,6 +11,18 @@ import java.util.List;
 
 public class JdbcRunner {
     public static void main(String[] args) throws SQLException {
+        CurrencyDao currencyDao = CurrencyDao.getInstance();
+
+        Currency currency = new Currency();
+        currency.setCode("51234");
+        currency.setFullName("51234");
+        currency.setSign("51234");
+
+        // System.out.println(currencyDao.save(currency));
+//        System.out.println(currencyDao.delete(9));
+//        System.out.println(currencyDao.findAll());
+        System.out.println(currencyDao.findByCode("USD"));
+
 //        String sql = """
 //                SELECT * FROM Currencies;
 //                """;
@@ -20,9 +34,7 @@ public class JdbcRunner {
 //            }
 //        }
 //
-        System.out.println(getCurrencyCodes(1, 3));
-
-
+//        System.out.println(getCurrencyCodes(1, 3));
     }
 
     public static List<String> getCurrencyCodes(int firstId, int lastId) {
