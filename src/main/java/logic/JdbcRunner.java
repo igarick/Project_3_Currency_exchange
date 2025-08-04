@@ -3,7 +3,6 @@ package logic;
 import logic.utils.ConnectionManager;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,22 +19,27 @@ public class JdbcRunner {
 //                System.out.println(result.getString(2));
 //            }
 //        }
-
-        System.out.println(getCodeByFullName("euro"));
+//
+        System.out.println(getCurrencyCodes(1, 3));
 
 
     }
 
-    public static List<String> getCodeByFullName(String FullName) {
+    public static List<String> getCurrencyCodes(int firstId, int lastId) {
         List<String> result = new ArrayList<>();
         String sql = """
-                SELECT * from Currencies
-                WHERE FullName = %s
-                """, formatted(FullName);
-        try (Connection connection = ConnectionManager.open();
-             var statement = connection.createStatement()) {
+                SELECT * FROM Currencies
+                WHERE ID BETWEEN ? and ?;
+                """;
+        try (Connection connection = ConnectionManager.get();
+            var statement = connection.prepareStatement(sql)) {
 
-            var res = statement.executeQuery(sql);
+            statement.setMaxRows(1);
+
+            statement.setLong(1, firstId);
+            statement.setLong(2, lastId);
+
+            var res = statement.executeQuery();
             while (res.next()) {
                 result.add(res.getString("Code"));
             }
@@ -44,5 +48,27 @@ public class JdbcRunner {
         }
         return result;
     }
+
+//    public static List<String> getCodeByFullName(String fullName) {
+//        List<String> result = new ArrayList<>();
+//        String sql = """
+//                SELECT * from Currencies
+//                WHERE FullName = ?
+//                """;
+//        try (Connection connection = ConnectionManager.open();
+//             var statement = connection.prepareStatement(sql)) {
+//
+//            statement.setString(1, fullName);
+//
+//            var res = statement.executeQuery();
+//            while (res.next()) {
+//                result.add(res.getString("Code"));
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return result;
+//    }
 }
+
 

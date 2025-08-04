@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
-public class LibraryServlet extends HttpServlet {
+public class LibraryServlet_1 extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }
 
@@ -22,7 +22,9 @@ public class LibraryServlet extends HttpServlet {
 
         try {
             Connection conn = DriverManager.getConnection(
-                    "jdbc:sqlite:F:/IDEA_Projects/!Database/mybaseFor3.db");
+//                    "jdbc:sqlite:F:/IDEA_Projects/!Database/mybaseFor3.db"); // для компа на работе
+                    "jdbc:sqlite:D:/java/DATABASES/mybaseFor3.db"); // для дома
+
 
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT title from books");
