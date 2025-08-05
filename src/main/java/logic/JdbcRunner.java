@@ -1,6 +1,7 @@
 package logic;
 
 import dao.CurrencyDao;
+import dto.CurrencyFilter;
 import entities.Currency;
 import logic.utils.ConnectionManager;
 
@@ -8,20 +9,38 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JdbcRunner {
     public static void main(String[] args) throws SQLException {
         CurrencyDao currencyDao = CurrencyDao.getInstance();
 
-        Currency currency = new Currency();
-        currency.setCode("51234");
-        currency.setFullName("51234");
-        currency.setSign("51234");
+        CurrencyFilter filter = new CurrencyFilter("USD", null, 2, 0);
+        System.out.println(currencyDao.findAll(filter));
 
-        // System.out.println(currencyDao.save(currency));
+//        Currency currency = currencyDao.findByCode("51234").get();
+//        System.out.println(currency);
+//        currency.setFullName("qwe");
+//        System.out.println(currencyDao.update(currency));
+//        System.out.println(currency);
+
+//        Currency currency = new Currency();
+//        currency.setCode("51234");
+//        currency.setFullName("51234");
+//        currency.setSign("51234");
+
+//         System.out.println(currencyDao.save(currency));
 //        System.out.println(currencyDao.delete(9));
 //        System.out.println(currencyDao.findAll());
-        System.out.println(currencyDao.findByCode("USD"));
+
+//        Optional<Currency> optional = currencyDao.findByCode("51234");
+//            if (optional.isPresent()) {
+//                Currency currency = optional.get();
+//            } else {
+//                System.out.println("Валюты с таким кодом не найдено");
+//            }
+
+
 
 //        String sql = """
 //                SELECT * FROM Currencies;

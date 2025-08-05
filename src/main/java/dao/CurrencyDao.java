@@ -1,5 +1,6 @@
 package dao;
 
+import dto.CurrencyFilter;
 import entities.Currency;
 import exception.DaoException;
 import logic.utils.ConnectionManager;
@@ -7,6 +8,8 @@ import logic.utils.ConnectionManager;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 public class CurrencyDao {
@@ -29,6 +32,14 @@ public class CurrencyDao {
 
     private final static String FIND_BY_CODE_SQL = FIND_ALL_SQL + """
             WHERE Code = ?
+            """;
+
+    private final static String UPDATE_SQL = """
+            UPDATE Currencies
+            SET Code = ?,
+                FullName = ?,
+                Sign = ?
+            WHERE ID = ?
             """;
 
     private CurrencyDao() {
@@ -69,19 +80,40 @@ public class CurrencyDao {
         }
     }
 
-    public List<Currency> findAll() {
-        List<Currency> currencies = new ArrayList<>();
+    public List<Currency> findAll(CurrencyFilter filter) {
+        List<Object> parameters = new ArrayList<>();
+        List<String> whereSql = new ArrayList<>();
+        if(filter.code() != null) {
+            parameters.add(filter.code());
+            whereSql.add("Code = ?");
+        }
+        if(filter.fullName() != null) {
+            parameters.add("%" + filter.fullName() + "%");
+            whereSql.add("FullName like ?");
+        }
+        parameters.add(filter.limit());
+        parameters.add(filter.offset());
+        String where = whereSql.stream().collect(Collectors.joining(
+                " AND ",
+                " WHERE ",
+                " LIMIT ? OFFSET ? "
+        ));
+
+        String sql = FIND_ALL_SQL + where;
+
         try (Connection connection = ConnectionManager.get();
-        PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
+        PreparedStatement statement = connection.prepareStatement(sql)) {
+            List<Currency> currencies = new ArrayList<>();
+
+            for (int i = 0; i < parameters.size(); i++) {
+                statement.setObject(i + 1, parameters.get(i));
+            }
+            System.out.println(statement);
 
             ResultSet result = statement.executeQuery();
             while (result.next()) {
                 currencies.add(
-                        new Currency(result.getInt("ID"),
-                                result.getString("Code"),
-                                result.getString("FullName"),
-                                result.getString("Sign")
-                        )
+                        buildCurrency(result)
                 );
             }
 
@@ -91,23 +123,60 @@ public class CurrencyDao {
         }
     }
 
-    public Currency findByCode(String code) {
+//    public List<Currency> findAll() {
+//        List<Currency> currencies = new ArrayList<>();
+//        try (Connection connection = ConnectionManager.get();
+//        PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
+//
+//            ResultSet result = statement.executeQuery();
+//            while (result.next()) {
+//                currencies.add(
+//                        buildCurrency(result)
+//                );
+//            }
+//
+//            return currencies;
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+    public Optional<Currency> findByCode(String code) {
         try (Connection connection = ConnectionManager.get();
         PreparedStatement statement = connection.prepareStatement(FIND_BY_CODE_SQL)) {
             statement.setString(1, code);
 
             ResultSet result = statement.executeQuery();
-            Currency currency = new Currency();
+            Currency currency = null;
             if (result.next()) {
-                currency.setId(result.getInt("ID"));
-                currency.setCode(result.getString("Code"));
-                currency.setFullName(result.getString("FullName"));
-                currency.setSign(result.getString("Sign"));
+                currency = buildCurrency(result);
             }
 
-            return currency;
+            return Optional.ofNullable(currency);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean update(Currency currency) {
+        try (Connection connection = ConnectionManager.get();
+            PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
+            statement.setString(1, currency.getCode());
+            statement.setString(2, currency.getFullName());
+            statement.setString(3, currency.getSign());
+            statement.setInt(4, currency.getId());
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Currency buildCurrency(ResultSet result) throws SQLException {
+        return new Currency(result.getInt("ID"),
+                result.getString("Code"),
+                result.getString("FullName"),
+                result.getString("Sign")
+        );
     }
 }
