@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-public class CurrencyDao {
+public class CurrencyDao implements Dao<String, Currency>{
     private final static CurrencyDao INSTANCE = new CurrencyDao();
 
     private final static String SAVE_SQL = """
@@ -23,7 +23,7 @@ public class CurrencyDao {
 
     private final static String DELETE_SQL = """
             DELETE FROM Currencies
-            WHERE ID = ?
+            WHERE Code = ?
             """;
 
     private final static String FIND_ALL_SQL = """
@@ -69,17 +69,17 @@ public class CurrencyDao {
         }
     }
 
-    public boolean delete(int id) {
+    public boolean delete(String code) {
         try (Connection connection = ConnectionManager.get();
         PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
-            statement.setInt(1, id);
+            statement.setString(1, code);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
-
+    // динамическое построние блока WHERE
     public List<Currency> findAll(CurrencyFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
@@ -95,7 +95,7 @@ public class CurrencyDao {
         parameters.add(filter.offset());
         String where = whereSql.stream().collect(Collectors.joining(
                 " AND ",
-                " WHERE ",
+                parameters.size() > 2 ? " WHERE " : "",
                 " LIMIT ? OFFSET ? "
         ));
 
@@ -123,23 +123,23 @@ public class CurrencyDao {
         }
     }
 
-//    public List<Currency> findAll() {
-//        List<Currency> currencies = new ArrayList<>();
-//        try (Connection connection = ConnectionManager.get();
-//        PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
-//
-//            ResultSet result = statement.executeQuery();
-//            while (result.next()) {
-//                currencies.add(
-//                        buildCurrency(result)
-//                );
-//            }
-//
-//            return currencies;
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    public List<Currency> findAll() {
+        List<Currency> currencies = new ArrayList<>();
+        try (Connection connection = ConnectionManager.get();
+        PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
+
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                currencies.add(
+                        buildCurrency(result)
+                );
+            }
+
+            return currencies;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public Optional<Currency> findByCode(String code) {
         try (Connection connection = ConnectionManager.get();

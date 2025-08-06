@@ -1,6 +1,7 @@
 package logic;
 
 import dao.CurrencyDao;
+import dao.ExchangeRateDao;
 import dto.CurrencyFilter;
 import entities.Currency;
 import logic.utils.ConnectionManager;
@@ -14,9 +15,10 @@ import java.util.Optional;
 public class JdbcRunner {
     public static void main(String[] args) throws SQLException {
         CurrencyDao currencyDao = CurrencyDao.getInstance();
-
-        CurrencyFilter filter = new CurrencyFilter("USD", null, 2, 0);
-        System.out.println(currencyDao.findAll(filter));
+        ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
+        System.out.println(exchangeRateDao.findAll());
+//        CurrencyFilter filter = new CurrencyFilter(null, null, 2, 0);
+//        System.out.println(currencyDao.findAll(filter));
 
 //        Currency currency = currencyDao.findByCode("51234").get();
 //        System.out.println(currency);
