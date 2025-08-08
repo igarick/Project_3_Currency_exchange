@@ -9,11 +9,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.sqlite.util.StringUtils;
 import service.CurrencyService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/currencies")
 public class CurrencyServlet extends HttpServlet {
@@ -38,7 +41,18 @@ public class CurrencyServlet extends HttpServlet {
 
             currencyService.findAll().forEach(currencyDto ->
                     printWriter.print(new Gson().toJson(currencyDto)));
+
+            List<CurrencyDto> currencyDtos = new ArrayList<>();
+            currencyService.findAll().forEach(currencyDto -> currencyDtos.add(currencyDto));
+
+            currencyService.findAll().forEach(currencyDto ->
+                    printWriter.print(new Gson().toJson(StringUtils.join(currencyDtos, ","))));
+
+
+
             printWriter.flush();
+
+
 
 //            currencyService.findAll().forEach(currencyDto ->
 //            printWriter.write(currencyDto.getCode()));
