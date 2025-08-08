@@ -1,7 +1,8 @@
 package dao;
 
 import entities.ExchangeRate;
-import logic.utils.ConnectionManager;
+import logic.utilsGURU.ConnectionManagerGURU;
+import utils.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

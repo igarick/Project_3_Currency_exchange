@@ -3,7 +3,8 @@ package dao;
 import dto.CurrencyFilter;
 import entities.Currency;
 import exception.DaoException;
-import logic.utils.ConnectionManager;
+import logic.utilsGURU.ConnectionManagerGURU;
+import utils.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class CurrencyDao implements Dao<String, Currency>{
 
     public boolean delete(String code) {
         try (Connection connection = ConnectionManager.get();
-        PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
+             PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
             statement.setString(1, code);
 
             return statement.executeUpdate() > 0;
@@ -82,7 +83,7 @@ public class CurrencyDao implements Dao<String, Currency>{
     }
     public List<Currency> findAll() {
         try (Connection connection = ConnectionManager.get();
-        PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
             ResultSet result = statement.executeQuery();
             List<Currency> currencies = new ArrayList<>();
             while (result.next()) {
@@ -99,7 +100,7 @@ public class CurrencyDao implements Dao<String, Currency>{
 
     public Optional<Currency> findByCode(String code) {
         try (Connection connection = ConnectionManager.get();
-        PreparedStatement statement = connection.prepareStatement(FIND_BY_CODE_SQL)) {
+             PreparedStatement statement = connection.prepareStatement(FIND_BY_CODE_SQL)) {
             statement.setString(1, code);
 
             ResultSet result = statement.executeQuery();
@@ -116,7 +117,7 @@ public class CurrencyDao implements Dao<String, Currency>{
 
     public boolean update(Currency currency) {
         try (Connection connection = ConnectionManager.get();
-            PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
+             PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
             statement.setString(1, currency.getCode());
             statement.setString(2, currency.getFullName());
             statement.setString(3, currency.getSign());
