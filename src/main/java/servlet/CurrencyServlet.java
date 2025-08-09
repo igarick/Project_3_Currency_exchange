@@ -1,6 +1,7 @@
 package servlet;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.CurrencyDto;
 import entities.Currency;
@@ -22,34 +23,28 @@ import java.util.List;
 public class CurrencyServlet extends HttpServlet {
 
     private final CurrencyService currencyService = CurrencyService.getInstance();
-    private final Gson gson = new Gson();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        Currency currency = new Currency(1, "sd", "sdf", "s");
-//        String currencyJson = this.gson.toJson(currency);
-//
-//        String str = new Gson().toJson(currency);
 
         resp.setContentType("application/json");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         try (PrintWriter printWriter = resp.getWriter()) {
-//            printWriter.print(currencyJson);
-//            printWriter.flush();
+//
+//            currencyService.findAll().forEach(currencyDto ->
+//                    printWriter.print(new Gson().toJson(currencyDto)));           // ВЕРНО
 
 
-            currencyService.findAll().forEach(currencyDto ->
-                    printWriter.print(new Gson().toJson(currencyDto)));
+            List<CurrencyDto> currenciesDto = new ArrayList<>();
+            currencyService.findAll().forEach(currencyDto -> currenciesDto.add(currencyDto));
 
-            List<CurrencyDto> currencyDtos = new ArrayList<>();
-            currencyService.findAll().forEach(currencyDto -> currencyDtos.add(currencyDto));
-
-            currencyService.findAll().forEach(currencyDto ->
-                    printWriter.print(new Gson().toJson(StringUtils.join(currencyDtos, ","))));
-
-
-
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                            .create();
+            String json = gson.toJson(currenciesDto);
+            printWriter.print(json);
             printWriter.flush();
 
 
