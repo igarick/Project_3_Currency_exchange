@@ -499,7 +499,7 @@
     </routine>
     <schema id="191" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2025-08-09.02:56:53</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-08-11.10:04:29</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="192" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1652,7 +1652,7 @@
     <column id="570" parent="556" name="Rate">
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StoredType>DECIMAL(7,4)|0s</StoredType>
+      <StoredType>DECIMAL(10,6)|0s</StoredType>
     </column>
     <foreign-key id="571" parent="556">
       <ColNames>BaseCurrencyId</ColNames>

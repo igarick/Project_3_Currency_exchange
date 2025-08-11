@@ -24,30 +24,18 @@ public class CurrencyServlet extends HttpServlet {
 
     private final CurrencyService currencyService = CurrencyService.getInstance();
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         resp.setContentType("application/json");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         try (PrintWriter printWriter = resp.getWriter()) {
-//
-//            currencyService.findAll().forEach(currencyDto ->
-//                    printWriter.print(new Gson().toJson(currencyDto)));           // ВЕРНО
-
-
-            List<CurrencyDto> currenciesDto = new ArrayList<>();
-            currencyService.findAll().forEach(currencyDto -> currenciesDto.add(currencyDto));
-
             Gson gson = new GsonBuilder()
                     .setPrettyPrinting()
-                            .create();
-            String json = gson.toJson(currenciesDto);
+                    .create();
+            String json = gson.toJson(currencyService.findAll());
             printWriter.print(json);
-            printWriter.flush();
-
-
+            
 
 //            currencyService.findAll().forEach(currencyDto ->
 //            printWriter.write(currencyDto.getCode()));
@@ -61,6 +49,7 @@ public class CurrencyServlet extends HttpServlet {
 //            </li>
 //            """.formatted(currencyDto.getId(), currencyDto.getCode())));
 //            printWriter.write("</ul>");
+
 
         }
     }

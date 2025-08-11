@@ -27,8 +27,8 @@ public final class ConnectionManager {
         try {
             return DriverManager.getConnection(
                     PropertiesUtil.get(URL_KEY));
-        } catch (SQLException throwables) {
-            throw new RuntimeException(throwables);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
