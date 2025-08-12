@@ -25,7 +25,7 @@ public class CurrencyServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         resp.setContentType("application/json");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
@@ -35,8 +35,11 @@ public class CurrencyServlet extends HttpServlet {
                     .create();
             String json = gson.toJson(currencyService.findAll());
             printWriter.print(json);
-            
 
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+        }
 //            currencyService.findAll().forEach(currencyDto ->
 //            printWriter.write(currencyDto.getCode()));
 
@@ -51,6 +54,6 @@ public class CurrencyServlet extends HttpServlet {
 //            printWriter.write("</ul>");
 
 
-        }
+
     }
 }

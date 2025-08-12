@@ -78,7 +78,7 @@ public class CurrencyDao implements Dao<String, Currency>{
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new DaoException(e);
+            throw new RuntimeException(e);
         }
     }
     public List<Currency> findAll() {
@@ -94,7 +94,7 @@ public class CurrencyDao implements Dao<String, Currency>{
 
             return currencies;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException(500, "база лежит");   //throw new RuntimeException(e);
         }
     }
 
