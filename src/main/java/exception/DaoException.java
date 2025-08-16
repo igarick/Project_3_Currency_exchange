@@ -1,24 +1,46 @@
 package exception;
 
 import java.io.IOException;
+import java.io.Serial;
 
 public class DaoException extends RuntimeException {
-    private final int code;
-    private final String errorMessage;
+   @Serial
+   private static final long serialVersionUID = 1L;
 
-    public DaoException(int code, String errorMessage) {
-        this.code = code;
-        this.errorMessage = errorMessage;
+    private final ErrorInfo errorInfo;
+
+    public DaoException(ErrorInfo errorInfo, Throwable cause) {
+        super(cause);
+        this.errorInfo = errorInfo;
     }
 
-
-    public int getCode() {
-        return code;
+    public ErrorInfo getErrorInfo() {
+        return errorInfo;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-
+    //    private final int code;
+//    private final String errorMessage;
+//
+//    public DaoException(int code, String errorMessage, Throwable cause) {
+//        super(cause);
+//        this.code = code;
+//        this.errorMessage = errorMessage;
+//    }
+//
+//
+//    public int getCode() {
+//        return code;
+//    }
+//
+//    public String getErrorMessage() {
+//        return errorMessage;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "DaoException{" +
+//                "code=" + code +
+//                ", errorMessage='" + errorMessage + '\'' +
+//                '}';
+//    }
 }

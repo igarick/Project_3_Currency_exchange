@@ -1,5 +1,8 @@
 package utils;
 
+import exception.ConnectionException;
+import exception.ErrorInfo;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,12 +26,12 @@ public final class ConnectionManager {
     private ConnectionManager() {
     }
 
-    public static Connection get() {
+    public static Connection get() throws ConnectionException {
         try {
             return DriverManager.getConnection(
                     PropertiesUtil.get(URL_KEY));
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new ConnectionException(ErrorInfo.BAD_WITH_CONNECTION, e);
         }
     }
 }

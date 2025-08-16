@@ -1,7 +1,10 @@
 package utils;
 
+import exception.ConnectionException;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.util.Properties;
 
 public final class PropertiesUtil {
@@ -23,8 +26,7 @@ public final class PropertiesUtil {
             throw new RuntimeException(e);
         }
     }
-
-    public static String get(String key) {
+        public static String get(String key) {
         return PROPERTIES.getProperty(key);
     }
 }

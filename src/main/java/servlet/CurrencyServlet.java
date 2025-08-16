@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.CurrencyDto;
 import entities.Currency;
+import exception.ConnectionException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,19 +26,18 @@ public class CurrencyServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("application/json");
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
-        try (PrintWriter printWriter = resp.getWriter()) {
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .create();
-            String json = gson.toJson(currencyService.findAll());
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        String json = gson.toJson(currencyService.findAll());
+
+        try (PrintWriter printWriter = response.getWriter()) {
             printWriter.print(json);
-
         } catch (IOException e) {
-
             throw new RuntimeException(e);
         }
 //            currencyService.findAll().forEach(currencyDto ->

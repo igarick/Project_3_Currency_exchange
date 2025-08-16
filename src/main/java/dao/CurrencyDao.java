@@ -3,7 +3,7 @@ package dao;
 import dto.CurrencyFilter;
 import entities.Currency;
 import exception.DaoException;
-import logic.utilsGURU.ConnectionManagerGURU;
+import exception.ErrorInfo;
 import utils.ConnectionManager;
 
 import java.sql.*;
@@ -81,7 +81,7 @@ public class CurrencyDao implements Dao<String, Currency>{
             throw new RuntimeException(e);
         }
     }
-    public List<Currency> findAll() {
+    public List<Currency> findAll() throws DaoException {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
             ResultSet result = statement.executeQuery();
@@ -94,7 +94,7 @@ public class CurrencyDao implements Dao<String, Currency>{
 
             return currencies;
         } catch (SQLException e) {
-            throw new DaoException(500, "база лежит");   //throw new RuntimeException(e);
+            throw new DaoException(ErrorInfo.BAD_WITH_CONNECTION, e);   //500, "база данных недоступна"
         }
     }
 
