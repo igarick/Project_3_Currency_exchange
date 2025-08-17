@@ -128,12 +128,16 @@ public class CurrencyDao implements Dao<String, Currency>{
         }
     }
 
-    private Currency buildCurrency(ResultSet result) throws SQLException {
-        return new Currency(result.getInt("ID"),
-                result.getString("Code"),
-                result.getString("FullName"),
-                result.getString("Sign")
-        );
+    private Currency buildCurrency(ResultSet result) {
+        try {
+            return new Currency(result.getInt("ID"),
+                    result.getString("Code"),
+                    result.getString("FullName"),
+                    result.getString("Sign")
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // динамическое построние блока WHERE

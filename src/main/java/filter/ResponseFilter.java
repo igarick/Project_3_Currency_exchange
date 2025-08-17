@@ -42,14 +42,9 @@ public class ResponseFilter implements Filter {
             System.out.println(Arrays.toString(e.getStackTrace()));
 
             resp.setStatus(e.getErrorInfo().getStatusCode());
-
             resp.setContentType("application/json");
             resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
-//            Gson gson = new GsonBuilder()
-//                    .setPrettyPrinting()
-//                    .create();
-//            String json = gson.toJson(e.getErrorInfo().getMessage());
             ErrorMessageDto message = new ErrorMessageDto(e.getErrorInfo().getMessage());
             Gson gson = new GsonBuilder()
                     .setPrettyPrinting()
@@ -86,6 +81,6 @@ public class ResponseFilter implements Filter {
         }
         System.out.println("post");
 
-
     }
+
 }
