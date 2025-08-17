@@ -1,6 +1,7 @@
 package exception;
 
-import java.io.IOException;
+import exceptionUtils.ErrorInfo;
+
 import java.io.Serial;
 
 public class ConnectionException extends RuntimeException {

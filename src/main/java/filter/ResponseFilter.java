@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import exception.ConnectionException;
 import exception.DaoException;
-import exception.ErrorInfo;
-import filtrUtils.ErrorMessage;
+import exceptionUtils.ErrorInfo;
+import filterUtils.ErrorMessageDto;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,7 +41,8 @@ public class ResponseFilter implements Filter {
 //            }
             System.out.println(Arrays.toString(e.getStackTrace()));
 
-            resp.setStatus(e.getErrorInfo().getErrorCode());
+            resp.setStatus(e.getErrorInfo().getStatusCode());
+
             resp.setContentType("application/json");
             resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
@@ -49,11 +50,13 @@ public class ResponseFilter implements Filter {
 //                    .setPrettyPrinting()
 //                    .create();
 //            String json = gson.toJson(e.getErrorInfo().getMessage());
-            ErrorMessage message = new ErrorMessage(e.getErrorInfo().getMessage());
-            Gson json = new Gson();
-            String s = json.toJson(message);
+            ErrorMessageDto message = new ErrorMessageDto(e.getErrorInfo().getMessage());
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+            String s = gson.toJson(message);
 
-                try (PrintWriter writer = resp.getWriter()) {
+            try (PrintWriter writer = resp.getWriter()) {
                 writer.print(s);
                 writer.flush();
             }
@@ -61,10 +64,25 @@ public class ResponseFilter implements Filter {
 
 
         } catch (DaoException e) {
-            PrintWriter writer = resp.getWriter();
-            Gson json = new Gson();
-            String s = json.toJson(e.getErrorInfo().getMessage());
-            writer.print(s);
+            ErrorInfo errorInfo = e.getErrorInfo();
+            System.out.println(errorInfo.getMessage());
+            e.printStackTrace();
+
+            resp.setStatus(e.getErrorInfo().getStatusCode());
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+
+            ErrorMessageDto message = new ErrorMessageDto(e.getErrorInfo().getMessage());
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+            String s = gson.toJson(message);
+
+
+            try (PrintWriter writer = resp.getWriter()) {
+                writer.print(s);
+            }
+
         }
         System.out.println("post");
 
