@@ -28,6 +28,17 @@ public class CurrencyService {
 
     }
 
+    public List<CurrencyDto> findByCode(String code) {
+        return currencyDao.findByCode(code).stream()
+                .map(currency -> new CurrencyDto(
+                        currency.getId(),
+                        currency.getCode(),
+                        currency.getFullName(),
+                        currency.getSign()
+                ))
+                .toList();
+    }
+
     public static CurrencyService getInstance() {
         return INSTANCE;
     }

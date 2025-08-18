@@ -33,13 +33,14 @@ public class ResponseFilter implements Filter {
             throw new RuntimeException(e);
 
         } catch (ConnectionException e) {
-            ErrorInfo errorInfo = e.getErrorInfo();
-            System.out.println(errorInfo.getMessage());
+//            ErrorInfo errorInfo = e.getErrorInfo();
+            System.err.println("Request failed: " + e.getErrorInfo().getMessage());
+            e.printStackTrace();
 
 //            if (!resp.isCommitted()) {
 //                resp.reset();
 //            }
-            System.out.println(Arrays.toString(e.getStackTrace()));
+//            System.out.println(Arrays.toString(e.getStackTrace()));
 
             resp.setStatus(e.getErrorInfo().getStatusCode());
             resp.setContentType("application/json");
@@ -59,8 +60,7 @@ public class ResponseFilter implements Filter {
 
 
         } catch (DaoException e) {
-            ErrorInfo errorInfo = e.getErrorInfo();
-            System.out.println(errorInfo.getMessage());
+            System.err.println("Request failed: " + e.getErrorInfo().getMessage());
             e.printStackTrace();
 
             resp.setStatus(e.getErrorInfo().getStatusCode());
