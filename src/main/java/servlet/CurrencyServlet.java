@@ -19,6 +19,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @WebServlet(urlPatterns = {"/currencies", "/currency/*"})
 public class CurrencyServlet extends HttpServlet {
@@ -45,8 +46,14 @@ public class CurrencyServlet extends HttpServlet {
             sendResponse(allCurrencies, response);
         } else {
             String code = pathInfo.substring(1);
-            List<CurrencyDto> currencies = currencyService.findByCode(code);
-            sendResponse(currencies,response);
+            Optional<CurrencyDto> currency = currencyService.findByCode(code);
+//            List<CurrencyDto> currencies = currencyService.findByCode(code);
+            if (currency.isPresent()) {
+                List<CurrencyDto> currencies = new ArrayList<>();
+                currencies.add(currency.get());
+
+                sendResponse(currencies, response);
+            }
         }
 //        String json = gson.toJson(currencyService.findAll());
 
