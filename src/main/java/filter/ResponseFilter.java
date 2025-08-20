@@ -78,7 +78,29 @@ public class ResponseFilter implements Filter {
                 writer.print(s);
             }
 
+        } catch (exception.ServletException e) {
+
+            System.err.println("Request failed: " + e.getErrorInfo().getMessage());
+            e.printStackTrace();
+
+            resp.setStatus(e.getErrorInfo().getStatusCode());
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+
+            ErrorMessageDto message = new ErrorMessageDto(e.getErrorInfo().getMessage());
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+            String s = gson.toJson(message);
+
+
+            try (PrintWriter writer = resp.getWriter()) {
+                writer.print(s);
+            }
+
+
         }
+
         System.out.println("post");
 
     }

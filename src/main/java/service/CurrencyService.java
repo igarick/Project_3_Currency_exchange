@@ -2,6 +2,8 @@ package service;
 
 import dao.CurrencyDao;
 import dto.CurrencyDto;
+import exception.ServletException;
+import exceptionUtils.ErrorInfo;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +31,10 @@ public class CurrencyService {
 
     }
 
-    public Optional<CurrencyDto> findByCode(String code) {
-        return currencyDao.findByCode(code).stream()
+    public Optional<CurrencyDto> findByCode(String code) throws ServletException{
+
+
+        Optional<CurrencyDto> currencyDto = currencyDao.findByCode(code).stream()
                 .map(currency -> new CurrencyDto(
                         currency.getId(),
                         currency.getCode(),
@@ -38,6 +42,19 @@ public class CurrencyService {
                         currency.getSign()
                 ))
                 .findFirst();
+        if (currencyDto.isPresent()) {
+            return currencyDto;
+        }
+        throw new ServletException(ErrorInfo.CURRENCY_NOT_FOUND);
+
+//        return currencyDao.findByCode(code).stream()
+//                .map(currency -> new CurrencyDto(
+//                        currency.getId(),
+//                        currency.getCode(),
+//                        currency.getFullName(),
+//                        currency.getSign()
+//                ))
+//                .findFirst();
     }
 
     public static CurrencyService getInstance() {

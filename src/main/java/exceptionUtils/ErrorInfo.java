@@ -1,11 +1,14 @@
 package exceptionUtils;
 
-import static jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import jakarta.servlet.http.HttpServletResponse;
+
+import static jakarta.servlet.http.HttpServletResponse.*;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_IMPLEMENTED;
 
 public enum ErrorInfo {
     CONNECTION_ERROR("Не удается установить соединение с базой", SC_INTERNAL_SERVER_ERROR),
-    CURRENCY_FETCH_FAILED("Невозможно получить список валют", SC_INTERNAL_SERVER_ERROR);
+    CURRENCY_FETCH_FAILED("Невозможно получить список валют", SC_INTERNAL_SERVER_ERROR),
+    CURRENCY_NOT_FOUND("Валюта не найдена", SC_NOT_FOUND);
 
 
     private final String message;
