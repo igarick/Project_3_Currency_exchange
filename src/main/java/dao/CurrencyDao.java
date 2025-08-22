@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-public class CurrencyDao implements Dao<String, Currency>{
+public class CurrencyDao implements Dao<String, Currency> {
     private final static CurrencyDao INSTANCE = new CurrencyDao();
 
     private final static String SAVE_SQL = """
@@ -51,9 +51,9 @@ public class CurrencyDao implements Dao<String, Currency>{
         return INSTANCE;
     }
 
-        public Currency save(Currency currency) {
+    public Currency save(Currency currency) {
         try (Connection connection = ConnectionManager.get();
-             PreparedStatement statement = connection.prepareStatement(SAVE_SQL)){
+             PreparedStatement statement = connection.prepareStatement(SAVE_SQL)) {
             statement.setString(1, currency.getCode());
             statement.setString(2, currency.getFullName());
             statement.setString(3, currency.getSign());
@@ -63,8 +63,10 @@ public class CurrencyDao implements Dao<String, Currency>{
             ResultSet keys = connection.createStatement().executeQuery("SELECT last_insert_rowid()");
             if (keys.next()) {
                 currency.setId(keys.getInt(1)); // 1 - для скллайт
-            }
+            } else if (!keys.next()) {
 
+                throw new DaoException(ErrorInfo.CURRENCY_CREATE_FAILED);
+            }
             return currency;
         } catch (SQLException e) {
             throw new RuntimeException(e);  //DaoException(e)
@@ -79,7 +81,8 @@ public class CurrencyDao implements Dao<String, Currency>{
 //            statement.setString(3, currency.getSign());
 //
 //            statement.executeUpdate();
-////            ResultSet keys = statement.getGeneratedKeys(); // для постреса
+
+    /// /            ResultSet keys = statement.getGeneratedKeys(); // для постреса
 //            ResultSet keys = connection.createStatement().executeQuery("SELECT last_insert_rowid()");
 //            if (keys.next()) {
 //                currency.setId(keys.getInt(1)); // 1 - для скллайт
@@ -90,7 +93,6 @@ public class CurrencyDao implements Dao<String, Currency>{
 //            throw new RuntimeException(e);  //DaoException(e)
 //        }
 //    }
-
     public boolean delete(String code) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
@@ -101,6 +103,7 @@ public class CurrencyDao implements Dao<String, Currency>{
             throw new RuntimeException(e);
         }
     }
+
     public List<Currency> findAll() throws DaoException {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
@@ -164,11 +167,11 @@ public class CurrencyDao implements Dao<String, Currency>{
     public List<Currency> findAll(CurrencyFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
-        if(filter.code() != null) {
+        if (filter.code() != null) {
             parameters.add(filter.code());
             whereSql.add("Code = ?");
         }
-        if(filter.fullName() != null) {
+        if (filter.fullName() != null) {
             parameters.add("%" + filter.fullName() + "%");
             whereSql.add("FullName like ?");
         }

@@ -12,7 +12,7 @@ public enum ErrorInfo {
     CURRENCY_UPDATE_QUERY_ERROR("Currency update query failed", SC_INTERNAL_SERVER_ERROR),
 
     CURRENCY_NOT_FOUND("Currency not found", SC_NOT_FOUND),
-    CURRENCY_UPDATE_FAILED("Currency with this code already exists", SC_CONFLICT);
+    CURRENCY_CREATE_FAILED("Currency with this code already exists", SC_CONFLICT);
 
 
 

@@ -10,4 +10,7 @@ public class DaoException extends AppException {
         super(errorInfo, cause);
     }
 
+    public DaoException(ErrorInfo errorInfo) {
+        super(errorInfo);
+    }
 }

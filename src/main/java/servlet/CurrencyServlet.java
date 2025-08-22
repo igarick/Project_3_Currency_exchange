@@ -35,9 +35,9 @@ public class CurrencyServlet extends HttpServlet {
                 req.getParameter("sign")
                 );
 
-        CurrencyDto createDto = currencyService.save(currencyCreateDto);
+        CurrencyDto currencyDto = currencyService.save(currencyCreateDto);
 
-        sendGsonResponse(createDto, resp);
+        sendGsonResponse(currencyDto, resp);
 
 //        currencyService.save()
     }
