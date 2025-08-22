@@ -93,7 +93,7 @@ public class CurrencyDao implements Dao<String, Currency>{
             }
             return currencies;
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.CURRENCY_FETCH_FAILED, e);
+            throw new DaoException(ErrorInfo.CURRENCY_LIST_QUERY_ERROR, e);
         }
     }
 
@@ -110,7 +110,7 @@ public class CurrencyDao implements Dao<String, Currency>{
 
             return Optional.ofNullable(currency);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
         }
     }
 
