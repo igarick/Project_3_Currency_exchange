@@ -79,7 +79,7 @@ public class JdbcRunner {
 //        return result;
 //    }
 
-//    public static List<String> getCodeByFullName(String fullName) {
+//    public static List<String> getCodeByFullName(String name) {
 //        List<String> result = new ArrayList<>();
 //        String sql = """
 //                SELECT * from Currencies
@@ -88,7 +88,7 @@ public class JdbcRunner {
 //        try (Connection connection = ConnectionManager.open();
 //             var statement = connection.prepareStatement(sql)) {
 //
-//            statement.setString(1, fullName);
+//            statement.setString(1, name);
 //
 //            var res = statement.executeQuery();
 //            while (res.next()) {

@@ -49,7 +49,7 @@ public class CurrencyDto {
         return "CurrencyDto{" +
                "id=" + id +
                ", code='" + code + '\'' +
-               ", fullName='" + fullName + '\'' +
+               ", name='" + fullName + '\'' +
                ", sign='" + sign + '\'' +
                '}';
     }

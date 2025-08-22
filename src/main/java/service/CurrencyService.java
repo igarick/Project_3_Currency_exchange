@@ -1,7 +1,9 @@
 package service;
 
 import dao.CurrencyDao;
+import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
+import entities.Currency;
 import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
 
@@ -17,6 +19,32 @@ public class CurrencyService {
     private CurrencyService() {
     }
 
+        public CurrencyDto save(CurrencyCreateDto currencyCreateDto) {
+        Currency currency = new Currency(
+                null,
+                currencyCreateDto.code(),
+                currencyCreateDto.name(),
+                currencyCreateDto.sign());
+
+        Currency c = currencyDao.save(currency);
+        return new CurrencyDto(
+                c.getId(),
+                c.getCode(),
+                c.getFullName(),
+                c.getSign()
+        );
+    }
+
+//    public CurrencyDto save(Currency currency) {
+//        Currency c = currencyDao.save(currency);
+//        return new CurrencyDto(
+//                c.getId(),
+//                c.getCode(),
+//                c.getFullName(),
+//                c.getSign()
+//        );
+//    }
+
     public List<CurrencyDto> findAll() {
         return currencyDao.findAll().stream()
                 .map(currency -> new CurrencyDto(
@@ -26,7 +54,6 @@ public class CurrencyService {
                         currency.getSign()
                 ))
                 .toList();
-
     }
 
     public Optional<CurrencyDto> findByCode(String code) throws ServiceException {
@@ -41,16 +68,7 @@ public class CurrencyService {
         if (currencyDto.isPresent()) {
             return currencyDto;
         }
-        throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND_ERROR);
-
-//        return currencyDao.findByCode(code).stream()
-//                .map(currency -> new CurrencyDto(
-//                        currency.getId(),
-//                        currency.getCode(),
-//                        currency.getFullName(),
-//                        currency.getSign()
-//                ))
-//                .findFirst();
+        throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
     }
 
     public static CurrencyService getInstance() {

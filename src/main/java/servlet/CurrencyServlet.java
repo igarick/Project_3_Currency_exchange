@@ -2,10 +2,12 @@ package servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
 import exception.InputDataException;
 import exception.ResponseDataException;
 import exceptionUtils.ErrorInfo;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +26,22 @@ public class CurrencyServlet extends HttpServlet {
     private static final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .create();
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        CurrencyCreateDto currencyCreateDto = new CurrencyCreateDto(
+                req.getParameter("code"),
+                req.getParameter("name"),
+                req.getParameter("sign")
+                );
+
+        CurrencyDto createDto = currencyService.save(currencyCreateDto);
+
+        sendGsonResponse(createDto, resp);
+
+//        currencyService.save()
+    }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws InputDataException {
