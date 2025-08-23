@@ -19,19 +19,20 @@ public class CurrencyService {
     private CurrencyService() {
     }
 
-        public CurrencyDto save(CurrencyCreateDto currencyCreateDto) {
+    public CurrencyDto save(CurrencyCreateDto currencyCreateDto) {
         Currency currency = new Currency(
                 null,
                 currencyCreateDto.code(),
                 currencyCreateDto.name(),
                 currencyCreateDto.sign());
 
-        Currency c = currencyDao.save(currency);
+        Currency currencySaved = currencyDao.save(currency);
+
         return new CurrencyDto(
-                c.getId(),
-                c.getCode(),
-                c.getFullName(),
-                c.getSign()
+                currencySaved.getId(),
+                currencySaved.getCode(),
+                currencySaved.getFullName(),
+                currencySaved.getSign()
         );
     }
 

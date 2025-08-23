@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
 
 
 public class CurrencyDao implements Dao<String, Currency> {
+    private final int SQLITE_CONSTRAINT_ERROR_CODE = 19;
+    private final String SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
+
     private final static CurrencyDao INSTANCE = new CurrencyDao();
 
     private final static String SAVE_SQL = """
@@ -63,36 +66,16 @@ public class CurrencyDao implements Dao<String, Currency> {
             ResultSet keys = connection.createStatement().executeQuery("SELECT last_insert_rowid()");
             if (keys.next()) {
                 currency.setId(keys.getInt(1)); // 1 - для скллайт
-            } else if (!keys.next()) {
-
-                throw new DaoException(ErrorInfo.CURRENCY_CREATE_FAILED);
             }
             return currency;
         } catch (SQLException e) {
-            throw new RuntimeException(e);  //DaoException(e)
+            if (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE & e.getMessage().contains(SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE)) {
+                throw new DaoException(ErrorInfo.CURRENCY_CREATE_FAILED, e);
+            }
+            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
         }
     }
 
-//    public Currency save(Currency currency) {
-//        try (Connection connection = ConnectionManager.get();
-//             PreparedStatement statement = connection.prepareStatement(SAVE_SQL)){
-//            statement.setString(1, currency.getCode());
-//            statement.setString(2, currency.getFullName());
-//            statement.setString(3, currency.getSign());
-//
-//            statement.executeUpdate();
-
-    /// /            ResultSet keys = statement.getGeneratedKeys(); // для постреса
-//            ResultSet keys = connection.createStatement().executeQuery("SELECT last_insert_rowid()");
-//            if (keys.next()) {
-//                currency.setId(keys.getInt(1)); // 1 - для скллайт
-//            }
-//
-//            return currency;
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);  //DaoException(e)
-//        }
-//    }
     public boolean delete(String code) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
@@ -116,7 +99,7 @@ public class CurrencyDao implements Dao<String, Currency> {
             }
             return currencies;
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.CURRENCY_LIST_QUERY_ERROR, e);
+            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
         }
     }
 
