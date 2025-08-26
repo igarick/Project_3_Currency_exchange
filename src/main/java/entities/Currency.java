@@ -3,12 +3,12 @@ package entities;
 import java.util.Objects;
 
 public class Currency {
-    private Integer id;
+    private Long id;
     private String code;
     private String fullName;
     private String sign;
 
-    public Currency(Integer id, String code, String fullName, String sign) {
+    public Currency(Long id, String code, String fullName, String sign) {
         this.id = id;
         this.code = code;
         this.fullName = fullName;
@@ -18,11 +18,11 @@ public class Currency {
     public Currency() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,12 +63,12 @@ public class Currency {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Currency that = (Currency) o;
-        return id == that.id && Objects.equals(code, that.code) && Objects.equals(fullName, that.fullName) && Objects.equals(sign, that.sign);
+        Currency currency = (Currency) o;
+        return Objects.equals(id, currency.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, fullName, sign);
+        return Objects.hashCode(id);
     }
 }

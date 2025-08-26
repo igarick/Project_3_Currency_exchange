@@ -18,49 +18,37 @@ public class ServletFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("filt 1");
-
         HttpServletResponse resp = (HttpServletResponse) response;
-
         try {
             filterChain.doFilter(request, response);
-            System.out.println("filt 2");
-
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("Unable to send data");
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new IOException(e);
 
-        } catch (ConnectionException | DaoException | ServiceException | InputDataException | ResponseDataException e) {
-            System.out.println("Это из ServiceException 1");
-
-            sendGsonErrorMessage(resp, e);
-
-            System.out.println("Это из ServiceException 2");
+        } catch (ConnectionException | DaoException | ServiceException | ValidationException | ResponseDataException e) {
+            writeGsonErrorMessage(resp, e);
         }
     }
 
-    private void sendGsonErrorMessage(HttpServletResponse resp, AppException e) {
-        System.out.println("post 1");
+    private void writeGsonErrorMessage(HttpServletResponse resp, AppException e) throws IOException {
+        ErrorMessageDto message = new ErrorMessageDto(e.getErrorInfo().getMessage());
 
-        System.err.println("Request failed: " + e.getErrorInfo().getMessage());
+        System.err.println("Request failed: " + message);
         e.printStackTrace();
 
         resp.setStatus(e.getErrorInfo().getStatusCode());
         resp.setContentType("application/json");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
-        ErrorMessageDto message = new ErrorMessageDto(e.getErrorInfo().getMessage());
-        String s = gson.toJson(message);
+        String json = gson.toJson(message);
 
         try (PrintWriter writer = resp.getWriter()) {
-            writer.print(s);
-            writer.flush();
+            writer.print(json);
         } catch (IOException ex) {
-            e.printStackTrace();
             System.out.println("Unable to send data");
-            throw new RuntimeException(ex);
+            e.printStackTrace();
+            throw new IOException(ex);
         }
-        System.out.println("post 2");
     }
 }

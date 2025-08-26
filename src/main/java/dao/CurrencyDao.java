@@ -54,7 +54,7 @@ public class CurrencyDao implements Dao<String, Currency> {
         return INSTANCE;
     }
 
-    public Currency save(Currency currency) {
+    public Currency save(Currency currency) throws DaoException {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement statement = connection.prepareStatement(SAVE_SQL)) {
             statement.setString(1, currency.getCode());
@@ -65,25 +65,14 @@ public class CurrencyDao implements Dao<String, Currency> {
 //            ResultSet keys = statement.getGeneratedKeys(); // для постреса
             ResultSet keys = connection.createStatement().executeQuery("SELECT last_insert_rowid()");
             if (keys.next()) {
-                currency.setId(keys.getInt(1)); // 1 - для скллайт
+                currency.setId(keys.getLong(1)); // 1 - для скллайт
             }
             return currency;
         } catch (SQLException e) {
-            if (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE & e.getMessage().contains(SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE)) {
-                throw new DaoException(ErrorInfo.CURRENCY_CREATE_FAILED, e);
+            if (isConstraintUniqueError(e)) {
+                throw new DaoException(ErrorInfo.CURRENCY_CODE_ALREADY_EXISTS, e);
             }
             throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
-        }
-    }
-
-    public boolean delete(String code) {
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
-            statement.setString(1, code);
-
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -103,7 +92,7 @@ public class CurrencyDao implements Dao<String, Currency> {
         }
     }
 
-    public Optional<Currency> findByCode(String code) {
+    public Optional<Currency> findByCode(String code) throws DaoException {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_CODE_SQL)) {
             statement.setString(1, code);
@@ -120,23 +109,32 @@ public class CurrencyDao implements Dao<String, Currency> {
         }
     }
 
-    public boolean update(Currency currency) {
+    public boolean update(Currency currency) throws DaoException {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
             statement.setString(1, currency.getCode());
             statement.setString(2, currency.getFullName());
             statement.setString(3, currency.getSign());
-            statement.setInt(4, currency.getId());
+            statement.setLong(4, currency.getId());
 
-            return statement.executeUpdate() > 0;
+            int rows = statement.executeUpdate();
+
+            if (rows == 0) {
+                throw new DaoException(ErrorInfo.CURRENCY_NOT_FOUND);
+            }
+            return rows == 1;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            if (isConstraintUniqueError(e)) {
+                throw new DaoException(ErrorInfo.CURRENCY_CODE_ALREADY_EXISTS, e);
+            }
+            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR);
         }
     }
 
     private Currency buildCurrency(ResultSet result) {
         try {
-            return new Currency(result.getInt("ID"),
+            return new Currency(
+                    result.getLong("Id"),
                     result.getString("Code"),
                     result.getString("FullName"),
                     result.getString("Sign")
@@ -144,6 +142,23 @@ public class CurrencyDao implements Dao<String, Currency> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean isConstraintUniqueError(SQLException e) {
+        return (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE &
+                e.getMessage().contains(SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE));
+    }
+
+    public boolean delete(String code) {
+//        try (Connection connection = ConnectionManager.get();
+//             PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
+//            statement.setString(1, code);
+//
+//            return statement.executeUpdate() > 0;
+//        } catch (SQLException e) {
+//            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
+//        }
+        return false;
     }
 
     // динамическое построние блока WHERE

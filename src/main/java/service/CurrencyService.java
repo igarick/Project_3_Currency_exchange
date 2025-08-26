@@ -19,6 +19,16 @@ public class CurrencyService {
     private CurrencyService() {
     }
 
+    public boolean update(CurrencyDto currencyDto) {
+        Currency currency = new Currency(
+                currencyDto.id(),
+                currencyDto.code(),
+                currencyDto.name(),
+                currencyDto.sign()
+        );
+        return currencyDao.update(currency);
+    }
+
     public CurrencyDto save(CurrencyCreateDto currencyCreateDto) {
         Currency currency = new Currency(
                 null,
@@ -35,16 +45,6 @@ public class CurrencyService {
                 currencySaved.getSign()
         );
     }
-
-//    public CurrencyDto save(Currency currency) {
-//        Currency c = currencyDao.save(currency);
-//        return new CurrencyDto(
-//                c.getId(),
-//                c.getCode(),
-//                c.getFullName(),
-//                c.getSign()
-//        );
-//    }
 
     public List<CurrencyDto> findAll() {
         return currencyDao.findAll().stream()
@@ -70,6 +70,10 @@ public class CurrencyService {
             return currencyDto;
         }
         throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
+    }
+
+    public boolean delete(String code) {
+        return currencyDao.delete(code);
     }
 
     public static CurrencyService getInstance() {
