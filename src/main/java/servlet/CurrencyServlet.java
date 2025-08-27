@@ -1,17 +1,13 @@
 package servlet;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
+import jsonUtils.GsonWriter;
 import validators.CreateDtoValidator;
 import validators.CommonDtoValidator;
 import validators.ServletValidator;
 import validators.Validator;
 import exception.DaoException;
-import exception.ValidationException;
-import exception.ResponseDataException;
-import exceptionUtils.ErrorInfo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,23 +16,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import service.CurrencyService;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 @WebServlet(urlPatterns = {"/currencies", "/currency/*"})
 public class CurrencyServlet extends HttpServlet {
 
     private final CurrencyService currencyService = CurrencyService.getInstance();
-    private static final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .create();
-    private static final Validator<CurrencyDto> validator = new CommonDtoValidator();
+    private static final Validator<CurrencyDto> validatorCommon = new CommonDtoValidator();
     private static final Validator<CurrencyCreateDto> validatorCreate = new CreateDtoValidator();
     private static final ServletValidator validatorServlet = new ServletValidator();
+    private static final Logger log = LoggerFactory.getLogger(CurrencyServlet.class);
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, DaoException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws DaoException {
         String id = req.getParameter("id");
         validatorServlet.verifyNumberRepresentation(id);
 
@@ -47,9 +42,10 @@ public class CurrencyServlet extends HttpServlet {
                 req.getParameter("sign")
         );
 
-        validator.validate(currencyDto);
+        validatorCommon.validate(currencyDto);
 
         if (currencyService.update(currencyDto)) {
+            log.info("Currency updated successfully {}", currencyDto);
             resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
         }
     }
@@ -70,7 +66,7 @@ public class CurrencyServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse response) throws IOException {
         CurrencyCreateDto currencyCreateDto = new CurrencyCreateDto(
                 req.getParameter("code").toUpperCase(),
                 req.getParameter("name"),
@@ -79,40 +75,21 @@ public class CurrencyServlet extends HttpServlet {
         validatorCreate.validate(currencyCreateDto);
 
         CurrencyDto currencyDto = currencyService.save(currencyCreateDto);
-        writeGsonResponse(currencyDto, resp);
+        GsonWriter.sendResponse(currencyDto, response);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ValidationException {
-        System.out.println(request.getContextPath() + " 1");
-        System.out.println(request.getRequestURI() + " 2");
-        System.out.println(request.getPathInfo() + " 3");
-        System.out.println(request.getServletPath() + " 4");
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/")) {
-            writeGsonResponse(currencyService.findAll(), response);
+            GsonWriter.sendResponse(currencyService.findAll(), response);
         } else {
             String code = pathInfo.substring(1).toUpperCase();
             validatorServlet.validateCode(code);
 
             Optional<CurrencyDto> currency = currencyService.findByCode(code);
-            writeGsonResponse(currency, response);
-        }
-    }
-
-    private void writeGsonResponse(Object data, HttpServletResponse response) {
-        response.setContentType("application/json");
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-        String json = gson.toJson(data);
-        try (PrintWriter printWriter = response.getWriter()) {
-            printWriter.print(json);
-        } catch (IOException e) {
-            System.out.println("Unable to send data");
-            e.printStackTrace();
-            throw new ResponseDataException(ErrorInfo.UNABLE_TO_SEND_DATA_ERROR, e);
+            GsonWriter.sendResponse(currency, response);
         }
     }
 }

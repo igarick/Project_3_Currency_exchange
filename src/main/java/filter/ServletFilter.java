@@ -7,48 +7,28 @@ import filterUtils.ErrorMessageDto;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
+import jsonUtils.GsonWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 
 @WebFilter("/*")
 public class ServletFilter implements Filter {
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final Logger log = LoggerFactory.getLogger(ServletFilter.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletResponse resp = (HttpServletResponse) response;
+        HttpServletResponse servletResponse = (HttpServletResponse) response;
         try {
             filterChain.doFilter(request, response);
         } catch (IOException e) {
-            System.out.println("Unable to send data");
-            e.printStackTrace();
-            throw new IOException(e);
+            log.warn("Unable to send data", e);
+            throw e;
 
-        } catch (ConnectionException | DaoException | ServiceException | ValidationException | ResponseDataException e) {
-            writeGsonErrorMessage(resp, e);
-        }
-    }
-
-    private void writeGsonErrorMessage(HttpServletResponse resp, AppException e) throws IOException {
-        ErrorMessageDto message = new ErrorMessageDto(e.getErrorInfo().getMessage());
-
-        System.err.println("Request failed: " + message);
-        e.printStackTrace();
-
-        resp.setStatus(e.getErrorInfo().getStatusCode());
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-        String json = gson.toJson(message);
-
-        try (PrintWriter writer = resp.getWriter()) {
-            writer.print(json);
-        } catch (IOException ex) {
-            System.out.println("Unable to send data");
-            e.printStackTrace();
-            throw new IOException(ex);
+        } catch (ConnectionException | DaoException | ServiceException | ValidationException | DataResponseException e) {
+            log.error("Request failed: {}", e.getErrorInfo().getMessage(), e);
+            GsonWriter.sendErrorMessage(servletResponse, e);
         }
     }
 }

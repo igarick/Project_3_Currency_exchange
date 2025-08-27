@@ -118,7 +118,6 @@ public class CurrencyDao implements Dao<String, Currency> {
             statement.setLong(4, currency.getId());
 
             int rows = statement.executeUpdate();
-
             if (rows == 0) {
                 throw new DaoException(ErrorInfo.CURRENCY_NOT_FOUND);
             }

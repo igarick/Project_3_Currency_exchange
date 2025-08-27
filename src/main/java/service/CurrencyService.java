@@ -13,7 +13,6 @@ import java.util.Optional;
 public class CurrencyService {
 
     private static final CurrencyService INSTANCE = new CurrencyService();
-
     private final CurrencyDao currencyDao = CurrencyDao.getInstance();
 
     private CurrencyService() {
