@@ -27,13 +27,6 @@ public class JsonWriter {
         writeJson(response, json);
     }
 
-//    public static void sendErrorMessage(HttpServletResponse response, AppException e) throws IOException {
-//        ErrorMessageDto message = new ErrorMessageDto(e.getErrorInfo().getMessage());
-//
-//        response.setStatus(e.getErrorInfo().getStatusCode());
-//        sendResponse(message, response);
-//    }
-
     private static void writeJson(HttpServletResponse resp, String json) throws IOException {
         try (PrintWriter writer = resp.getWriter()) {
             writer.print(json);

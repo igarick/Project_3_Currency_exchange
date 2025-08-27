@@ -30,7 +30,6 @@ public class ServletFilter implements Filter {
             servletResponse.setStatus(e.getErrorInfo().getStatusCode());
 
             ErrorMessageDto messageDto = ErrorResponseFactory.fromException(e);
-//            JsonWriter.sendErrorMessage(servletResponse, e);
             JsonWriter.sendResponse(messageDto, servletResponse);
         }
     }
