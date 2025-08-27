@@ -1,13 +1,12 @@
 package filter;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import dto.ErrorMessageDto;
 import exception.*;
-import filterUtils.ErrorMessageDto;
+import filterUtils.ErrorResponseFactory;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
-import jsonUtils.GsonWriter;
+import jsonUtils.JsonWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +25,13 @@ public class ServletFilter implements Filter {
             log.warn("Unable to send data", e);
             throw e;
 
-        } catch (ConnectionException | DaoException | ServiceException | ValidationException | DataResponseException e) {
+        } catch (AppException e) {
             log.error("Request failed: {}", e.getErrorInfo().getMessage(), e);
-            GsonWriter.sendErrorMessage(servletResponse, e);
+            servletResponse.setStatus(e.getErrorInfo().getStatusCode());
+
+            ErrorMessageDto messageDto = ErrorResponseFactory.fromException(e);
+//            JsonWriter.sendErrorMessage(servletResponse, e);
+            JsonWriter.sendResponse(messageDto, servletResponse);
         }
     }
 }

@@ -2,7 +2,7 @@ package validators;
 
 import dto.CurrencyCreateDto;
 
-public class CreateDtoValidator extends AbstractValidator implements Validator<CurrencyCreateDto>{
+public class CurrencyCreateDtoValidator extends AbstractValidator implements Validator<CurrencyCreateDto>{
 
     @Override
     public void validate(CurrencyCreateDto dto) {

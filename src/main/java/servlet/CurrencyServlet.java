@@ -2,10 +2,10 @@ package servlet;
 
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
-import jsonUtils.GsonWriter;
-import validators.CreateDtoValidator;
-import validators.CommonDtoValidator;
-import validators.ServletValidator;
+import jsonUtils.JsonWriter;
+import validators.CurrencyCreateDtoValidator;
+import validators.CurrencyDtoValidator;
+import validators.RequestParameterValidator;
 import validators.Validator;
 import exception.DaoException;
 import jakarta.servlet.ServletException;
@@ -25,15 +25,15 @@ import org.slf4j.Logger;
 public class CurrencyServlet extends HttpServlet {
 
     private final CurrencyService currencyService = CurrencyService.getInstance();
-    private static final Validator<CurrencyDto> validatorCommon = new CommonDtoValidator();
-    private static final Validator<CurrencyCreateDto> validatorCreate = new CreateDtoValidator();
-    private static final ServletValidator validatorServlet = new ServletValidator();
+    private static final Validator<CurrencyDto> currencyDtoValidator = new CurrencyDtoValidator();
+    private static final Validator<CurrencyCreateDto> currencyCreateDtoValidator = new CurrencyCreateDtoValidator();
+    private static final RequestParameterValidator parameterValidator = new RequestParameterValidator();
     private static final Logger log = LoggerFactory.getLogger(CurrencyServlet.class);
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws DaoException {
         String id = req.getParameter("id");
-        validatorServlet.verifyNumberRepresentation(id);
+        parameterValidator.verifyNumberRepresentation(id);
 
         CurrencyDto currencyDto = new CurrencyDto(
                 Long.parseLong(req.getParameter("id")),
@@ -42,7 +42,7 @@ public class CurrencyServlet extends HttpServlet {
                 req.getParameter("sign")
         );
 
-        validatorCommon.validate(currencyDto);
+        currencyDtoValidator.validate(currencyDto);
 
         if (currencyService.update(currencyDto)) {
             log.info("Currency updated successfully {}", currencyDto);
@@ -72,10 +72,10 @@ public class CurrencyServlet extends HttpServlet {
                 req.getParameter("name"),
                 req.getParameter("sign")
         );
-        validatorCreate.validate(currencyCreateDto);
+        currencyCreateDtoValidator.validate(currencyCreateDto);
 
         CurrencyDto currencyDto = currencyService.save(currencyCreateDto);
-        GsonWriter.sendResponse(currencyDto, response);
+        JsonWriter.sendResponse(currencyDto, response);
     }
 
     @Override
@@ -83,13 +83,13 @@ public class CurrencyServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/")) {
-            GsonWriter.sendResponse(currencyService.findAll(), response);
+            JsonWriter.sendResponse(currencyService.findAll(), response);
         } else {
             String code = pathInfo.substring(1).toUpperCase();
-            validatorServlet.validateCode(code);
+            parameterValidator.validateCode(code);
 
             Optional<CurrencyDto> currency = currencyService.findByCode(code);
-            GsonWriter.sendResponse(currency, response);
+            JsonWriter.sendResponse(currency, response);
         }
     }
 }

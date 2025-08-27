@@ -4,7 +4,7 @@ import dto.CurrencyDto;
 import exception.ValidationException;
 import exceptionUtils.ErrorInfo;
 
-public class CommonDtoValidator extends AbstractValidator implements Validator<CurrencyDto> {
+public class CurrencyDtoValidator extends AbstractValidator implements Validator<CurrencyDto> {
 
     @Override
     public void validate(CurrencyDto dto) {

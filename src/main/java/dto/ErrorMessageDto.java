@@ -1,4 +1,4 @@
-package filterUtils;
+package dto;
 
 public record ErrorMessageDto(String message) {
 }

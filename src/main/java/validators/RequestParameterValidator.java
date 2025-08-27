@@ -3,7 +3,7 @@ package validators;
 import exception.DaoException;
 import exceptionUtils.ErrorInfo;
 
-public class ServletValidator extends AbstractValidator {
+public class RequestParameterValidator extends AbstractValidator {
     @Override
     public void validateCode(String code) {
         super.validateCode(code);
