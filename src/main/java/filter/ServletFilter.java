@@ -6,7 +6,7 @@ import filterUtils.ErrorResponseFactory;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
-import jsonUtils.JsonWriter;
+import jsonUtils.JsonResponseWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class ServletFilter implements Filter {
             servletResponse.setStatus(e.getErrorInfo().getStatusCode());
 
             ErrorMessageDto messageDto = ErrorResponseFactory.fromException(e);
-            JsonWriter.sendResponse(messageDto, servletResponse);
+            JsonResponseWriter.write(messageDto, servletResponse);
         }
     }
 }

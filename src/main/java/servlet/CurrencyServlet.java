@@ -1,12 +1,11 @@
 package servlet;
 
+import com.google.gson.Gson;
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
-import jsonUtils.JsonWriter;
-import validators.CurrencyCreateDtoValidator;
-import validators.CurrencyDtoValidator;
-import validators.RequestParameterValidator;
-import validators.Validator;
+import jsonUtils.JsonResponseWriter;
+import mappers.CurrencyMapper;
+import validators.*;
 import exception.DaoException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,18 +30,34 @@ public class CurrencyServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(CurrencyServlet.class);
 
     @Override
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
+        String pathInfo = req.getPathInfo();
+
+        if (pathInfo == null || pathInfo.equals("/")) {
+            JsonResponseWriter.write(currencyService.findAll(), resp);
+        } else {
+            String code = pathInfo.substring(1).toUpperCase();
+            parameterValidator.validateCode(code);
+
+            Optional<CurrencyDto> currency = currencyService.findByCode(code);
+            JsonResponseWriter.write(currency, response);
+        }
+    }
+
+    @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws DaoException {
-        String id = req.getParameter("id");
-        parameterValidator.verifyNumberRepresentation(id);
+        RequestParameterValidator_1 requestParameterValidator_1 = new RequestParameterValidator_1();
 
-        CurrencyDto currencyDto = new CurrencyDto(
-                Long.parseLong(req.getParameter("id")),
-                req.getParameter("code").toUpperCase(),
-                req.getParameter("name"),
-                req.getParameter("sign")
-        );
+        requestParameterValidator_1.validate(req);
+//
+//        String id = req.getParameter("id");
+//        parameterValidator.validateId(id);
 
-        currencyDtoValidator.validate(currencyDto);
+        CurrencyDto currencyDto = CurrencyMapper.fromRequest(req);
+
+//        currencyDtoValidator.validate(currencyDto);
 
         if (currencyService.update(currencyDto)) {
             log.info("Currency updated successfully {}", currencyDto);
@@ -67,15 +82,19 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        CurrencyCreateDto currencyCreateDto = new CurrencyCreateDto(
-                req.getParameter("code").toUpperCase(),
-                req.getParameter("name"),
-                req.getParameter("sign")
-        );
-        currencyCreateDtoValidator.validate(currencyCreateDto);
+
+        RequestParameterCreateValidator_1 validator_1 = new RequestParameterCreateValidator_1();
+        validator_1.validate(req);
+
+        CurrencyCreateDto currencyCreateDto = CurrencyMapper.fromRequestForCreate(req);
+
+
+//        CurrencyCreateDto currencyCreateDto = CurrencyMapper.fromRequestForCreate(req);
+
+//        currencyCreateDtoValidator.validate(currencyCreateDto);
 
         CurrencyDto currencyDto = currencyService.save(currencyCreateDto);
-        JsonWriter.sendResponse(currencyDto, response);
+        JsonResponseWriter.write(currencyDto, response);
     }
 
     @Override
@@ -83,13 +102,15 @@ public class CurrencyServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/")) {
-            JsonWriter.sendResponse(currencyService.findAll(), response);
+            JsonResponseWriter.write(currencyService.findAll(), response);
         } else {
             String code = pathInfo.substring(1).toUpperCase();
             parameterValidator.validateCode(code);
 
             Optional<CurrencyDto> currency = currencyService.findByCode(code);
-            JsonWriter.sendResponse(currency, response);
+            JsonResponseWriter.write(currency, response);
         }
     }
+
+
 }

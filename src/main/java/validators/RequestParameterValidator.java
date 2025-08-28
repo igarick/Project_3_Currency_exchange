@@ -9,7 +9,7 @@ public class RequestParameterValidator extends AbstractValidator {
         super.validateCode(code);
     }
 
-    public void verifyNumberRepresentation(String id) {
+    public void validateId(String id) {
         if (!(id.matches("[0-9]+"))) {
             throw new DaoException(ErrorInfo.INPUT_ID_ERROR);
         }

@@ -7,12 +7,6 @@ public abstract class AbstractValidator {
     private static final int MIN_SIGN = 1;
     private static final int MAX_SIGN = 5;
 
-//    protected void validateId(Long id) {
-//        if (!(id != null && id > 0)) {
-//            throw new ValidationException(ErrorInfo.INPUT_ID_ERROR);
-//        }
-//    }
-
     protected void validateCode(String code) {
         if (!code.matches("[a-zA-Z]{3}")) {
             throw new ValidationException(ErrorInfo.INPUT_CODE_ERROR);
