@@ -12,6 +12,7 @@ public enum ErrorInfo {
     UNABLE_TO_SEND_DATA_ERROR("Enable to send data", SC_INTERNAL_SERVER_ERROR),
 
     CURRENCY_QUERY_ERROR("Currency query failed", SC_INTERNAL_SERVER_ERROR),
+    EXCHANGE_RATE_QUERY_ERROR("Exchange rate query failed", SC_INTERNAL_SERVER_ERROR),
 
     CURRENCY_NOT_FOUND("Currency not found", SC_NOT_FOUND),
     CURRENCY_CODE_ALREADY_EXISTS("Currency with this code already exists", SC_CONFLICT);

@@ -39,6 +39,10 @@ public class CurrencyDao implements Dao<String, Currency> {
             WHERE Code = ?
             """;
 
+    private final static String FIND_BY_ID_SQL = FIND_ALL_SQL + """
+            WHERE ID = ?
+            """;
+
     private final static String UPDATE_SQL = """
             UPDATE Currencies
             SET Code = ?,
@@ -107,6 +111,25 @@ public class CurrencyDao implements Dao<String, Currency> {
         } catch (SQLException e) {
             throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
         }
+    }
+
+    public Optional<Currency> findById(Long id) {
+        try (Connection connection = ConnectionManager.get();
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
+            preparedStatement.setLong(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            Currency currency = null;
+            if (resultSet.next()) {
+                currency = buildCurrency(resultSet);
+            }
+
+            return Optional.ofNullable(currency);
+        } catch (SQLException e) {
+            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
+        }
+
     }
 
     public boolean update(Currency currency) throws DaoException {

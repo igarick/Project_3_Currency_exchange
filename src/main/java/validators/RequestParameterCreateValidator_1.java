@@ -6,7 +6,7 @@ public class RequestParameterCreateValidator_1 extends AbstractValidator impleme
 
     @Override
     public void validate(HttpServletRequest req) {
-        validateCode(req.getParameter("code").toUpperCase());
+        validateCode(req.getParameter("code")); //.toUpperCase()
         validateName(req.getParameter("name"));
         validateSign(req.getParameter("sign"));
     }

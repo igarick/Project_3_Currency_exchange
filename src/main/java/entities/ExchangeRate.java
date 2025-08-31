@@ -4,60 +4,60 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class ExchangeRate {
-    private int ID;
-    private String BaseCurrencyId;
-    private String TargetCurrencyId;
-    private BigDecimal Rate;
+    private int id;
+    private Long baseCurrencyId;
+    private Long targetCurrencyId;
+    private BigDecimal rate;
 
-    public ExchangeRate(int ID, String baseCurrencyId, String targetCurrencyId, BigDecimal rate) {
-        this.ID = ID;
-        this.BaseCurrencyId = baseCurrencyId;
-        this.TargetCurrencyId = targetCurrencyId;
-        this.Rate = rate;
+    public ExchangeRate(int id, Long baseCurrencyId, Long targetCurrencyId, BigDecimal rate) {
+        this.id = id;
+        this.baseCurrencyId = baseCurrencyId;
+        this.targetCurrencyId = targetCurrencyId;
+        this.rate = rate;
     }
 
     public ExchangeRate() {
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getBaseCurrencyId() {
-        return BaseCurrencyId;
+    public Long getBaseCurrencyId() {
+        return baseCurrencyId;
     }
 
-    public void setBaseCurrencyId(String baseCurrencyId) {
-        BaseCurrencyId = baseCurrencyId;
+    public void setBaseCurrencyId(Long baseCurrencyId) {
+        this.baseCurrencyId = baseCurrencyId;
     }
 
-    public String getTargetCurrencyId() {
-        return TargetCurrencyId;
+    public Long getTargetCurrencyId() {
+        return targetCurrencyId;
     }
 
-    public void setTargetCurrencyId(String targetCurrencyId) {
-        TargetCurrencyId = targetCurrencyId;
+    public void setTargetCurrencyId(Long targetCurrencyId) {
+        this.targetCurrencyId = targetCurrencyId;
     }
 
     public BigDecimal getRate() {
-        return Rate;
+        return rate;
     }
 
     public void setRate(BigDecimal rate) {
-        Rate = rate;
+        this.rate = rate;
     }
 
     @Override
     public String toString() {
         return "ExchangeRate{" +
-               "ID=" + ID +
-               ", BaseCurrencyId='" + BaseCurrencyId + '\'' +
-               ", TargetCurrencyId='" + TargetCurrencyId + '\'' +
-               ", Rate=" + Rate +
+               "ID=" + id +
+               ", BaseCurrencyId='" + baseCurrencyId + '\'' +
+               ", TargetCurrencyId='" + targetCurrencyId + '\'' +
+               ", Rate=" + rate +
                '}';
     }
 
@@ -65,11 +65,11 @@ public class ExchangeRate {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ExchangeRate that = (ExchangeRate) o;
-        return ID == that.ID && Objects.equals(BaseCurrencyId, that.BaseCurrencyId) && Objects.equals(TargetCurrencyId, that.TargetCurrencyId) && Objects.equals(Rate, that.Rate);
+        return id == that.id && Objects.equals(baseCurrencyId, that.baseCurrencyId) && Objects.equals(targetCurrencyId, that.targetCurrencyId) && Objects.equals(rate, that.rate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ID, BaseCurrencyId, TargetCurrencyId, Rate);
+        return Objects.hash(id, baseCurrencyId, targetCurrencyId, rate);
     }
 }

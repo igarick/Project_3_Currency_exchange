@@ -3,6 +3,7 @@ package servlet;
 import com.google.gson.Gson;
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import jsonUtils.JsonResponseWriter;
 import mappers.CurrencyMapper;
 import validators.*;
@@ -14,8 +15,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.CurrencyService;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Optional;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -33,17 +38,55 @@ public class CurrencyServlet extends HttpServlet {
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-        String pathInfo = req.getPathInfo();
+        System.out.println(req.getParameter("name"));
+        System.out.println(req.getParameter("id"));
 
-        if (pathInfo == null || pathInfo.equals("/")) {
-            JsonResponseWriter.write(currencyService.findAll(), resp);
-        } else {
-            String code = pathInfo.substring(1).toUpperCase();
-            parameterValidator.validateCode(code);
+        BufferedReader reader = req.getReader();
+        StringBuilder builder = new StringBuilder();
 
-            Optional<CurrencyDto> currency = currencyService.findByCode(code);
-            JsonResponseWriter.write(currency, response);
+        String line;
+        while ((line = reader.readLine()) != null) {
+            builder.append(line);
         }
+
+        System.out.println(builder);
+
+        String decoder = URLDecoder.decode(builder.toString(), StandardCharsets.UTF_8);
+
+        String[] split = decoder.split("&");
+        Map<String, String> map = new HashMap<>();
+
+        for (String s : split) {
+            String[] arr = s.split("=");
+            map.put(arr[0], arr[1]);
+        }
+
+        map.forEach((key, value) -> System.out.println(key + "=" + value));
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + "=" + entry.getValue());
+        }
+
+
+        CurrencyDto dto = new CurrencyDto(
+                Long.parseLong(map.get("id")),
+                map.get("code"),
+                map.get("name"),
+                map.get("sign")
+        );
+
+        System.out.println(dto);
+
+//        if (pathInfo == null || pathInfo.equals("/")) {
+//            log.error("Request must be not null");
+//            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//        } else {
+//            String code = pathInfo.substring(1).toUpperCase();
+//            parameterValidator.validateCode(code);
+
+//            Optional<CurrencyDto> currency = currencyService.findByCode(code);
+//            JsonResponseWriter.write(currency, response);
+//        }
     }
 
     @Override
@@ -63,21 +106,6 @@ public class CurrencyServlet extends HttpServlet {
             log.info("Currency updated successfully {}", currencyDto);
             resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
         }
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        String pathInfo = req.getPathInfo();
-//        String code = pathInfo.substring(1).toUpperCase();
-//
-//        if (!isValidCurrencyCode(code)) {
-//            throw new ValidException(ErrorInfo.INPUT_ERROR);
-//        }
-//
-//        if (currencyService.delete(code)) {
-//            resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
-//        }
-
     }
 
     @Override
