@@ -1,5 +1,5 @@
 package validators;
 
-public interface Validator <T> {
-    void validate(T dto);
+public interface Validator<T> {
+    void validate(T req);
 }

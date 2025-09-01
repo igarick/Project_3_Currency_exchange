@@ -4,8 +4,6 @@ import entities.Currency;
 import entities.ExchangeRate;
 import exception.DaoException;
 import exceptionUtils.ErrorInfo;
-import logic.utilsGURU.ConnectionManagerGURU;
-import models.ExchangeRateModel;
 import utils.ConnectionManager;
 
 import java.sql.Connection;
@@ -19,43 +17,38 @@ import java.util.Optional;
 public class ExchangeRateDao implements Dao<String, ExchangeRate>{
     private final static ExchangeRateDao INSTANCE = new ExchangeRateDao();
 
-    private final static String FIND_ALL_SQL = """
-            SELECT ID, BaseCurrencyId, TargetCurrencyId, Rate 
-            FROM ExchangeRates
-            """;
-
-//    private final static String FIND_ALL_MERGE_SQL = """
-//            SELECT ID, BaseCurrencyId, TargetCurrencyId, Rate
-//            FROM ExchangeRates e
-//            JOIN Currencies c on c.ID = e.BaseCurrencyId and c.ID = e.TargetCurrencyId
-//            """;
-
-    private final static String FIND_ALL_MERGE_SQL = """
+    private static final String FIND_ALL_SQL = """
             SELECT rates.ID,
                 base.ID as baseId, base.Code as baseCode, base.FullName as baseName, base.Sign as baseSign,
                 target.ID as targetId, target.Code as targetCode, target.FullName as targetName, target.Sign as targetSign,
-
                    rates.Rate
             FROM ExchangeRates as rates
             JOIN Currencies as base on base.ID = rates.BaseCurrencyId
-            JOIN Currencies as target on target.ID = rates.TargetCurrencyId;
+            JOIN Currencies as target on target.ID = rates.TargetCurrencyId
             """;
 
-    //                   (base.ID || ' ' || base.Code || ' ' || base.FullName || ' ' || base.Sign) as baseCurrency,
-//                (target.ID || ' ' || target.Code || ' ' || target.FullName || ' ' || target.Sign) as targetCurrency,
+    private static final String FIND_BY_CURRENCY_ID = FIND_ALL_SQL + """
+            WHERE rates.BaseCurrencyId = ?
+            AND rates.TargetCurrencyId = ?
+            """;
 
     private ExchangeRateDao() {
     }
 
+//              SELECT ID, BaseCurrencyId, TargetCurrencyId, Rate
+//            FROM ExchangeRates
+//            WHERE ? in (BaseCurrencyId)
+//            AND ? in (TargetCurrencyId)
+
     @Override
-    public List<ExchangeRate> findAll() {
+    public List<ExchangeRate> findAll() throws DaoException {
         try (Connection connection = ConnectionManager.get();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             List<ExchangeRate> rates = new ArrayList<>();
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                rates.add(buildRate(result));
+            while (resultSet.next()) {
+                rates.add(buildRate(resultSet));
             }
             return rates;
         } catch (SQLException e) {
@@ -63,39 +56,33 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate>{
         }
     }
 
-    public List<ExchangeRateModel> findAllMerge() {
-        try (Connection connection = ConnectionManager.get();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_MERGE_SQL)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            List<ExchangeRateModel> rates = new ArrayList<>();
-            while (resultSet.next()) {
-//                rates.add(buildRate(resultSet));
-                ExchangeRateModel exchangeRateModel = new ExchangeRateModel(
-                        resultSet.getLong("ID"),
-                        new Currency(resultSet.getLong("baseId"),
-                                resultSet.getString("baseCode"),
-                                resultSet.getString("baseName"),
-                                resultSet.getString("baseSign")),
-                        new Currency(resultSet.getLong("targetId"),
-                                resultSet.getString("targetCode"),
-                                resultSet.getString("targetName"),
-                                resultSet.getString("targetSign")),
-                        resultSet.getBigDecimal("Rate")
-                );
-                rates.add(exchangeRateModel);
-
-            }
-            return rates;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public Optional<ExchangeRate> findByCode(String code) {
         return Optional.empty();
     }
+
+    public List<ExchangeRate> findByCurrencyId(Long firstId, Long secondId) throws DaoException {
+        try (Connection connection = ConnectionManager.get();
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_CURRENCY_ID)) {
+            preparedStatement.setLong(1, firstId);
+            preparedStatement.setLong(2, secondId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<ExchangeRate> rates = new ArrayList<>();
+            if(resultSet.next()) {
+                rates.add(buildRate(resultSet));
+            }
+            return rates;
+        } catch (SQLException e) {
+            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
+        }
+    }
+
+//    private Optional<ExchangeRate> buildExchangeRate(ResultSet resultSet) {
+//        return new ExchangeRate(
+//                resultSet
+//        );
+//    }
 
     @Override
     public ExchangeRate save(ExchangeRate exchangeRate) {
@@ -112,29 +99,24 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate>{
         return false;
     }
 
-    private ExchangeRate buildRate(ResultSet result) throws SQLException {
+    private ExchangeRate buildRate(ResultSet result) throws DaoException {
         try {
             return new ExchangeRate(
-                    result.getInt("id"),
-                    result.getLong("baseCurrencyId"),
-                    result.getLong("targetCurrencyId"),
-                    result.getBigDecimal("rate")
+                    result.getLong("ID"),
+                    new Currency(
+                            result.getLong("baseId"),
+                            result.getString("baseCode"),
+                            result.getString("baseName"),
+                            result.getString("baseSign")),
+                    new Currency(
+                            result.getLong("targetId"),
+                            result.getString("targetCode"),
+                            result.getString("targetName"),
+                            result.getString("targetSign")),
+                    result.getBigDecimal("Rate")
             );
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private ExchangeRate buildRateModel(ResultSet result) throws SQLException {
-        try {
-            return new ExchangeRate(
-                    result.getInt("id"),
-                    result.getLong("baseCurrencyId"),
-                    result.getLong("targetCurrencyId"),
-                    result.getBigDecimal("rate")
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException(ErrorInfo.EXCHANGE_RATE_QUERY_ERROR, e);
         }
     }
 

@@ -1,6 +1,5 @@
 package dao;
 
-import dto.CurrencyFilter;
 import entities.Currency;
 import exception.DaoException;
 import exceptionUtils.ErrorInfo;
@@ -153,7 +152,7 @@ public class CurrencyDao implements Dao<String, Currency> {
         }
     }
 
-    private Currency buildCurrency(ResultSet result) {
+    private Currency buildCurrency(ResultSet result) throws DaoException {
         try {
             return new Currency(
                     result.getLong("Id"),
@@ -162,7 +161,7 @@ public class CurrencyDao implements Dao<String, Currency> {
                     result.getString("Sign")
             );
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
         }
     }
 
@@ -183,47 +182,4 @@ public class CurrencyDao implements Dao<String, Currency> {
         return false;
     }
 
-    // динамическое построние блока WHERE
-    public List<Currency> findAll(CurrencyFilter filter) {
-        List<Object> parameters = new ArrayList<>();
-        List<String> whereSql = new ArrayList<>();
-        if (filter.code() != null) {
-            parameters.add(filter.code());
-            whereSql.add("Code = ?");
-        }
-        if (filter.fullName() != null) {
-            parameters.add("%" + filter.fullName() + "%");
-            whereSql.add("FullName like ?");
-        }
-        parameters.add(filter.limit());
-        parameters.add(filter.offset());
-        String where = whereSql.stream().collect(Collectors.joining(
-                " AND ",
-                parameters.size() > 2 ? " WHERE " : "",
-                " LIMIT ? OFFSET ? "
-        ));
-
-        String sql = FIND_ALL_SQL + where;
-
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            List<Currency> currencies = new ArrayList<>();
-
-            for (int i = 0; i < parameters.size(); i++) {
-                statement.setObject(i + 1, parameters.get(i));
-            }
-            System.out.println(statement);
-
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                currencies.add(
-                        buildCurrency(result)
-                );
-            }
-
-            return currencies;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

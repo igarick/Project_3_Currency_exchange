@@ -16,8 +16,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<!--    <maven.compiler.source>23</maven.compiler.source>-->
-<!--    <maven.compiler.target>23</maven.compiler.target>-->
+    <maven.compiler.source>23</maven.compiler.source>
+    <maven.compiler.target>23</maven.compiler.target>
     <junit.version>5.11.0</junit.version>
   </properties>
 
@@ -69,17 +69,17 @@
       <version>3.50.3.0</version>
     </dependency>
 
-<!--&lt;!&ndash;    <dependency>&ndash;&gt;-->
-<!--&lt;!&ndash;      <groupId>org.slf4j</groupId>&ndash;&gt;-->
-<!--&lt;!&ndash;      <artifactId>slf4j-simple</artifactId>&ndash;&gt;-->
-<!--&lt;!&ndash;      <version>2.0.13</version>&ndash;&gt;-->
-<!--&lt;!&ndash;    </dependency>&ndash;&gt;-->
-
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>2.0.7</version>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.13</version>
     </dependency>
+
+<!--    <dependency>-->
+<!--      <groupId>org.slf4j</groupId>-->
+<!--      <artifactId>slf4j-api</artifactId>-->
+<!--      <version>2.0.7</version>-->
+<!--    </dependency>-->
 
 <!--    <dependency>-->
 <!--      <groupId>org.apache.tomcat</groupId>-->
@@ -89,17 +89,28 @@
 <!--    </dependency>-->
   </dependencies>
 
+<!--  <build>-->
+<!--    <plugins>-->
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-compiler-plugin</artifactId>-->
+<!--        <version>3.11.0</version>-->
+<!--        <configuration>-->
+<!--          <release>23</release>-->
+<!--        </configuration>-->
+<!--      </plugin>-->
+
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-war-plugin</artifactId>-->
+<!--        <version>3.4.0</version>-->
+<!--      </plugin>-->
+<!--    </plugins>-->
+<!--    <finalName>Project_3_Currency</finalName>-->
+<!--  </build>-->
+
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
-        <configuration>
-          <release>23</release>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
@@ -108,18 +119,6 @@
     </plugins>
     <finalName>Project_3_Currency</finalName>
   </build>
-
-<!--  <build>-->
-<!--    <plugins>-->
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-war-plugin</artifactId>-->
-<!--        <version>3.4.0</version>-->
-<!--      </plugin>-->
-<!--    </plugins>-->
-<!--    <finalName>Project_3_Currency</finalName>-->
-
-<!--  </build>-->
 
 <!--  <build>-->
 <!--    <finalName>Project_3_Currency</finalName>-->
