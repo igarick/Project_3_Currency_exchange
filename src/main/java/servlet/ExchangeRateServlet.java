@@ -29,11 +29,11 @@ public class ExchangeRateServlet extends HttpServlet {
         }
 
         if (path != null) {
-            String currencyPairCode = path.substring(1);
-            validator.validateCode(currencyPairCode);
+            String pairCode = path.substring(1);
+            validator.validateCode(pairCode);
 
-            List<ExchangeRateDto> rates = exchangeRateService.findRate(currencyPairCode);
-            JsonResponseWriter.write(rates, resp);
+            ExchangeRateDto exchangeRates = exchangeRateService.findExchangeRate(pairCode);
+            JsonResponseWriter.write(exchangeRates, resp);
 
             int c = 12;
 

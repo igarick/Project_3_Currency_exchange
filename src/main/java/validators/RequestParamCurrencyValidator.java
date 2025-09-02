@@ -18,20 +18,22 @@ public class RequestParamCurrencyValidator implements Validator<HttpServletReque
 
     public void validateCode(String code) {
         if (!code.matches("[a-zA-Z]{3}")) {
-            throw new ValidationException(ErrorInfo.INPUT_CODE_ERROR);
+            throw new ValidationException(ErrorInfo.CURRENCY_CODE_FAILED);
         }
     }
 
     protected void validateName(String name) {
         if (!name.matches("[a-zA-Z ]{1,15}")) {
-            throw new ValidationException(ErrorInfo.INPUT_NAME_ERROR);
+            throw new ValidationException(ErrorInfo.CURRENCY_CODE_FAILED);
         }
     }
 
     protected void validateSign(String sign) {
         if (!(sign.length() >= MIN_SIGN && sign.length() <= MAX_SIGN)) {
-            throw new ValidationException(ErrorInfo.INPUT_SIGN_ERROR);
+            throw new ValidationException(ErrorInfo.CURRENCY_CODE_FAILED);
         }
     }
+
+    // to do exceptions
 
 }

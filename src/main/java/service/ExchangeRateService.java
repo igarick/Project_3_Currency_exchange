@@ -4,7 +4,7 @@ import dao.CurrencyDao;
 import dao.ExchangeRateDao;
 import dto.CurrencyDto;
 import dto.ExchangeRateDto;
-import entities.Currency;
+import entities.ExchangeRate;
 import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
 
@@ -20,53 +20,47 @@ public class ExchangeRateService {
     }
 
     public List<ExchangeRateDto> findAll() {
-        return exchangeRateDao.findAll().stream()
-                .map(exchangeRate -> new ExchangeRateDto(
-                        exchangeRate.getId(),
-                        new CurrencyDto(
-                                exchangeRate.getBaseCurrency().getId(),
-                                exchangeRate.getBaseCurrency().getCode(),
-                                exchangeRate.getBaseCurrency().getFullName(),
-                                exchangeRate.getBaseCurrency().getSign()),
-                        new CurrencyDto(
-                                exchangeRate.getTargetCurrency().getId(),
-                                exchangeRate.getTargetCurrency().getCode(),
-                                exchangeRate.getTargetCurrency().getFullName(),
-                                exchangeRate.getTargetCurrency().getSign()),
-                        exchangeRate.getRate()
-                )).toList();
+        return exchangeRateDao.findAll()
+                .stream()
+                .map(this::buildExchangeRateDto)
+                .toList();
     }
 
-    public List<ExchangeRateDto> findRate(String currencyPairCode) {
-        String firstCode = currencyPairCode.substring(0, 3);
-        String secondCode = currencyPairCode.substring(3, 6);
-
-        Currency firstCurrency = currencyDao.findByCode(firstCode).get();
-        Currency secondCurrency = currencyDao.findByCode(secondCode).get();
-
-        Long currencyId_1 = firstCurrency.getId();
-        Long currencyId_2 = secondCurrency.getId();
-
-        List<ExchangeRateDto> rates = exchangeRateDao.findByCurrencyId(currencyId_1, currencyId_2).stream()
-                .map(exchangeRate -> new ExchangeRateDto(
-                        exchangeRate.getId(),
-                        new CurrencyDto(
-                                exchangeRate.getBaseCurrency().getId(),
-                                exchangeRate.getBaseCurrency().getCode(),
-                                exchangeRate.getBaseCurrency().getFullName(),
-                                exchangeRate.getBaseCurrency().getSign()),
-                        new CurrencyDto(
-                                exchangeRate.getTargetCurrency().getId(),
-                                exchangeRate.getTargetCurrency().getCode(),
-                                exchangeRate.getTargetCurrency().getFullName(),
-                                exchangeRate.getTargetCurrency().getSign()),
-                        exchangeRate.getRate()
-                )).toList();
-        if (rates.isEmpty()) {
+    public ExchangeRateDto findExchangeRate(String code) {
+        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(code);
+        if (exchangeRate.isEmpty()) {
             throw new ServiceException(ErrorInfo.EXCHANGE_RATE_NOT_FOUND);
         }
-        return rates;
+
+        return exchangeRate.stream()
+                .map(this::buildExchangeRateDto)
+                .findFirst()
+                .get();
     }
+
+    private ExchangeRateDto buildExchangeRateDto(ExchangeRate exchangeRate) {
+        return new ExchangeRateDto(
+                exchangeRate.getId(),
+                new CurrencyDto(
+                        exchangeRate.getBaseCurrency().getId(),
+                        exchangeRate.getBaseCurrency().getCode(),
+                        exchangeRate.getBaseCurrency().getFullName(),
+                        exchangeRate.getBaseCurrency().getSign()),
+                new CurrencyDto(
+                        exchangeRate.getTargetCurrency().getId(),
+                        exchangeRate.getTargetCurrency().getCode(),
+                        exchangeRate.getTargetCurrency().getFullName(),
+                        exchangeRate.getTargetCurrency().getSign()),
+                exchangeRate.getRate());
+    }
+
+//    private Long findCurrencyIdByCode(String code) {
+//        Optional<Currency> currency = currencyDao.findByCode(code);
+//        if (currency.isEmpty()) {
+//            throw new ServiceException(ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
+//        }
+//        return currency.get().getId();
+//    }
 
     public static ExchangeRateService getInstance() {
         return INSTANCE;

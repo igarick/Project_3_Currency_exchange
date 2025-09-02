@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ExchangeRateDao implements Dao<String, ExchangeRate>{
+public class ExchangeRateDao implements Dao<String, ExchangeRate> {
     private final static ExchangeRateDao INSTANCE = new ExchangeRateDao();
 
     private static final String FIND_ALL_SQL = """
@@ -32,23 +32,23 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate>{
             AND rates.TargetCurrencyId = ?
             """;
 
+    private static final String FIND_BY_CODE_SQL = FIND_ALL_SQL + """
+            WHERE base.Code = ?
+            AND target.Code = ?
+            """;
+
     private ExchangeRateDao() {
     }
-
-//              SELECT ID, BaseCurrencyId, TargetCurrencyId, Rate
-//            FROM ExchangeRates
-//            WHERE ? in (BaseCurrencyId)
-//            AND ? in (TargetCurrencyId)
 
     @Override
     public List<ExchangeRate> findAll() throws DaoException {
         try (Connection connection = ConnectionManager.get();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             List<ExchangeRate> rates = new ArrayList<>();
             while (resultSet.next()) {
-                rates.add(buildRate(resultSet));
+                rates.add(buildExchangeRate(resultSet));
             }
             return rates;
         } catch (SQLException e) {
@@ -58,31 +58,25 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate>{
 
     @Override
     public Optional<ExchangeRate> findByCode(String code) {
-        return Optional.empty();
-    }
+        String firstCurrencyCode = code.substring(0, 3).toUpperCase();
+        String secondCurrencyCode = code.substring(3, 6).toUpperCase();
 
-    public List<ExchangeRate> findByCurrencyId(Long firstId, Long secondId) throws DaoException {
         try (Connection connection = ConnectionManager.get();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_CURRENCY_ID)) {
-            preparedStatement.setLong(1, firstId);
-            preparedStatement.setLong(2, secondId);
-            ResultSet resultSet = preparedStatement.executeQuery();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_CODE_SQL)) {
+            preparedStatement.setString(1, firstCurrencyCode);
+            preparedStatement.setString(2, secondCurrencyCode);
 
-            List<ExchangeRate> rates = new ArrayList<>();
-            if(resultSet.next()) {
-                rates.add(buildRate(resultSet));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ExchangeRate exchangeRate = null;
+            if (resultSet.next()) {
+                exchangeRate = buildExchangeRate(resultSet);
             }
-            return rates;
+            return Optional.ofNullable(exchangeRate);
+
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
+            throw new RuntimeException(e);
         }
     }
-
-//    private Optional<ExchangeRate> buildExchangeRate(ResultSet resultSet) {
-//        return new ExchangeRate(
-//                resultSet
-//        );
-//    }
 
     @Override
     public ExchangeRate save(ExchangeRate exchangeRate) {
@@ -99,7 +93,7 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate>{
         return false;
     }
 
-    private ExchangeRate buildRate(ResultSet result) throws DaoException {
+    private ExchangeRate buildExchangeRate(ResultSet result) throws DaoException {
         try {
             return new ExchangeRate(
                     result.getLong("ID"),
@@ -119,9 +113,6 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate>{
             throw new DaoException(ErrorInfo.EXCHANGE_RATE_QUERY_ERROR, e);
         }
     }
-
-
-
 
     public static ExchangeRateDao getInstance() {
         return INSTANCE;

@@ -16,21 +16,21 @@ public class RequestParamExchangeRateValidator implements Validator<HttpServletR
         validateSign(req.getParameter("sign"));
     }
 
-    public void validateCode(String code) {
+    public void validateCode(String code) throws ValidationException {
         if (!code.matches("[a-zA-Z]{6}")) {
-            throw new ValidationException(ErrorInfo.INPUT_PAIR_CODE_ERROR);
+            throw new ValidationException(ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
         }
     }
 
     protected void validateName(String name) {
         if (!name.matches("[a-zA-Z ]{1,15}")) {
-            throw new ValidationException(ErrorInfo.INPUT_NAME_ERROR);
+            throw new ValidationException(ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
         }
     }
 
     protected void validateSign(String sign) {
         if (!(sign.length() >= MIN_SIGN && sign.length() <= MAX_SIGN)) {
-            throw new ValidationException(ErrorInfo.INPUT_SIGN_ERROR);
+            throw new ValidationException(ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
         }
     }
 

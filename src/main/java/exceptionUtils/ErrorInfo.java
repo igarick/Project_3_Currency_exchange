@@ -8,7 +8,10 @@ public enum ErrorInfo {
     INPUT_NAME_ERROR("Invalid name: must be < 15 letters", SC_BAD_REQUEST),
     INPUT_SIGN_ERROR("Invalid sign: must be < 5 characters", SC_BAD_REQUEST),
 
-    INPUT_PAIR_CODE_ERROR("Invalid code: must be 6 letters", SC_BAD_REQUEST),
+    CURRENCY_CODE_FAILED("There is no currency code in the address", SC_BAD_REQUEST),
+
+    CURRENCY_PAIR_CODES_ERROR("There are no currency pair codes in the address", SC_BAD_REQUEST),
+    EXCHANGE_RATE_NOT_FOUND("Exchange rate for the pair not found", SC_NOT_FOUND),
 
 
     CONNECTION_ERROR("Database connection error", SC_INTERNAL_SERVER_ERROR),
@@ -18,7 +21,6 @@ public enum ErrorInfo {
     EXCHANGE_RATE_QUERY_ERROR("Exchange rate query failed", SC_INTERNAL_SERVER_ERROR),
 
     CURRENCY_NOT_FOUND("Currency not found", SC_NOT_FOUND),
-    EXCHANGE_RATE_NOT_FOUND("Exchange rate not found", SC_NOT_FOUND),
     CURRENCY_CODE_ALREADY_EXISTS("Currency with this code already exists", SC_CONFLICT);
 
 
