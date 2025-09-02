@@ -4,36 +4,49 @@ import exception.ValidationException;
 import exceptionUtils.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
-public class RequestParamCurrencyValidator implements Validator<HttpServletRequest> {
-
+public class RequestParamCurrencyValidator {
     private static final int MIN_SIGN = 1;
     private static final int MAX_SIGN = 5;
 
-    @Override
     public void validate(HttpServletRequest req) {
-        validateCode(req.getParameter("code"));
-        validateName(req.getParameter("name"));
-        validateSign(req.getParameter("sign"));
+        String code = req.getParameter("code");
+        String name = req.getParameter("name");
+        String sign = req.getParameter("sign");
+
+        if(isEmpty(code) || isEmpty(name) || isEmpty(sign)) {
+            throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
+        }
+        validateCode(code);
+        validateName(name);
+        validateSign(sign);
     }
 
-    public void validateCode(String code) {
+    private boolean isEmpty(String param) {
+        return (param == null || param.isBlank());
+    }
+
+    private void validateCode(String code) {
         if (!code.matches("[a-zA-Z]{3}")) {
             throw new ValidationException(ErrorInfo.CURRENCY_CODE_FAILED);
         }
     }
 
-    protected void validateName(String name) {
+    private void validateName(String name) {
         if (!name.matches("[a-zA-Z ]{1,15}")) {
             throw new ValidationException(ErrorInfo.CURRENCY_CODE_FAILED);
         }
     }
 
-    protected void validateSign(String sign) {
+    private void validateSign(String sign) {
         if (!(sign.length() >= MIN_SIGN && sign.length() <= MAX_SIGN)) {
             throw new ValidationException(ErrorInfo.CURRENCY_CODE_FAILED);
         }
     }
 
     // to do exceptions
+
+    public void validateParamCode(String code) {
+        validateCode(code);
+    }
 
 }

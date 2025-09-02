@@ -71,19 +71,19 @@ public class CurrencyService {
         throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
     }
 
-    public Optional<CurrencyDto> findById(Long id) throws ServiceException {
-        Optional<CurrencyDto> currencyDto = currencyDao.findById(id).stream()
-                .map(currency -> new CurrencyDto(
-                        currency.getId(),
-                        currency.getCode(),
-                        currency.getFullName(),
-                        currency.getSign()))
-                .findFirst();
-        if (currencyDto.isPresent()) {
-            return currencyDto;
-        }
-        throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
-    }
+//    public Optional<CurrencyDto> findById(Long id) throws ServiceException {
+//        Optional<CurrencyDto> currencyDto = currencyDao.findById(id).stream()
+//                .map(currency -> new CurrencyDto(
+//                        currency.getId(),
+//                        currency.getCode(),
+//                        currency.getFullName(),
+//                        currency.getSign()))
+//                .findFirst();
+//        if (currencyDto.isPresent()) {
+//            return currencyDto;
+//        }
+//        throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
+//    }
 
     public static CurrencyService getInstance() {
         return INSTANCE;

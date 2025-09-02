@@ -113,7 +113,7 @@ public class CurrencyServlet extends HttpServlet {
             JsonResponseWriter.write(currencyService.findAll(), response);
         } else {
             String code = pathInfo.substring(1).toUpperCase();
-            validator.validateCode(code);
+            validator.validateParamCode(code);
 
             Optional<CurrencyDto> currency = currencyService.findByCode(code);
             JsonResponseWriter.write(currency, response);

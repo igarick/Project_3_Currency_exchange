@@ -9,7 +9,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 public class CurrencyDao implements Dao<String, Currency> {
@@ -75,7 +74,7 @@ public class CurrencyDao implements Dao<String, Currency> {
             if (isConstraintUniqueError(e)) {
                 throw new DaoException(ErrorInfo.CURRENCY_CODE_ALREADY_EXISTS, e);
             }
-            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
     }
 
@@ -91,7 +90,7 @@ public class CurrencyDao implements Dao<String, Currency> {
             }
             return currencies;
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
     }
 
@@ -108,7 +107,7 @@ public class CurrencyDao implements Dao<String, Currency> {
 
             return Optional.ofNullable(currency);
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
     }
 
@@ -126,7 +125,7 @@ public class CurrencyDao implements Dao<String, Currency> {
 
             return Optional.ofNullable(currency);
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
 
     }
@@ -148,7 +147,7 @@ public class CurrencyDao implements Dao<String, Currency> {
             if (isConstraintUniqueError(e)) {
                 throw new DaoException(ErrorInfo.CURRENCY_CODE_ALREADY_EXISTS, e);
             }
-            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR);
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED);
         }
     }
 
@@ -161,7 +160,7 @@ public class CurrencyDao implements Dao<String, Currency> {
                     result.getString("Sign")
             );
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.CURRENCY_QUERY_ERROR, e);
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
     }
 

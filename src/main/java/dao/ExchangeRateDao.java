@@ -52,7 +52,7 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate> {
             }
             return rates;
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.EXCHANGE_RATE_QUERY_ERROR, e);
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
     }
 
@@ -74,7 +74,7 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate> {
             return Optional.ofNullable(exchangeRate);
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
     }
 
@@ -110,7 +110,7 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate> {
                     result.getBigDecimal("Rate")
             );
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.EXCHANGE_RATE_QUERY_ERROR, e);
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
     }
 
