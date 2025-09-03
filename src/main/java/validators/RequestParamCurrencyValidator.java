@@ -25,7 +25,7 @@ public class RequestParamCurrencyValidator {
 
     private void validateCode(String code) {
         if (!code.matches("[a-zA-Z]{3}")) {
-            throw new ValidationException(ErrorInfo.CURRENCY_CODE_FAILED);
+            throw new ValidationException(ErrorInfo.CURRENCY_CODE_ERROR);
         }
     }
 
@@ -42,9 +42,6 @@ public class RequestParamCurrencyValidator {
     }
 
     public void validateParamCode(String code) {
-        if (isEmpty(code)) {
-            throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
-        }
         validateCode(code);
     }
 

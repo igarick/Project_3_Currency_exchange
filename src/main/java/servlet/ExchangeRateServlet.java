@@ -22,7 +22,7 @@ public class ExchangeRateServlet extends HttpServlet {
         String path = req.getPathInfo();
 
         String pairCode = path.substring(1);
-        validator.validatePairCode(pairCode);
+        validator.validateParamCode(pairCode);
 
         ExchangeRateDto exchangeRates = exchangeRateService.findExchangeRate(pairCode);
         JsonResponseWriter.write(exchangeRates, resp);
