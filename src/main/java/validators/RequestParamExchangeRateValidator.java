@@ -4,19 +4,19 @@ import exception.ValidationException;
 import exceptionUtils.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
-public class RequestParamExchangeRateValidator implements Validator<HttpServletRequest> {
+public class RequestParamExchangeRateValidator {
 
     private static final int MIN_SIGN = 1;
     private static final int MAX_SIGN = 5;
 
-    @Override
+
     public void validate(HttpServletRequest req) {
-        validateCode(req.getParameter("code"));
+        validatePairCode(req.getParameter("code"));
         validateName(req.getParameter("name"));
         validateSign(req.getParameter("sign"));
     }
 
-    public void validateCode(String code) throws ValidationException {
+    public void validatePairCode(String code) throws ValidationException {
         if (!code.matches("[a-zA-Z]{6}")) {
             throw new ValidationException(ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
         }

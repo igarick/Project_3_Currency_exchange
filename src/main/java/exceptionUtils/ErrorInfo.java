@@ -6,8 +6,12 @@ public enum ErrorInfo {
     // common
     CONNECTION_ERROR("Database connection error", SC_INTERNAL_SERVER_ERROR),
     UNABLE_TO_SEND_DATA_ERROR("Enable to send data", SC_INTERNAL_SERVER_ERROR),
+
     SQL_QUERY_FAILED("SQL query failed", SC_INTERNAL_SERVER_ERROR),
     FORM_FIELD_MISSING_ERROR("A required form field is missing", SC_BAD_REQUEST),
+    MAPPING_FAILED("Data mapping failed"),
+    PATH_ERROR("Incorrect page address"),
+
     // currency
     INPUT_ID_ERROR("Invalid id: must be > 0", SC_BAD_REQUEST),
     INPUT_CODE_ERROR("Invalid code: must be 3 letters", SC_BAD_REQUEST),
@@ -32,6 +36,10 @@ public enum ErrorInfo {
     private final String message;
     private final int statusCode;
 
+
+    ErrorInfo(String message) {
+        this(message, 0);
+    }
 
     ErrorInfo(String message, int statusCode) {
         this.message = message;

@@ -14,9 +14,8 @@ import service.CurrencyService;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet(urlPatterns = {"/currencies", "/currency/*"})
+@WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
-
     private final CurrencyService currencyService = CurrencyService.getInstance();
     private static final RequestParamCurrencyValidator validator = new RequestParamCurrencyValidator();
 
@@ -77,25 +76,6 @@ public class CurrencyServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
-//        RequestParamCurPutValidator requestParamCurPutValidator = new RequestParamCurPutValidator();
-//
-//        requestParamCurPutValidator.validate(req);
-//
-//        String id = req.getParameter("id");
-//        parameterValidator.validateId(id);
-//
-//        CurrencyDto currencyDto = CurrencyMapper.fromRequest(req);
-//
-//        currencyDtoValidator.validate(currencyDto);
-//
-//        if (currencyService.update(currencyDto)) {
-//            log.info("Currency updated successfully {}", currencyDto);
-//            resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
-//        }
-    }
-
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse response) throws IOException {
         validator.validate(req);
 
@@ -107,18 +87,12 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String pathInfo = request.getPathInfo();
+        String path = request.getPathInfo();
 
-        if (pathInfo == null || pathInfo.equals("/")) {
-            JsonResponseWriter.write(currencyService.findAll(), response);
-        } else {
-            String code = pathInfo.substring(1).toUpperCase();
-            validator.validateParamCode(code);
+        String code = path.substring(1).toUpperCase();
+        validator.validateParamCode(code);
 
-            Optional<CurrencyDto> currency = currencyService.findByCode(code);
-            JsonResponseWriter.write(currency, response);
-        }
+        Optional<CurrencyDto> currency = currencyService.findByCode(code);
+        JsonResponseWriter.write(currency, response);
     }
-
-
 }

@@ -1,6 +1,8 @@
 package mappers;
 
 import dto.CurrencyCreateDto;
+import exception.RequestMappingException;
+import exceptionUtils.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class CurrencyMapper {
@@ -18,11 +20,14 @@ public class CurrencyMapper {
 //    }
 
     public static CurrencyCreateDto fromRequest(HttpServletRequest request) {
-        return new CurrencyCreateDto(
-                request.getParameter("code").toUpperCase(),
-                request.getParameter("name"),
-                request.getParameter("sign")
-        );
+        try {
+            return new CurrencyCreateDto(
+                    request.getParameter("code").toUpperCase(),
+                    request.getParameter("name"),
+                    request.getParameter("sign"));
+        } catch (RuntimeException e) {
+            throw new RequestMappingException(ErrorInfo.MAPPING_FAILED);
+        }
 
     }
 }

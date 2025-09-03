@@ -18,57 +18,41 @@ public class CurrencyService {
     private CurrencyService() {
     }
 
-    public boolean update(CurrencyDto currencyDto) {
-        Currency currency = new Currency(
-                currencyDto.id(),
-                currencyDto.code(),
-                currencyDto.name(),
-                currencyDto.sign()
-        );
-        return currencyDao.update(currency);
-    }
-
     public CurrencyDto save(CurrencyCreateDto currencyCreateDto) {
-        Currency currency = new Currency(
+        Currency currencyToSave = new Currency(
                 null,
                 currencyCreateDto.code(),
                 currencyCreateDto.name(),
                 currencyCreateDto.sign());
 
-        Currency currencySaved = currencyDao.save(currency);
+        Currency savedCurrency = currencyDao.save(currencyToSave);
 
-        return new CurrencyDto(
-                currencySaved.getId(),
-                currencySaved.getCode(),
-                currencySaved.getFullName(),
-                currencySaved.getSign()
-        );
+        return buildCurrencyDto(savedCurrency);
     }
 
     public List<CurrencyDto> findAll() {
         return currencyDao.findAll().stream()
-                .map(currency -> new CurrencyDto(
-                        currency.getId(),
-                        currency.getCode(),
-                        currency.getFullName(),
-                        currency.getSign()
-                ))
+                .map(this::buildCurrencyDto)
                 .toList();
     }
 
     public Optional<CurrencyDto> findByCode(String code) throws ServiceException {
         Optional<CurrencyDto> currencyDto = currencyDao.findByCode(code).stream()
-                .map(currency -> new CurrencyDto(
-                        currency.getId(),
-                        currency.getCode(),
-                        currency.getFullName(),
-                        currency.getSign()
-                ))
+                .map(this::buildCurrencyDto)
                 .findFirst();
         if (currencyDto.isPresent()) {
             return currencyDto;
         }
         throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
+    }
+
+    private CurrencyDto buildCurrencyDto(Currency currency) {
+        return new CurrencyDto(
+                currency.getId(),
+                currency.getCode(),
+                currency.getFullName(),
+                currency.getSign()
+        );
     }
 
 //    public Optional<CurrencyDto> findById(Long id) throws ServiceException {

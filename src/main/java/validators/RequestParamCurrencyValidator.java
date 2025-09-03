@@ -5,8 +5,6 @@ import exceptionUtils.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class RequestParamCurrencyValidator {
-    private static final int MIN_SIGN = 1;
-    private static final int MAX_SIGN = 5;
 
     public void validate(HttpServletRequest req) {
         String code = req.getParameter("code");
@@ -32,20 +30,21 @@ public class RequestParamCurrencyValidator {
     }
 
     private void validateName(String name) {
-        if (!name.matches("[a-zA-Z ]{1,15}")) {
-            throw new ValidationException(ErrorInfo.CURRENCY_CODE_FAILED);
+        if (!name.matches("[a-zA-Z ]{1,15}")) {                            //"[\\p{L} ]{1,15}"
+            throw new ValidationException(ErrorInfo.CURRENCY_NAME_FAILED);
         }
     }
 
     private void validateSign(String sign) {
-        if (!(sign.length() >= MIN_SIGN && sign.length() <= MAX_SIGN)) {
-            throw new ValidationException(ErrorInfo.CURRENCY_CODE_FAILED);
+        if (!sign.matches(".{1,5}")) {
+            throw new ValidationException(ErrorInfo.CURRENCY_SIGN_FAILED);
         }
     }
 
-    // to do exceptions
-
     public void validateParamCode(String code) {
+        if (isEmpty(code)) {
+            throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
+        }
         validateCode(code);
     }
 
