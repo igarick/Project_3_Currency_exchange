@@ -7,6 +7,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 
 public class RequestParamExchangeRateValidator {
+    private static final int MAX_EXCHANGE_RATE_SCALE = 6;
+    private static final BigDecimal MAX_EXCHANGE_RATE = new BigDecimal(1999999999);
+    private static final BigDecimal MIN_EXCHANGE_RATE = new BigDecimal(0.000001);
+
     public void validate(HttpServletRequest req) {
         String baseCode = req.getParameter("baseCurrencyCode");
         String targetCode = req.getParameter("targetCurrencyCode");
@@ -37,17 +41,15 @@ public class RequestParamExchangeRateValidator {
         try {
             bigDecimal = new BigDecimal(rate);
 
-            if (bigDecimal.scale() > 6) {
-                throw new ArithmeticException();
+            if ((bigDecimal.compareTo(MAX_EXCHANGE_RATE) > 0) || (bigDecimal.compareTo(MIN_EXCHANGE_RATE) < 0)
+                || (bigDecimal.scale() > MAX_EXCHANGE_RATE_SCALE)) {
+                throw new ValidationException(ErrorInfo.CURRENCY_PAIR_RATE_ERROR);
             }
-        } catch (Exception e) {
-            throw new ValidationException(ErrorInfo.CURRENCY_PAIR_RATE_ERROR);
+        } catch (NumberFormatException e) {
+            throw new ValidationException(ErrorInfo.CURRENCY_PAIR_RATE_ERROR, e);
         }
 
-        int scale = bigDecimal.scale();
-
         System.out.println(bigDecimal);
-        System.out.println(scale);
     }
 
     private void validatePairCode(String code) throws ValidationException {

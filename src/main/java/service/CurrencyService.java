@@ -46,6 +46,8 @@ public class CurrencyService {
         throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
     }
 
+//    public List<CurrencyDto> findByCode
+
     private CurrencyDto buildCurrencyDto(Currency currency) {
         return new CurrencyDto(
                 currency.getId(),

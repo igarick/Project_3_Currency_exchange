@@ -23,11 +23,6 @@ public class CurrencyDao {     //implements Dao<String, Currency>
             VALUES (?, ?, ?)
             """;
 
-    private final static String DELETE_SQL = """
-            DELETE FROM Currencies
-            WHERE Code = ?
-            """;
-
     private final static String FIND_ALL_SQL = """
             SELECT ID, Code, FullName, Sign
             FROM Currencies
@@ -37,8 +32,9 @@ public class CurrencyDao {     //implements Dao<String, Currency>
             WHERE Code = ?
             """;
 
-    private final static String FIND_BY_ID_SQL = FIND_ALL_SQL + """
-            WHERE ID = ?
+    private final static String FIND_BY_CODES_SQL = FIND_ALL_SQL + """
+            WHERE Code = ?
+            and Code = ?
             """;
 
     private final static String UPDATE_SQL = """
@@ -111,24 +107,30 @@ public class CurrencyDao {     //implements Dao<String, Currency>
         }
     }
 
-//    public Optional<Currency> findById(Long id) {
-//        try (Connection connection = ConnectionManager.get();
-//            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
-//            preparedStatement.setLong(1, id);
-//
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//
-//            Currency currency = null;
-//            if (resultSet.next()) {
-//                currency = buildCurrency(resultSet);
-//            }
-//
-//            return Optional.ofNullable(currency);
-//        } catch (SQLException e) {
-//            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
-//        }
-//
-//    }
+    public List<Currency> findByCodes(String baseCode, String targetCode) {
+        try (Connection connection = ConnectionManager.get();
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_CODES_SQL)) {
+            preparedStatement.setString(1, baseCode);
+            preparedStatement.setString(2, targetCode);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<Currency> currencies = new ArrayList<>();
+            while (resultSet.next()) {
+                currencies.add(
+                        buildCurrency(resultSet)
+                );
+            }
+
+            if (currencies.size() < 2) {
+                return List.of();
+            }
+            return currencies;
+        } catch (SQLException e) {
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
+        }
+
+    }
 
 //    public boolean update(Currency currency) throws DaoException {
 //        try (Connection connection = ConnectionManager.get();

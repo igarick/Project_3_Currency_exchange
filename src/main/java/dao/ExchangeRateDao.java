@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ExchangeRateDao implements Dao<String, ExchangeRate> {
-    private final static ExchangeRateDao INSTANCE = new ExchangeRateDao();
+public class ExchangeRateDao {
+    private static final  ExchangeRateDao INSTANCE = new ExchangeRateDao();
+    private static final CurrencyDao currencyDao = CurrencyDao.getInstance();
 
     private static final String FIND_ALL_SQL = """
             SELECT rates.ID,
@@ -37,10 +38,10 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate> {
             AND target.Code = ?
             """;
 
+
     private ExchangeRateDao() {
     }
 
-    @Override
     public List<ExchangeRate> findAll() throws DaoException {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
@@ -48,7 +49,9 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate> {
 
             List<ExchangeRate> rates = new ArrayList<>();
             while (resultSet.next()) {
-                rates.add(buildExchangeRate(resultSet));
+                rates.add(
+                        buildExchangeRate(resultSet)
+                );
             }
             return rates;
         } catch (SQLException e) {
@@ -56,7 +59,6 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate> {
         }
     }
 
-    @Override
     public Optional<ExchangeRate> findByCode(String code) {
         String firstCurrencyCode = code.substring(0, 3).toUpperCase();
         String secondCurrencyCode = code.substring(3, 6).toUpperCase();
@@ -78,17 +80,14 @@ public class ExchangeRateDao implements Dao<String, ExchangeRate> {
         }
     }
 
-    @Override
-    public ExchangeRate save(ExchangeRate exchangeRate) {
+    public ExchangeRate save(String baseCurrency, String targetCurrency) {
+        List<Currency> currencies = currencyDao.findByCodes(baseCurrency, targetCurrency);
+        if (!currencies.isEmpty()) {
+
+        }
         return null;
     }
 
-    @Override
-    public boolean delete(String code) {
-        return false;
-    }
-
-    @Override
     public boolean update(ExchangeRate exchangeRate) {
         return false;
     }
