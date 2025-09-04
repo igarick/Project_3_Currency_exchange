@@ -19,7 +19,6 @@ public class CurrencyServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
     private static final RequestParamCurrencyValidator validator = new RequestParamCurrencyValidator();
 
-
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 //
@@ -75,15 +74,16 @@ public class CurrencyServlet extends HttpServlet {
 //        }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        validator.validate(req);
-
-        CurrencyCreateDto currencyCreateDto = CurrencyMapper.fromRequest(req);
-
-        CurrencyDto currencyDto = currencyService.save(currencyCreateDto);
-        JsonResponseWriter.write(currencyDto, response);
-    }
+//    @Override
+//    protected void doPost(HttpServletRequest req, HttpServletResponse response) throws IOException {
+//        validator.validate(req);
+//
+//        CurrencyCreateDto currencyCreateDto = CurrencyMapper.fromRequest(req);
+//
+//        CurrencyDto currencyDto = currencyService.save(currencyCreateDto);
+//        response.setStatus(201);
+//        JsonResponseWriter.write(currencyDto, response);
+//    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

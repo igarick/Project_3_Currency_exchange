@@ -18,10 +18,23 @@ import java.util.Optional;
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
+    private static final RequestParamCurrencyValidator validator = new RequestParamCurrencyValidator();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<CurrencyDto> currencies = currencyService.findAll();
         JsonResponseWriter.write(currencies, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        validator.validate(req);
+        CurrencyCreateDto currencyCreateDto = CurrencyMapper.fromRequest(req);
+
+        CurrencyDto currencyDto = currencyService.save(currencyCreateDto);
+
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        JsonResponseWriter.write(currencyDto, response);
     }
 }

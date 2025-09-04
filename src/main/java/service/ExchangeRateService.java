@@ -14,7 +14,6 @@ import java.util.Optional;
 public class ExchangeRateService {
     private static final ExchangeRateService INSTANCE = new ExchangeRateService();
     private final ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
-    private static final CurrencyDao currencyDao = CurrencyDao.getInstance();
 
     private ExchangeRateService() {
     }
