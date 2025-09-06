@@ -1,9 +1,10 @@
 package service;
 
-import dao.CurrencyDao;
 import dao.ExchangeRateDao;
 import dto.CurrencyDto;
+import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
+import entities.Currency;
 import entities.ExchangeRate;
 import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
@@ -25,8 +26,11 @@ public class ExchangeRateService {
                 .toList();
     }
 
-    public ExchangeRateDto findExchangeRate(String code) {
-        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(code);
+    public ExchangeRateDto findExchangeRate(String  pairCode) {
+        String baseCode = pairCode.substring(0, 3).toUpperCase();
+        String targetCode = pairCode.substring(3, 6).toUpperCase();
+
+        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(baseCode, targetCode);
         if (exchangeRate.isEmpty()) {
             throw new ServiceException(ErrorInfo.EXCHANGE_RATE_NOT_FOUND);
         }
@@ -37,29 +41,60 @@ public class ExchangeRateService {
                 .get();
     }
 
+    public ExchangeRateDto save(ExchangeRateCreateDto dto) {
+        ExchangeRate exchangeRateToSave = buildExchangeRate(dto);
+
+        exchangeRateDao.save(exchangeRateToSave);
+
+        String baseCode = dto.baseCurrency();
+        String targetCode = dto.targetCurrency();
+
+        return findExchangeRate(baseCode + targetCode);
+
+
+
+//        ExchangeRate saved = exchangeRateDao.save(exchangeRateToSave);
+//        Long exchangeRateId = exchangeRateDao.save(dto);
+//        String baseC
+
+
+//        return null;
+    }
+
+    public static ExchangeRate buildExchangeRate(ExchangeRateCreateDto dto) {
+        return new ExchangeRate(
+                null,
+                new Currency(
+                        null,
+                        dto.baseCurrency(),
+                        null,
+                        null
+                ),
+                new Currency(
+                        null,
+                        dto.targetCurrency(),
+                        null,
+                        null
+                ),
+                dto.rate()
+        );
+    }
+
     private ExchangeRateDto buildExchangeRateDto(ExchangeRate exchangeRate) {
         return new ExchangeRateDto(
                 exchangeRate.getId(),
                 new CurrencyDto(
-                        exchangeRate.getBaseCurrency().getId(),
-                        exchangeRate.getBaseCurrency().getCode(),
-                        exchangeRate.getBaseCurrency().getFullName(),
-                        exchangeRate.getBaseCurrency().getSign()),
+                        exchangeRate.getBaseCurrencyId().getId(),
+                        exchangeRate.getBaseCurrencyId().getCode(),
+                        exchangeRate.getBaseCurrencyId().getFullName(),
+                        exchangeRate.getBaseCurrencyId().getSign()),
                 new CurrencyDto(
-                        exchangeRate.getTargetCurrency().getId(),
-                        exchangeRate.getTargetCurrency().getCode(),
-                        exchangeRate.getTargetCurrency().getFullName(),
-                        exchangeRate.getTargetCurrency().getSign()),
+                        exchangeRate.getTargetCurrencyId().getId(),
+                        exchangeRate.getTargetCurrencyId().getCode(),
+                        exchangeRate.getTargetCurrencyId().getFullName(),
+                        exchangeRate.getTargetCurrencyId().getSign()),
                 exchangeRate.getRate());
     }
-
-//    private Long findCurrencyIdByCode(String code) {
-//        Optional<Currency> currency = currencyDao.findByCode(code);
-//        if (currency.isEmpty()) {
-//            throw new ServiceException(ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
-//        }
-//        return currency.get().getId();
-//    }
 
     public static ExchangeRateService getInstance() {
         return INSTANCE;

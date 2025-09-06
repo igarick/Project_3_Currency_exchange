@@ -5,14 +5,14 @@ import java.util.Objects;
 
 public class ExchangeRate {
     private Long id;
-    private Currency baseCurrency;
-    private Currency targetCurrency;
+    private Currency baseCurrencyId;
+    private Currency targetCurrencyId;
     private BigDecimal rate;
 
-    public ExchangeRate(Long id, Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
+    public ExchangeRate(Long id, Currency baseCurrencyId, Currency targetCurrencyId, BigDecimal rate) {
         this.id = id;
-        this.baseCurrency = baseCurrency;
-        this.targetCurrency = targetCurrency;
+        this.baseCurrencyId = baseCurrencyId;
+        this.targetCurrencyId = targetCurrencyId;
         this.rate = rate;
     }
 
@@ -27,20 +27,20 @@ public class ExchangeRate {
         this.id = id;
     }
 
-    public Currency getBaseCurrency() {
-        return baseCurrency;
+    public Currency getBaseCurrencyId() {
+        return baseCurrencyId;
     }
 
-    public void setBaseCurrency(Currency baseCurrency) {
-        this.baseCurrency = baseCurrency;
+    public void setBaseCurrencyId(Currency baseCurrencyId) {
+        this.baseCurrencyId = baseCurrencyId;
     }
 
-    public Currency getTargetCurrency() {
-        return targetCurrency;
+    public Currency getTargetCurrencyId() {
+        return targetCurrencyId;
     }
 
-    public void setTargetCurrency(Currency targetCurrency) {
-        this.targetCurrency = targetCurrency;
+    public void setTargetCurrencyId(Currency targetCurrencyId) {
+        this.targetCurrencyId = targetCurrencyId;
     }
 
     public BigDecimal getRate() {
@@ -55,8 +55,8 @@ public class ExchangeRate {
     public String toString() {
         return "ExchangeRate{" +
                "ID=" + id +
-               ", BaseCurrencyId='" + baseCurrency + '\'' +
-               ", TargetCurrencyId='" + targetCurrency + '\'' +
+               ", BaseCurrencyId='" + baseCurrencyId + '\'' +
+               ", TargetCurrencyId='" + targetCurrencyId + '\'' +
                ", Rate=" + rate +
                '}';
     }
@@ -65,11 +65,11 @@ public class ExchangeRate {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ExchangeRate that = (ExchangeRate) o;
-        return id == that.id && Objects.equals(baseCurrency, that.baseCurrency) && Objects.equals(targetCurrency, that.targetCurrency) && Objects.equals(rate, that.rate);
+        return id == that.id && Objects.equals(baseCurrencyId, that.baseCurrencyId) && Objects.equals(targetCurrencyId, that.targetCurrencyId) && Objects.equals(rate, that.rate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, baseCurrency, targetCurrency, rate);
+        return Objects.hash(id, baseCurrencyId, targetCurrencyId, rate);
     }
 }

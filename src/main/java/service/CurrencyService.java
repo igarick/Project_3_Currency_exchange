@@ -4,10 +4,12 @@ import dao.CurrencyDao;
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
 import entities.Currency;
+import exception.DaoException;
 import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class CurrencyService {
@@ -30,23 +32,27 @@ public class CurrencyService {
         return buildCurrencyDto(savedCurrency);
     }
 
-    public List<CurrencyDto> findAll() {
-        return currencyDao.findAll().stream()
+    public List<CurrencyDto> findAll() {        //CurrencyDto
+//        return currencyDao.findAll();
+
+                return currencyDao.findAll().stream()
                 .map(this::buildCurrencyDto)
                 .toList();
     }
 
-    public Optional<CurrencyDto> findByCode(String code) throws ServiceException {
-        Optional<CurrencyDto> currencyDto = currencyDao.findByCode(code).stream()
-                .map(this::buildCurrencyDto)
-                .findFirst();
-        if (currencyDto.isPresent()) {
-            return currencyDto;
+    public CurrencyDto findByCode(String code) throws ServiceException {
+        CurrencyDto currencyDto = null;
+        try {
+            currencyDto = currencyDao.findByCode(code).stream()
+                    .map(this::buildCurrencyDto)
+                    .findFirst()
+                    .get();
+        } catch (NoSuchElementException e) {
+            throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
         }
-        throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
-    }
 
-//    public List<CurrencyDto> findByCode
+        return currencyDto;
+    }
 
     private CurrencyDto buildCurrencyDto(Currency currency) {
         return new CurrencyDto(

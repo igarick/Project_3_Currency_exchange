@@ -2,6 +2,7 @@ package servlet;
 
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
+import entities.Currency;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,9 +33,9 @@ public class CurrenciesServlet extends HttpServlet {
         validator.validate(req);
         CurrencyCreateDto currencyCreateDto = CurrencyMapper.fromRequest(req);
 
-        CurrencyDto currencyDto = currencyService.save(currencyCreateDto);
+        CurrencyDto currencySavedDto = currencyService.save(currencyCreateDto);
 
         response.setStatus(HttpServletResponse.SC_CREATED);
-        JsonResponseWriter.write(currencyDto, response);
+        JsonResponseWriter.write(currencySavedDto, response);
     }
 }

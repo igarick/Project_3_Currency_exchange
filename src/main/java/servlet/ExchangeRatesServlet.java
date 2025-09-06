@@ -1,5 +1,6 @@
 package servlet;
 
+import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
 import exception.ValidationException;
 import jakarta.servlet.ServletException;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
+import mappers.ExchangeRateMapper;
 import service.ExchangeRateService;
 import validators.RequestParamExchangeRateValidator;
 
@@ -29,11 +31,10 @@ public class ExchangeRatesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         validator.validate(req);
-        String baseCode = req.getParameter("baseCurrencyCode");
-        String targetCode = req.getParameter("targetCurrencyCode");
-        String rate = req.getParameter("rate");
+        ExchangeRateCreateDto dto = ExchangeRateMapper.fromRequest(req);
 
-
+        ExchangeRateDto saved = exchangeRateService.save(dto);
+        JsonResponseWriter.write(saved, resp);
 
     }
 }

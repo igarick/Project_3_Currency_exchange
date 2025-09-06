@@ -92,7 +92,7 @@ public class CurrencyServlet extends HttpServlet {
         String code = path.substring(1).toUpperCase();
         validator.validateParamCode(code);
 
-        Optional<CurrencyDto> currency = currencyService.findByCode(code);
-        JsonResponseWriter.write(currency, response);
+        CurrencyDto dto = currencyService.findByCode(code);
+        JsonResponseWriter.write(dto, response);
     }
 }

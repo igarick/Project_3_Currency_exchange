@@ -34,7 +34,8 @@ public enum ErrorInfo {
     CURRENCY_PAIR_CODES_ERROR("There are no currency pair codes in the address", SC_BAD_REQUEST),
     EXCHANGE_RATE_NOT_FOUND("Exchange rate for the pair not found", SC_NOT_FOUND),
     CURRENCY_PAIR_RATE_ERROR("Invalid rate", SC_BAD_REQUEST),
-    CURRENCY_DO_NOT_EXIST("One (or both) currency of currency pair do not exist"),
+    CURRENCY_PAIR_DO_NOT_EXIST("One (or both) currency of currency pair do not exist in the database", SC_NOT_FOUND),
+    CURRENCY_PAIR_CODE_ALREADY_EXISTS("A currency pair with this code already exists", SC_CONFLICT),
 
 
 

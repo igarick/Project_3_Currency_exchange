@@ -23,8 +23,9 @@ public class ExchangeRateServlet extends HttpServlet {
 
         String pairCode = path.substring(1);
         validator.validateParamCode(pairCode);
+//        PairCodeDto dto = PairCodeMapper.convertToDto(pairCode);
 
-        ExchangeRateDto exchangeRates = exchangeRateService.findExchangeRate(pairCode);
-        JsonResponseWriter.write(exchangeRates, resp);
+        ExchangeRateDto exchangeRate = exchangeRateService.findExchangeRate(pairCode);
+        JsonResponseWriter.write(exchangeRate, resp);
     }
 }

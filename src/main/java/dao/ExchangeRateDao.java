@@ -1,5 +1,6 @@
 package dao;
 
+import dto.ExchangeRateCreateDto;
 import entities.Currency;
 import entities.ExchangeRate;
 import exception.DaoException;
@@ -15,8 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRateDao {
-    private static final  ExchangeRateDao INSTANCE = new ExchangeRateDao();
-    private static final CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private static final ExchangeRateDao INSTANCE = new ExchangeRateDao();
+    //    private final int SQLITE_CONSTRAINT_ERROR_CODE = 19;
+    private final String SQLITE_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
+    private final String SQLITE_NOTNULL_ERROR_MESSAGE = "SQLITE_CONSTRAINT_NOTNULL";
 
     private static final String FIND_ALL_SQL = """
             SELECT rates.ID,
@@ -36,6 +39,15 @@ public class ExchangeRateDao {
     private static final String FIND_BY_CODE_SQL = FIND_ALL_SQL + """
             WHERE base.Code = ?
             AND target.Code = ?
+            """;
+
+    private static final String SAVE_SQL = """
+            INSERT INTO ExchangeRates (BaseCurrencyId, TargetCurrencyId, Rate)
+            VALUES (
+                    (SELECT Currencies.ID FROM Currencies WHERE Code = ?),
+                    (SELECT Currencies.ID FROM Currencies WHERE Code = ?),
+                    ?
+                   )
             """;
 
 
@@ -59,14 +71,11 @@ public class ExchangeRateDao {
         }
     }
 
-    public Optional<ExchangeRate> findByCode(String code) {
-        String firstCurrencyCode = code.substring(0, 3).toUpperCase();
-        String secondCurrencyCode = code.substring(3, 6).toUpperCase();
-
+    public Optional<ExchangeRate> findByCode(String baseCode, String targetCode) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_CODE_SQL)) {
-            preparedStatement.setString(1, firstCurrencyCode);
-            preparedStatement.setString(2, secondCurrencyCode);
+            preparedStatement.setString(1, baseCode);
+            preparedStatement.setString(2, targetCode);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             ExchangeRate exchangeRate = null;
@@ -74,22 +83,36 @@ public class ExchangeRateDao {
                 exchangeRate = buildExchangeRate(resultSet);
             }
             return Optional.ofNullable(exchangeRate);
-
         } catch (SQLException e) {
             throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
     }
 
-    public ExchangeRate save(String baseCurrency, String targetCurrency) {
-        List<Currency> currencies = currencyDao.findByCodes(baseCurrency, targetCurrency);
-        if (!currencies.isEmpty()) {
+    public void save(ExchangeRate exchangeRate) {                 //ExchangeRateCreateDto
+        try (Connection connection = ConnectionManager.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL)) {
+            preparedStatement.setString(1, exchangeRate.getBaseCurrencyId().getCode());
+            preparedStatement.setString(2, exchangeRate.getTargetCurrencyId().getCode());
+            preparedStatement.setBigDecimal(3, exchangeRate.getRate());
 
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            if (isUniqueError(e)) {
+                throw new DaoException(ErrorInfo.CURRENCY_PAIR_CODE_ALREADY_EXISTS, e);
+            }
+            if (isNullError(e)) {
+                throw new DaoException(ErrorInfo.CURRENCY_PAIR_DO_NOT_EXIST, e);
+            }
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
-        return null;
     }
 
-    public boolean update(ExchangeRate exchangeRate) {
-        return false;
+    private boolean isUniqueError(SQLException e) {
+        return (e.getMessage().contains(SQLITE_UNIQUE_ERROR_MESSAGE));
+    }
+
+    private boolean isNullError(SQLException e) {
+        return (e.getMessage().contains(SQLITE_NOTNULL_ERROR_MESSAGE));
     }
 
     private ExchangeRate buildExchangeRate(ResultSet result) throws DaoException {
