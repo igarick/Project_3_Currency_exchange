@@ -50,15 +50,6 @@ public class ExchangeRateService {
         String targetCode = dto.targetCurrency();
 
         return findExchangeRate(baseCode + targetCode);
-
-
-
-//        ExchangeRate saved = exchangeRateDao.save(exchangeRateToSave);
-//        Long exchangeRateId = exchangeRateDao.save(dto);
-//        String baseC
-
-
-//        return null;
     }
 
     public static ExchangeRate buildExchangeRate(ExchangeRateCreateDto dto) {
