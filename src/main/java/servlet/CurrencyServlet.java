@@ -1,9 +1,7 @@
 package servlet;
 
-import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
 import jsonUtils.JsonResponseWriter;
-import mappers.CurrencyMapper;
 import validators.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,12 +10,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import service.CurrencyService;
 
 import java.io.IOException;
-import java.util.*;
 
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
-    private static final RequestParamCurrencyValidator validator = new RequestParamCurrencyValidator();
+    private static final RequestCurrencyValidator validator = new RequestCurrencyValidator();
 
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -87,10 +84,7 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String path = request.getPathInfo();
-
-        String code = path.substring(1).toUpperCase();
-        validator.validateParamCode(code);
+        String code = validator.extractAndValidateCode(request);
 
         CurrencyDto dto = currencyService.findByCode(code);
         JsonResponseWriter.write(dto, response);

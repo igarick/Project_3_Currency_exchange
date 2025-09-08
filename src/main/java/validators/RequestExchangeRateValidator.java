@@ -4,9 +4,10 @@ import exception.ValidationException;
 import exceptionUtils.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
-public class RequestParamExchangeRateValidator {
+public class RequestExchangeRateValidator extends AbstractValidator{
     private static final int MAX_EXCHANGE_RATE_SCALE = 6;
     private static final BigDecimal MAX_EXCHANGE_RATE = new BigDecimal(1999999999);
     private static final BigDecimal MIN_EXCHANGE_RATE = new BigDecimal(0.000001);
@@ -19,34 +20,21 @@ public class RequestParamExchangeRateValidator {
         if(isEmpty(baseCode) || isEmpty(targetCode) || isEmpty(rate)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
         }
-
-        validateCode(baseCode);
-        validateCode(targetCode);
+        validateCode(baseCode, ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
+        validateCode(targetCode, ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
         validateRate(rate);
-
-    }
-
-    private boolean isEmpty(String param) {
-        return (param == null || param.isBlank());
-    }
-
-    private void validateCode(String code) {
-        if (!code.matches("[a-zA-Z]{3}")) {
-            throw new ValidationException(ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
-        }
     }
 
     private void validateRate(String rate) {
         BigDecimal bigDecimal = null;
         try {
             bigDecimal = new BigDecimal(rate);
-
             if ((bigDecimal.compareTo(MAX_EXCHANGE_RATE) > 0) || (bigDecimal.compareTo(MIN_EXCHANGE_RATE) < 0)
                 || (bigDecimal.scale() > MAX_EXCHANGE_RATE_SCALE)) {
-                throw new ValidationException(ErrorInfo.CURRENCY_PAIR_RATE_ERROR);
+                throw new ValidationException(ErrorInfo.EXCHANGE_RATE_ERROR);
             }
         } catch (NumberFormatException e) {
-            throw new ValidationException(ErrorInfo.CURRENCY_PAIR_RATE_ERROR, e);
+            throw new ValidationException(ErrorInfo.EXCHANGE_RATE_ERROR, e);
         }
 
         System.out.println(bigDecimal);
@@ -58,8 +46,28 @@ public class RequestParamExchangeRateValidator {
         }
     }
 
-    public void validateParamCode(String pairCode) {
+    public String extractAndValidatePairCode(HttpServletRequest req) {
+        String path = extractPath(req);
+
+        String pairCode = path.substring(1);
         validatePairCode(pairCode);
+        return pairCode;
     }
 
+    public BigDecimal extractAndValidateRate(HttpServletRequest req) throws IOException {
+        String parameter = req.getReader().readLine();
+
+        if (parameter == null || !parameter.contains("rate=")) {
+            throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
+        }
+
+        String rate = parameter.replace("rate=", "");
+
+        if(isEmpty(rate)) {
+            throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
+        }
+
+        validateRate(rate);
+        return new BigDecimal(rate);
+    }
 }

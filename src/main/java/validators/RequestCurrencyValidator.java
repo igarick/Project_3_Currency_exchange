@@ -4,7 +4,7 @@ import exception.ValidationException;
 import exceptionUtils.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
-public class RequestParamCurrencyValidator {
+public class RequestCurrencyValidator extends AbstractValidator {
 
     public void validate(HttpServletRequest req) {
         String code = req.getParameter("code");
@@ -14,19 +14,9 @@ public class RequestParamCurrencyValidator {
         if(isEmpty(code) || isEmpty(name) || isEmpty(sign)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
         }
-        validateCode(code);
+        validateCode(code, ErrorInfo.CURRENCY_CODE_ERROR);
         validateName(name);
         validateSign(sign);
-    }
-
-    private boolean isEmpty(String param) {
-        return (param == null || param.isBlank());
-    }
-
-    private void validateCode(String code) {
-        if (!code.matches("[a-zA-Z]{3}")) {
-            throw new ValidationException(ErrorInfo.CURRENCY_CODE_ERROR);
-        }
     }
 
     private void validateName(String name) {
@@ -41,8 +31,11 @@ public class RequestParamCurrencyValidator {
         }
     }
 
-    public void validateParamCode(String code) {
-        validateCode(code);
+    public String extractAndValidateCode(HttpServletRequest request) { //String code
+        String path = extractPath(request);
+        String code = path.substring(1);
+        validateCode(code, ErrorInfo.CURRENCY_CODE_ERROR);
+        return code;
     }
 
 }

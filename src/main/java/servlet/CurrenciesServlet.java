@@ -2,7 +2,6 @@ package servlet;
 
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
-import entities.Currency;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,16 +9,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
 import mappers.CurrencyMapper;
 import service.CurrencyService;
-import validators.RequestParamCurrencyValidator;
+import validators.RequestCurrencyValidator;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
-    private static final RequestParamCurrencyValidator validator = new RequestParamCurrencyValidator();
+    private static final RequestCurrencyValidator validator = new RequestCurrencyValidator();
 
 
     @Override

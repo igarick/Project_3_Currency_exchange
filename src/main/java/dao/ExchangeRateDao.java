@@ -1,10 +1,12 @@
 package dao;
 
-import dto.ExchangeRateCreateDto;
 import entities.Currency;
 import entities.ExchangeRate;
 import exception.DaoException;
 import exceptionUtils.ErrorInfo;
+import models.ExchangeRateModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.ConnectionManager;
 
 import java.sql.Connection;
@@ -17,9 +19,9 @@ import java.util.Optional;
 
 public class ExchangeRateDao {
     private static final ExchangeRateDao INSTANCE = new ExchangeRateDao();
-    //    private final int SQLITE_CONSTRAINT_ERROR_CODE = 19;
     private final String SQLITE_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
     private final String SQLITE_NOTNULL_ERROR_MESSAGE = "SQLITE_CONSTRAINT_NOTNULL";
+    private final Logger log = LoggerFactory.getLogger(ExchangeRateDao.class);
 
     private static final String FIND_ALL_SQL = """
             SELECT rates.ID,
@@ -50,8 +52,35 @@ public class ExchangeRateDao {
                    )
             """;
 
+    private static final String UPDATE_SQL = """
+            UPDATE ExchangeRates
+            SET Rate = ?
+            WHERE (
+                    BaseCurrencyId = ((SELECT ID FROM Currencies WHERE Code = ?))
+                    AND TargetCurrencyId = ((SELECT ID FROM Currencies WHERE Code = ?))
+            )
+""";
+
 
     private ExchangeRateDao() {
+    }
+
+    public void update(ExchangeRateModel model) {
+        try (
+            Connection connection = ConnectionManager.get();
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
+            preparedStatement.setBigDecimal(1, model.rate());
+            preparedStatement.setString(2, model.baseCurrency());
+            preparedStatement.setString(3, model.targetCurrency());
+
+            int i = preparedStatement.executeUpdate();
+
+            if (i == 0) {
+                throw new DaoException(ErrorInfo.CURRENCY_PAIR_MISSING_ERROR);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
+        }
     }
 
     public List<ExchangeRate> findAll() throws DaoException {
@@ -88,12 +117,12 @@ public class ExchangeRateDao {
         }
     }
 
-    public void save(ExchangeRate exchangeRate) {                 //ExchangeRateCreateDto
+    public void save(ExchangeRateModel model) {                 //ExchangeRateCreateDto
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL)) {
-            preparedStatement.setString(1, exchangeRate.getBaseCurrencyId().getCode());
-            preparedStatement.setString(2, exchangeRate.getTargetCurrencyId().getCode());
-            preparedStatement.setBigDecimal(3, exchangeRate.getRate());
+            preparedStatement.setString(1, model.baseCurrency());
+            preparedStatement.setString(2, model.targetCurrency());
+            preparedStatement.setBigDecimal(3, model.rate());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -115,7 +144,7 @@ public class ExchangeRateDao {
         return (e.getMessage().contains(SQLITE_NOTNULL_ERROR_MESSAGE));
     }
 
-    private ExchangeRate buildExchangeRate(ResultSet result) throws DaoException {
+    private ExchangeRate buildExchangeRate(ResultSet result) {
         try {
             return new ExchangeRate(
                     result.getLong("ID"),

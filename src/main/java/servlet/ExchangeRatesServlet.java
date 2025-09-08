@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
 import mappers.ExchangeRateMapper;
 import service.ExchangeRateService;
-import validators.RequestParamExchangeRateValidator;
+import validators.RequestExchangeRateValidator;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
     private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
-    private static final RequestParamExchangeRateValidator validator =new RequestParamExchangeRateValidator();
+    private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ValidationException, IOException {
@@ -30,7 +30,7 @@ public class ExchangeRatesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        validator.validate(req);
+        requestValidator.validate(req);
         ExchangeRateCreateDto dto = ExchangeRateMapper.fromRequest(req);
 
         ExchangeRateDto saved = exchangeRateService.save(dto);
