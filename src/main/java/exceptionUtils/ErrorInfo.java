@@ -15,23 +15,25 @@ public enum ErrorInfo {
 
     // currency
 
-    CURRENCY_CODE_ERROR("There is no currency code in the address", SC_BAD_REQUEST),
+    CURRENCY_CODE_ERROR("The code must be only 3 letters", SC_BAD_REQUEST),
+    CURRENCY_NAME_ERROR("The name must be < 15 letters", SC_BAD_REQUEST),
+    CURRENCY_SIGN_ERROR("The name must be < 5 characters", SC_BAD_REQUEST),
 
-    CURRENCY_NAME_FAILED("The name must be < 15 letters", SC_BAD_REQUEST),
-    CURRENCY_SIGN_FAILED("The name must be < 5 characters", SC_BAD_REQUEST),
-
-    CURRENCY_NOT_FOUND("Currency not found", SC_NOT_FOUND),
+    CURRENCY_CODE_NOT_FOUND("There is no currency code in the address", SC_NOT_FOUND),
     CURRENCY_CODE_ALREADY_EXISTS("Currency with this code already exists", SC_CONFLICT),
 
     // exchangeRate
 
-    CURRENCY_PAIR_CODES_ERROR("There are no currency pair codes in the address", SC_BAD_REQUEST),
-    EXCHANGE_RATE_NOT_FOUND("Exchange rate for the pair not found", SC_NOT_FOUND),
+    CURRENCY_PAIR_CODES_ERROR("The currency pair codes must be only 6 letters", SC_BAD_REQUEST),
     EXCHANGE_RATE_ERROR("Invalid rate", SC_BAD_REQUEST),
-    CURRENCY_PAIR_DO_NOT_EXIST("One (or both) currency of currency pair do not exist in the database", SC_NOT_FOUND),
-    CURRENCY_PAIR_CODE_ALREADY_EXISTS("A currency pair with this code already exists", SC_CONFLICT),
-    CURRENCY_PAIR_MISSING_ERROR("The currency pair is missing from database", SC_NOT_FOUND),
 
+    CURRENCY_PAIR_CODE_NOT_FOUND("There are no currency pair codes in the address", SC_NOT_FOUND),
+    CURRENCY_PAIR_DOES_NOT_EXIST("One (or both) currency of currency pair do not exist in the database", SC_NOT_FOUND),
+    CURRENCY_PAIR_ALREADY_EXISTS("A currency pair with this code already exists", SC_CONFLICT),
+    CURRENCY_PAIR_MISSING("The currency pair is missing from database", SC_NOT_FOUND),
+
+    // exchange
+    AMOUNT_ERROR("Invalid amount", SC_BAD_REQUEST),
 
 
     CURRENCY_PAIR_CODES_ERRhOR("There are no currency pair codes in the address", SC_BAD_REQUEST),

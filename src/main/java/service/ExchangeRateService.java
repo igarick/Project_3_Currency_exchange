@@ -40,7 +40,7 @@ public class ExchangeRateService {
 
         Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(baseCode, targetCode);
         if (exchangeRate.isEmpty()) {
-            throw new ServiceException(ErrorInfo.EXCHANGE_RATE_NOT_FOUND);
+            throw new ServiceException(ErrorInfo.CURRENCY_PAIR_CODE_NOT_FOUND);
         }
 
         return exchangeRate.stream()

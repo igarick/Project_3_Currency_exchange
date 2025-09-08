@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class RequestCurrencyValidator extends AbstractValidator {
 
-    public void validate(HttpServletRequest req) {
+    public void validateParam(HttpServletRequest req) {
         String code = req.getParameter("code");
         String name = req.getParameter("name");
         String sign = req.getParameter("sign");
@@ -21,13 +21,13 @@ public class RequestCurrencyValidator extends AbstractValidator {
 
     private void validateName(String name) {
         if (!name.matches("[a-zA-Z ]{1,15}")) {                            //"[\\p{L} ]{1,15}"
-            throw new ValidationException(ErrorInfo.CURRENCY_NAME_FAILED);
+            throw new ValidationException(ErrorInfo.CURRENCY_NAME_ERROR);
         }
     }
 
     private void validateSign(String sign) {
         if (!sign.matches(".{1,5}")) {
-            throw new ValidationException(ErrorInfo.CURRENCY_SIGN_FAILED);
+            throw new ValidationException(ErrorInfo.CURRENCY_SIGN_ERROR);
         }
     }
 

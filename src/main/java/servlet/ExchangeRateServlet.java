@@ -26,6 +26,7 @@ public class ExchangeRateServlet extends HttpServlet {
         String pairCode = requestValidator.extractAndValidatePairCode(req);
 
         ExchangeRateDto exchangeRate = exchangeRateService.findExchangeRate(pairCode);
+
         JsonResponseWriter.write(exchangeRate, resp);
     }
 
@@ -33,10 +34,10 @@ public class ExchangeRateServlet extends HttpServlet {
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pairCode = requestValidator.extractAndValidatePairCode(req);
         BigDecimal rate = requestValidator.extractAndValidateRate(req);
-
         ExchangeRateUpdateDto dto = ExchangeRateMapper.convertTo(pairCode, rate);
 
         ExchangeRateDto update = exchangeRateService.update(dto);
+
         JsonResponseWriter.write(update, resp);
     }
 }

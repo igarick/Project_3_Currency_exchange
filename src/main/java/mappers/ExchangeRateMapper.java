@@ -13,7 +13,6 @@ public final class ExchangeRateMapper {
 
     public static ExchangeRateCreateDto fromRequest(HttpServletRequest request) {
         return new ExchangeRateCreateDto(
-//                null,
                 request.getParameter("baseCurrencyCode").toUpperCase(),
                 request.getParameter("targetCurrencyCode").toUpperCase(),
                 new BigDecimal(request.getParameter("rate"))

@@ -17,7 +17,7 @@ import java.util.List;
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
-    private static final RequestCurrencyValidator validator = new RequestCurrencyValidator();
+    private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator();
 
 
     @Override
@@ -28,7 +28,7 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        validator.validate(req);
+        requestValidator.validateParam(req);
         CurrencyCreateDto currencyCreateDto = CurrencyMapper.fromRequest(req);
 
         CurrencyDto currencySavedDto = currencyService.save(currencyCreateDto);

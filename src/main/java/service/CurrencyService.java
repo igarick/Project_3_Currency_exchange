@@ -1,16 +1,15 @@
 package service;
 
 import dao.CurrencyDao;
+import dto.CurrencyCodeDto;
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
 import entities.Currency;
-import exception.DaoException;
 import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 public class CurrencyService {
 
@@ -40,7 +39,9 @@ public class CurrencyService {
                 .toList();
     }
 
-    public CurrencyDto findByCode(String code) throws ServiceException {
+    public CurrencyDto findByCode(CurrencyCodeDto codeDto) {
+        String code = codeDto.code();
+
         CurrencyDto currencyDto = null;
         try {
             currencyDto = currencyDao.findByCode(code).stream()
@@ -48,9 +49,8 @@ public class CurrencyService {
                     .findFirst()
                     .get();
         } catch (NoSuchElementException e) {
-            throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
+            throw new ServiceException(ErrorInfo.CURRENCY_CODE_NOT_FOUND);
         }
-
         return currencyDto;
     }
 

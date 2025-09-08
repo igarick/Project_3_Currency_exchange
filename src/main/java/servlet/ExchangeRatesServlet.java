@@ -34,6 +34,8 @@ public class ExchangeRatesServlet extends HttpServlet {
         ExchangeRateCreateDto dto = ExchangeRateMapper.fromRequest(req);
 
         ExchangeRateDto saved = exchangeRateService.save(dto);
+
+        resp.setStatus(HttpServletResponse.SC_CREATED);
         JsonResponseWriter.write(saved, resp);
 
     }

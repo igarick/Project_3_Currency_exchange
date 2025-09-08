@@ -76,7 +76,7 @@ public class ExchangeRateDao {
             int i = preparedStatement.executeUpdate();
 
             if (i == 0) {
-                throw new DaoException(ErrorInfo.CURRENCY_PAIR_MISSING_ERROR);
+                throw new DaoException(ErrorInfo.CURRENCY_PAIR_MISSING);
             }
         } catch (SQLException e) {
             throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
@@ -127,10 +127,10 @@ public class ExchangeRateDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             if (isUniqueError(e)) {
-                throw new DaoException(ErrorInfo.CURRENCY_PAIR_CODE_ALREADY_EXISTS, e);
+                throw new DaoException(ErrorInfo.CURRENCY_PAIR_ALREADY_EXISTS, e);
             }
             if (isNullError(e)) {
-                throw new DaoException(ErrorInfo.CURRENCY_PAIR_DO_NOT_EXIST, e);
+                throw new DaoException(ErrorInfo.CURRENCY_PAIR_DOES_NOT_EXIST, e);
             }
             throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
