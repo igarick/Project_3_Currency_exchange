@@ -25,7 +25,7 @@ public enum ErrorInfo {
     // exchangeRate
 
     CURRENCY_PAIR_CODES_ERROR("The currency pair codes must be only 6 letters", SC_BAD_REQUEST),
-    EXCHANGE_RATE_ERROR("Invalid rate", SC_BAD_REQUEST),
+    EXCHANGE_RATE_ERROR("Invalid rate. Must be between 0.000001 and 1999999999", SC_BAD_REQUEST),
 
     CURRENCY_PAIR_CODE_NOT_FOUND("There are no currency pair codes in the address", SC_NOT_FOUND),
     CURRENCY_PAIR_DOES_NOT_EXIST("One (or both) currency of currency pair do not exist in the database", SC_NOT_FOUND),
@@ -33,7 +33,7 @@ public enum ErrorInfo {
     CURRENCY_PAIR_MISSING("The currency pair is missing from database", SC_NOT_FOUND),
 
     // exchange
-    AMOUNT_ERROR("Invalid amount", SC_BAD_REQUEST),
+    AMOUNT_ERROR("Invalid amount. Must be greater than 0 and less than 1999999999", SC_BAD_REQUEST),
 
 
     CURRENCY_PAIR_CODES_ERRhOR("There are no currency pair codes in the address", SC_BAD_REQUEST),

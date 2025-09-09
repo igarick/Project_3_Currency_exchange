@@ -1,7 +1,10 @@
 package mappers;
 
+import dto.CurrencyPairCodeDto;
 import dto.ExchangeDto;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.math.BigDecimal;
 
 public class ExchangeMapper {
     public static ExchangeDto fromRequest(HttpServletRequest request) {
@@ -10,9 +13,12 @@ public class ExchangeMapper {
         String amount = request.getParameter("amount");
 
         return new ExchangeDto(
-                baseCurrency.toUpperCase(),
-                targetCurrency.toUpperCase(),
-                Long.parseLong(amount)
+                new CurrencyPairCodeDto(
+                        baseCurrency.toUpperCase(),
+                        targetCurrency.toUpperCase()
+                ),
+                new BigDecimal(amount)
+//                Long.parseLong(amount)
         );
     }
 }

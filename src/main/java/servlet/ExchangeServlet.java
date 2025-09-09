@@ -13,16 +13,21 @@ import java.io.IOException;
 
 @WebServlet("/exchange")
 public class ExchangeServlet extends HttpServlet {
-    private static final ExchangeValidator validatorRequest = new ExchangeValidator();
+    private static final ExchangeValidator requestValidator = new ExchangeValidator();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        GET /exchange?from=USD&to=AUD&amount=10
 
-        validatorRequest.validateParam(req);
+        requestValidator.validateParam(req);
 
         ExchangeDto dto = ExchangeMapper.fromRequest(req);
 
+        String baseCurrency = req.getParameter("from");
+        String targetCurrency = req.getParameter("to");
+        String amount = req.getParameter("amount");
+
+        System.out.println(baseCurrency + " " + targetCurrency + " " + amount);
 
 
     }

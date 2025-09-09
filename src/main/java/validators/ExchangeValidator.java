@@ -5,6 +5,7 @@ import exceptionUtils.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class ExchangeValidator extends AbstractValidator {
+    private static final int MAX_AMOUNT_SCALE = 2;
 
     public void validateParam(HttpServletRequest request) {
         String baseCurrency = request.getParameter("from");
@@ -21,14 +22,21 @@ public class ExchangeValidator extends AbstractValidator {
     }
 
     private void validateAmount(String amount) {
-        try {
-            long l = Long.parseLong(amount);
-            if (l <= 0) {
-                throw new ValidationException(ErrorInfo.AMOUNT_ERROR);
-            }
-        } catch (NumberFormatException | ValidationException e) {
-            throw new ValidationException(ErrorInfo.AMOUNT_ERROR, e);
+//        try {
+            validateDecimal(amount, ErrorInfo.AMOUNT_ERROR, MAX_AMOUNT_SCALE);
+//        } catch (ValidationException | NumberFormatException e) {
+//            throw new ValidationException(ErrorInfo.AMOUNT_ERROR, e);
         }
-    }
+
+
+//        try {
+//            long l = Long.parseLong(amount);
+//            if (l <= 0 || l > 1999999999) {
+//                throw new ValidationException(ErrorInfo.AMOUNT_ERROR);
+//            }
+//        } catch (NumberFormatException | ValidationException e) {
+//            throw new ValidationException(ErrorInfo.AMOUNT_ERROR, e);
+//        }
+//    }
 
 }

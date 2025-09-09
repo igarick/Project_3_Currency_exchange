@@ -1,4 +1,6 @@
 package dto;
 
-public record ExchangeDto(String baseCurrency, String targetCurrency, Long amount) {
+import java.math.BigDecimal;
+
+public record ExchangeDto(CurrencyPairCodeDto currencyPairCodeDto, BigDecimal amount) {
 }

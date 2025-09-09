@@ -1,6 +1,6 @@
 //package filter;
 //
-//import dto.ErrorMessageDto;
+//import currencyPairCodeDto.ErrorMessageDto;
 //import exception.AppException;
 //import filterUtils.ErrorResponseFactory;
 //import jakarta.servlet.*;
