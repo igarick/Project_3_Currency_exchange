@@ -20,8 +20,8 @@ public class RequestExchangeRateValidator extends AbstractValidator{
         if(isEmpty(baseCode) || isEmpty(targetCode) || isEmpty(rate)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
         }
-        validateCode(baseCode, ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
-        validateCode(targetCode, ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
+        validateCode(baseCode, ErrorInfo.CURRENCY_CODE_ERROR);
+        validateCode(targetCode, ErrorInfo.CURRENCY_CODE_ERROR);
         validateRate(rate);
     }
 

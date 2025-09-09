@@ -13,12 +13,16 @@ public class ExchangeMapper {
         String amount = request.getParameter("amount");
 
         return new ExchangeDto(
-                new CurrencyPairCodeDto(
-                        baseCurrency.toUpperCase(),
-                        targetCurrency.toUpperCase()
-                ),
-                new BigDecimal(amount)
-//                Long.parseLong(amount)
+                baseCurrency.toUpperCase(),
+                targetCurrency.toUpperCase(),
+                new BigDecimal(amount).setScale(2)
         );
+//        return new ExchangeDto(
+//                new CurrencyPairCodeDto(
+//                        baseCurrency.toUpperCase(),
+//                        targetCurrency.toUpperCase()
+//                ),
+//                new BigDecimal(amount)
+//        );
     }
 }

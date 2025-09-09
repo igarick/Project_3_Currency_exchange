@@ -14,26 +14,24 @@ public class ExchangeService {
     private ExchangeService() {
     }
 
-    public BigDecimal convertAmount(ExchangeDto dto) {
-        String pairCode = dto.currencyPairCodeDto().toString();
-//        Long amount =
+    public ExchangeConvertedAmountDto convertAmount(ExchangeDto dto) {
+        String pairCode = dto.baseCurrency() + dto.targetCurrency();
         BigDecimal amount = dto.amount();
 
         ExchangeRateDto exchangeRate = exchangeRateService.findExchangeRate(pairCode);
-        BigDecimal rate = exchangeRate.rate();
-//        BigDecimal convertedAmount = null;
+        BigDecimal rate = exchangeRate.rate().setScale(2);
 
         BigDecimal convertedAmount = calculateDirectExchangeRate(amount, rate);
 
         ExchangeConvertedAmountDto convertedAmountDto = new ExchangeConvertedAmountDto(
                 exchangeRate.baseCurrencyId(),
                 exchangeRate.targetCurrencyId(),
-                exchangeRate.rate(),
+                rate,
                 amount,
                 convertedAmount
         );
 
-        return convertedAmount;
+        return convertedAmountDto;
     }
 
     private BigDecimal calculateDirectExchangeRate(BigDecimal amount, BigDecimal rate) {
