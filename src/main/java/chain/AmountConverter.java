@@ -29,7 +29,7 @@ public abstract class AmountConverter {
         BigDecimal amount = dto.amount();
 
         Optional<ExchangeRate> exchangeRate = findExchangeRate(baseCurrency, targetCurrency);
-
+// to do
         if (exchangeRate.isEmpty()) {
             return next.convert(dto);
         }
