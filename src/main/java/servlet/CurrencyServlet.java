@@ -3,7 +3,7 @@ package servlet;
 import dto.CurrencyCodeDto;
 import dto.CurrencyDto;
 import jsonUtils.JsonResponseWriter;
-import mappers.CurrencyMapper;
+import servletMappers.CurrencyMapper;
 import validators.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

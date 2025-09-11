@@ -1,4 +1,4 @@
-package chain;
+package ExchangeConverter;
 
 import dao.ExchangeRateDao;
 import dto.CurrencyDto;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class ReverseExchangeRate extends AmountConverter {
+public class Reverse extends AmountConverter {
     ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
 
     @Override
@@ -22,14 +22,11 @@ public class ReverseExchangeRate extends AmountConverter {
     @Override
     protected ExchangeAmountAndRateDto determineRateAndConvertAmount(BigDecimal amount, BigDecimal rate) {
         BigDecimal reverseRate = new BigDecimal(1).divide(rate).setScale(2, RoundingMode.DOWN);
-
         BigDecimal convertedAmount = reverseRate.multiply(amount).setScale(2, RoundingMode.DOWN);
-
         ExchangeAmountAndRateDto dto = new ExchangeAmountAndRateDto(
                 convertedAmount,
                 reverseRate
         );
-//        BigDecimal convertedAmount = calculateReverseExchangeRate(amount, reverseRate);
         return dto;
     }
 
@@ -58,17 +55,4 @@ public class ReverseExchangeRate extends AmountConverter {
                 dto.convertedAmount()
         );
     }
-
-    private BigDecimal calculateReverseExchangeRate(BigDecimal amount, BigDecimal rate) {
-//        BigDecimal reverseRate = new BigDecimal(1).divide(rate);
-        BigDecimal convertedAmount = rate.multiply(amount);
-//        BigDecimal convertedAmount = rate.multiply(amount);
-        return convertedAmount.setScale(2, RoundingMode.DOWN);
-    }
-
-    private BigDecimal calculateReverseRate(BigDecimal rate) {
-        return new BigDecimal(1).divide(rate).setScale(2, RoundingMode.DOWN);
-    }
-
-
 }

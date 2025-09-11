@@ -1,4 +1,4 @@
-package mappers;
+package servletMappers;
 
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateUpdateDto;

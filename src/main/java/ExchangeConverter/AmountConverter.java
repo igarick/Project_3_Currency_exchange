@@ -1,4 +1,4 @@
-package chain;
+package ExchangeConverter;
 
 import dto.ExchangeAmountAndRateDto;
 import dto.ExchangeConvertedDto;
@@ -38,8 +38,8 @@ public abstract class AmountConverter {
         ExchangeRate exchangeRate = exchangeRateOptional.get();
         BigDecimal rate = exchangeRate.getRate().setScale(2, RoundingMode.HALF_UP);
 
-        ExchangeAmountAndRateDto amountAndRateDto = determineRateAndConvertAmount(amount, rate);
-        ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate, amount, amountAndRateDto);
+        ExchangeAmountAndRateDto convertedAmountAndCurrentRateDto = determineRateAndConvertAmount(amount, rate);
+        ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate, amount, convertedAmountAndCurrentRateDto);
         return convertedDto;
     }
 
@@ -48,23 +48,4 @@ public abstract class AmountConverter {
     protected abstract boolean isEndOfChain();
     protected abstract ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ExchangeAmountAndRateDto amountAndRateDto);
 
-//    private ExchangeConvertedDto buildConvertedDto(ExchangeRate currentRate, BigDecimal rate, BigDecimal amount, BigDecimal convertedAmount) {
-//        return new ExchangeConvertedDto(
-//                new CurrencyDto(
-//                        currentRate.getBaseCurrencyId().getId(),
-//                        currentRate.getBaseCurrencyId().getCode(),
-//                        currentRate.getBaseCurrencyId().getFullName(),
-//                        currentRate.getBaseCurrencyId().getSign()
-//                ),
-//                new CurrencyDto(
-//                        currentRate.getTargetCurrencyId().getId(),
-//                        currentRate.getTargetCurrencyId().getCode(),
-//                        currentRate.getTargetCurrencyId().getFullName(),
-//                        currentRate.getTargetCurrencyId().getSign()
-//                ),
-//                rate,
-//                amount,
-//                convertedAmount
-//        );
-//    }
 }

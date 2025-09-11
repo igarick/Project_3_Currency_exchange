@@ -1,9 +1,7 @@
-package mappers;
+package servletMappers;
 
 import dto.CurrencyCodeDto;
 import dto.CurrencyCreateDto;
-import exception.RequestMappingException;
-import exceptionUtils.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
 public final class CurrencyMapper {

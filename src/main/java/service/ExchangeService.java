@@ -1,9 +1,6 @@
 package service;
 
-import chain.AmountConverter;
-import chain.DirectExchangeRate;
-import chain.EndExchangeRate;
-import chain.ReverseExchangeRate;
+import ExchangeConverter.*;
 import dao.ExchangeRateDao;
 import dto.CurrencyDto;
 import dto.ExchangeConvertedDto;
@@ -22,10 +19,11 @@ public class ExchangeService {
     private ExchangeService() {
     }
 
-    public ExchangeConvertedDto getConvertedAmount(ExchangeDto exchangeDto) {
-        AmountConverter amountConverter = new DirectExchangeRate();
-        amountConverter.setNext(new ReverseExchangeRate())
-                .setNext(new EndExchangeRate());
+    public ExchangeConvertedDto convertAmount(ExchangeDto exchangeDto) {
+        AmountConverter amountConverter = new Direct();
+        amountConverter.setNext(new Reverse())
+                .setNext(new Cross())
+                .setNext(new End());
 
         ExchangeConvertedDto dto = amountConverter.convert(exchangeDto);
 
@@ -35,26 +33,26 @@ public class ExchangeService {
 
     //----*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**--*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*--*
 
-    public ExchangeConvertedDto convertAmount(ExchangeDto dto) {
-        String pairCode = dto.baseCurrency() + dto.targetCurrency();
-        BigDecimal amount = dto.amount();
-
-        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(dto.baseCurrency(), dto.targetCurrency());
-
-        if (exchangeRate.isPresent()) {
-            ExchangeRate exchangeRate1 = exchangeRate.get();
-
-            BigDecimal rate = exchangeRate1.getRate().setScale(2);
-            BigDecimal convertedAmount = calculateDirectExchangeRate(amount, rate);
-
-            ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate1, rate, amount, convertedAmount);
-
-
-            return convertedDto;
-        }
-
-        return null;
-    }
+//    public ExchangeConvertedDto convertAmount(ExchangeDto dto) {
+//        String pairCode = dto.baseCurrency() + dto.targetCurrency();
+//        BigDecimal amount = dto.amount();
+//
+//        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(dto.baseCurrency(), dto.targetCurrency());
+//
+//        if (exchangeRate.isPresent()) {
+//            ExchangeRate exchangeRate1 = exchangeRate.get();
+//
+//            BigDecimal rate = exchangeRate1.getRate().setScale(2);
+//            BigDecimal convertedAmount = calculateDirectExchangeRate(amount, rate);
+//
+//            ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate1, rate, amount, convertedAmount);
+//
+//
+//            return convertedDto;
+//        }
+//
+//        return null;
+//    }
 
     //------------------------------------------------------------------------------------------------------------------------------------------------
 

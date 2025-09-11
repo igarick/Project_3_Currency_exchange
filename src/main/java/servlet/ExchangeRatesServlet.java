@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
-import mappers.ExchangeRateMapper;
+import servletMappers.ExchangeRateMapper;
 import service.ExchangeRateService;
 import validators.RequestExchangeRateValidator;
 

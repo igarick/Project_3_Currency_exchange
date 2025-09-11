@@ -1,4 +1,4 @@
-package chain;
+package ExchangeConverter;
 
 import dto.ExchangeAmountAndRateDto;
 import dto.ExchangeConvertedDto;
@@ -7,7 +7,7 @@ import entities.ExchangeRate;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public class EndExchangeRate extends AmountConverter {
+public class End extends AmountConverter {
     @Override
     protected Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency) {
         return Optional.empty();

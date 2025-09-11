@@ -1,6 +1,5 @@
 package servlet;
 
-import dto.CurrencyCodeDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
 import jakarta.servlet.ServletException;
@@ -9,14 +8,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
-import mappers.CurrencyMapper;
-import mappers.ExchangeRateMapper;
+import servletMappers.ExchangeRateMapper;
 import service.ExchangeRateService;
 import validators.RequestExchangeRateValidator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
 
 @WebServlet("/currentRate/*")
 public class ExchangeRateServlet extends HttpServlet {
