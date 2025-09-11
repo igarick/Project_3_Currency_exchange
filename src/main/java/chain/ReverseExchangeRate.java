@@ -2,6 +2,7 @@ package chain;
 
 import dao.ExchangeRateDao;
 import dto.CurrencyDto;
+import dto.ExchangeAmountAndRateDto;
 import dto.ExchangeConvertedDto;
 import entities.ExchangeRate;
 
@@ -19,9 +20,17 @@ public class ReverseExchangeRate extends AmountConverter {
     }
 
     @Override
-    protected BigDecimal convertAmountEx(BigDecimal amount, BigDecimal rate) {
-        BigDecimal convertedAmount = calculateReverseExchangeRate(amount, rate);
-        return convertedAmount;
+    protected ExchangeAmountAndRateDto determineRateAndConvertAmount(BigDecimal amount, BigDecimal rate) {
+        BigDecimal reverseRate = new BigDecimal(1).divide(rate).setScale(2, RoundingMode.DOWN);
+
+        BigDecimal convertedAmount = reverseRate.multiply(amount).setScale(2, RoundingMode.DOWN);
+
+        ExchangeAmountAndRateDto dto = new ExchangeAmountAndRateDto(
+                convertedAmount,
+                reverseRate
+        );
+//        BigDecimal convertedAmount = calculateReverseExchangeRate(amount, reverseRate);
+        return dto;
     }
 
     @Override
@@ -30,7 +39,7 @@ public class ReverseExchangeRate extends AmountConverter {
     }
 
     @Override
-    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal rate, BigDecimal amount, BigDecimal convertedAmount) {
+    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ExchangeAmountAndRateDto dto) {
         return new ExchangeConvertedDto(
                 new CurrencyDto(
                         exchangeRate.getTargetCurrencyId().getId(),
@@ -44,16 +53,22 @@ public class ReverseExchangeRate extends AmountConverter {
                         exchangeRate.getBaseCurrencyId().getFullName(),
                         exchangeRate.getBaseCurrencyId().getSign()
                 ),
-                rate,
+                dto.currentRate(),
                 amount,
-                convertedAmount
+                dto.convertedAmount()
         );
     }
 
     private BigDecimal calculateReverseExchangeRate(BigDecimal amount, BigDecimal rate) {
-        BigDecimal reverseRate = new BigDecimal(1).divide(rate);
-        BigDecimal convertedAmount = reverseRate.multiply(amount);
+//        BigDecimal reverseRate = new BigDecimal(1).divide(rate);
+        BigDecimal convertedAmount = rate.multiply(amount);
 //        BigDecimal convertedAmount = rate.multiply(amount);
         return convertedAmount.setScale(2, RoundingMode.DOWN);
     }
+
+    private BigDecimal calculateReverseRate(BigDecimal rate) {
+        return new BigDecimal(1).divide(rate).setScale(2, RoundingMode.DOWN);
+    }
+
+
 }

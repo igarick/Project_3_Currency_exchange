@@ -1,6 +1,6 @@
 package chain;
 
-import dto.CurrencyDto;
+import dto.ExchangeAmountAndRateDto;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
 import entities.ExchangeRate;
@@ -8,6 +8,7 @@ import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 public abstract class AmountConverter {
@@ -28,38 +29,38 @@ public abstract class AmountConverter {
         String targetCurrency = dto.targetCurrency();
         BigDecimal amount = dto.amount();
 
-        Optional<ExchangeRate> exchangeRate = findExchangeRate(baseCurrency, targetCurrency);
+        Optional<ExchangeRate> exchangeRateOptional = findExchangeRate(baseCurrency, targetCurrency);
 // to do
-        if (exchangeRate.isEmpty()) {
+        if (exchangeRateOptional.isEmpty()) {
             return next.convert(dto);
         }
 
-        ExchangeRate exchangeRate1 = exchangeRate.get();
-        BigDecimal rate = exchangeRate1.getRate().setScale(2);
+        ExchangeRate exchangeRate = exchangeRateOptional.get();
+        BigDecimal rate = exchangeRate.getRate().setScale(2, RoundingMode.HALF_UP);
 
-        BigDecimal convertedAmount = convertAmountEx(amount, rate);
-        ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate1, rate, amount, convertedAmount);
+        ExchangeAmountAndRateDto amountAndRateDto = determineRateAndConvertAmount(amount, rate);
+        ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate, amount, amountAndRateDto);
         return convertedDto;
     }
 
     protected abstract Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency);
-    protected abstract BigDecimal convertAmountEx(BigDecimal amount, BigDecimal rate);
+    protected abstract ExchangeAmountAndRateDto determineRateAndConvertAmount(BigDecimal amount, BigDecimal rate);
     protected abstract boolean isEndOfChain();
-    protected abstract ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal rate, BigDecimal amount, BigDecimal convertedAmount);
+    protected abstract ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ExchangeAmountAndRateDto amountAndRateDto);
 
-//    private ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal rate, BigDecimal amount, BigDecimal convertedAmount) {
+//    private ExchangeConvertedDto buildConvertedDto(ExchangeRate currentRate, BigDecimal rate, BigDecimal amount, BigDecimal convertedAmount) {
 //        return new ExchangeConvertedDto(
 //                new CurrencyDto(
-//                        exchangeRate.getBaseCurrencyId().getId(),
-//                        exchangeRate.getBaseCurrencyId().getCode(),
-//                        exchangeRate.getBaseCurrencyId().getFullName(),
-//                        exchangeRate.getBaseCurrencyId().getSign()
+//                        currentRate.getBaseCurrencyId().getId(),
+//                        currentRate.getBaseCurrencyId().getCode(),
+//                        currentRate.getBaseCurrencyId().getFullName(),
+//                        currentRate.getBaseCurrencyId().getSign()
 //                ),
 //                new CurrencyDto(
-//                        exchangeRate.getTargetCurrencyId().getId(),
-//                        exchangeRate.getTargetCurrencyId().getCode(),
-//                        exchangeRate.getTargetCurrencyId().getFullName(),
-//                        exchangeRate.getTargetCurrencyId().getSign()
+//                        currentRate.getTargetCurrencyId().getId(),
+//                        currentRate.getTargetCurrencyId().getCode(),
+//                        currentRate.getTargetCurrencyId().getFullName(),
+//                        currentRate.getTargetCurrencyId().getSign()
 //                ),
 //                rate,
 //                amount,

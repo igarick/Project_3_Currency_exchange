@@ -22,7 +22,7 @@ public enum ErrorInfo {
     CURRENCY_CODE_NOT_FOUND("There is no currency code in the address", SC_NOT_FOUND),
     CURRENCY_CODE_ALREADY_EXISTS("Currency with this code already exists", SC_CONFLICT),
 
-    // exchangeRate
+    // currentRate
 
     CURRENCY_PAIR_CODES_ERROR("The currency pair codes must be only 6 letters", SC_BAD_REQUEST),
     EXCHANGE_RATE_ERROR("Invalid rate. Must be greater than 0.000000 and less than 1999999999.000000", SC_BAD_REQUEST),

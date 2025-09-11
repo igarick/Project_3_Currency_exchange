@@ -67,11 +67,11 @@ public class ExchangeService {
 //        }
 //
 //        public ExchangeConvertedDto convert(String base, String target, BigDecimal amount) {
-//            Optional<ExchangeRate> exchangeRate = findExchangeRate(base, target);
-//            if (exchangeRate.isEmpty()) {
+//            Optional<ExchangeRate> currentRate = findExchangeRate(base, target);
+//            if (currentRate.isEmpty()) {
 //                next.convert(base, target, amount);
 //            }
-//            ExchangeRate exchangeRate1 = exchangeRate.get();
+//            ExchangeRate exchangeRate1 = currentRate.get();
 //            BigDecimal rate = exchangeRate1.getRate().setScale(2);
 //            BigDecimal convertedAmount = convertAmountEx(amount, rate);
 //            ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate1, rate, amount, convertedAmount);

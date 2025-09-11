@@ -1,5 +1,6 @@
 package chain;
 
+import dto.ExchangeAmountAndRateDto;
 import dto.ExchangeConvertedDto;
 import entities.ExchangeRate;
 
@@ -13,7 +14,7 @@ public class EndExchangeRate extends AmountConverter {
     }
 
     @Override
-    protected BigDecimal convertAmountEx(BigDecimal amount, BigDecimal rate) {
+    protected ExchangeAmountAndRateDto determineRateAndConvertAmount(BigDecimal amount, BigDecimal rate) {
         return null;
     }
 
@@ -23,7 +24,7 @@ public class EndExchangeRate extends AmountConverter {
     }
 
     @Override
-    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal rate, BigDecimal amount, BigDecimal convertedAmount) {
+    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ExchangeAmountAndRateDto dto) {
         return null;
     }
 }

@@ -2,6 +2,7 @@ package chain;
 
 import dao.ExchangeRateDao;
 import dto.CurrencyDto;
+import dto.ExchangeAmountAndRateDto;
 import dto.ExchangeConvertedDto;
 import entities.ExchangeRate;
 
@@ -19,9 +20,15 @@ public class DirectExchangeRate extends AmountConverter {
     }
 
     @Override
-    protected BigDecimal convertAmountEx(BigDecimal amount, BigDecimal rate) {
-        BigDecimal convertedAmount = calculateDirectExchangeRate(amount, rate);
-        return convertedAmount;
+    protected ExchangeAmountAndRateDto determineRateAndConvertAmount(BigDecimal amount, BigDecimal rate) {
+        BigDecimal convertedAmount = rate.multiply(amount).setScale(2, RoundingMode.DOWN);
+
+        ExchangeAmountAndRateDto dto = new ExchangeAmountAndRateDto(
+                convertedAmount,
+                rate
+        );
+
+        return dto;
     }
 
     @Override
@@ -30,7 +37,7 @@ public class DirectExchangeRate extends AmountConverter {
     }
 
     @Override
-    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal rate, BigDecimal amount, BigDecimal convertedAmount) {
+    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ExchangeAmountAndRateDto dto) {
         return new ExchangeConvertedDto(
                 new CurrencyDto(
                         exchangeRate.getBaseCurrencyId().getId(),
@@ -44,9 +51,9 @@ public class DirectExchangeRate extends AmountConverter {
                         exchangeRate.getTargetCurrencyId().getFullName(),
                         exchangeRate.getTargetCurrencyId().getSign()
                 ),
-                rate,
+                dto.currentRate(),
                 amount,
-                convertedAmount
+                dto.convertedAmount()
         );
     }
 
