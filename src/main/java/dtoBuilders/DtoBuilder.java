@@ -24,15 +24,4 @@ public final class DtoBuilder {
                 currency.getSign()
         );
     }
-
-    public static Currency buildCTargetCurrency(ExchangeRate exchangeRate) {
-        Currency targetCurrencyId = exchangeRate.getTargetCurrencyId();
-
-        return new Currency(
-                targetCurrencyId.getId(),
-                targetCurrencyId.getCode(),
-                targetCurrencyId.getFullName(),
-                targetCurrencyId.getSign()
-        );
-    }
 }

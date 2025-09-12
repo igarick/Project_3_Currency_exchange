@@ -3,11 +3,13 @@ package amountConverter;
 import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
+import dtoBuilders.DtoBuilder;
 import entities.ExchangeRate;
 import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 public abstract class AmountConverter {
@@ -38,12 +40,30 @@ public abstract class AmountConverter {
 
         ConversionData data = calculateAmountAndRate(amount, rate);
 
-        return buildConvertedDto(exchangeRate, amount, data);
+        ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate, amount, data);
+
+        return convertedDto;
     }
 
     protected abstract Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency);
-    protected abstract ConversionData calculateAmountAndRate(BigDecimal amount, BigDecimal rate);
-    protected abstract boolean isEndOfChain();
-    protected abstract ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ConversionData data);
 
+    protected abstract boolean isEndOfChain();
+
+    protected ConversionData calculateAmountAndRate(BigDecimal amount, BigDecimal rate) {
+        BigDecimal convertedAmount = rate.multiply(amount).setScale(2, RoundingMode.DOWN);
+        return new ConversionData(
+                convertedAmount,
+                rate.setScale(2, RoundingMode.DOWN)
+        );
+    }
+
+    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ConversionData data) {
+        return new ExchangeConvertedDto(
+                DtoBuilder.buildBaseCurrencyDto(exchangeRate),
+                DtoBuilder.buildTargetCurrencyDto(exchangeRate),
+                data.currentRate(),
+                amount,
+                data.convertedAmount()
+        );
+    }
 }
