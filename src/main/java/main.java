@@ -1,5 +1,5 @@
-import ExchangeConverter.AmountConverter;
-import ExchangeConverter.Direct;
+import amountConverter.AmountConverter;
+import amountConverter.Direct;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
 

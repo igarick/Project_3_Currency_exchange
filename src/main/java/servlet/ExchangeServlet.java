@@ -21,22 +21,12 @@ public class ExchangeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        GET /exchange?from=USD&to=AUD&amount=10
-
         requestValidator.validateParam(req);
         ExchangeDto dto = ExchangeMapper.fromRequest(req);
 
         ExchangeConvertedDto convertedAmount = exchangeService.convertAmount(dto);
 
         JsonResponseWriter.write(convertedAmount, resp);
-
-
-
-        String baseCurrency = req.getParameter("from");
-        String targetCurrency = req.getParameter("to");
-        String amount = req.getParameter("amount");
-        System.out.println(baseCurrency + " " + targetCurrency + " " + amount);
-
 
     }
 }

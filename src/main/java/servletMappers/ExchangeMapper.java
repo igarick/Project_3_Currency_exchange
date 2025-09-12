@@ -16,12 +16,5 @@ public class ExchangeMapper {
                 targetCurrency.toUpperCase(),
                 new BigDecimal(amount).setScale(2)
         );
-//        return new ExchangeDto(
-//                new CurrencyPairCodeDto(
-//                        baseCurrency.toUpperCase(),
-//                        targetCurrency.toUpperCase()
-//                ),
-//                new BigDecimal(amount)
-//        );
     }
 }

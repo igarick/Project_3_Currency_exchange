@@ -15,7 +15,7 @@ import validators.RequestExchangeRateValidator;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-@WebServlet("/currentRate/*")
+@WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
     private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
     private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator();

@@ -1,6 +1,6 @@
-package ExchangeConverter;
+package amountConverter;
 
-import dto.ExchangeAmountAndRateDto;
+import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import entities.ExchangeRate;
 
@@ -14,7 +14,7 @@ public class End extends AmountConverter {
     }
 
     @Override
-    protected ExchangeAmountAndRateDto determineRateAndConvertAmount(BigDecimal amount, BigDecimal rate) {
+    protected ConversionData calculateAmountAndRate(BigDecimal amount, BigDecimal rate) {
         return null;
     }
 
@@ -24,7 +24,7 @@ public class End extends AmountConverter {
     }
 
     @Override
-    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ExchangeAmountAndRateDto dto) {
+    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ConversionData dto) {
         return null;
     }
 }

@@ -1,6 +1,6 @@
-package ExchangeConverter;
+package amountConverter;
 
-import dto.ExchangeAmountAndRateDto;
+import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
 import entities.ExchangeRate;
@@ -8,11 +8,9 @@ import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Optional;
 
 public abstract class AmountConverter {
-
     protected AmountConverter next;
 
     public AmountConverter setNext(AmountConverter next) {
@@ -30,22 +28,21 @@ public abstract class AmountConverter {
         BigDecimal amount = dto.amount();
 
         Optional<ExchangeRate> exchangeRateOptional = findExchangeRate(baseCurrency, targetCurrency);
-// to do
+
         if (exchangeRateOptional.isEmpty()) {
             return next.convert(dto);
         }
 
         ExchangeRate exchangeRate = exchangeRateOptional.get();
-        BigDecimal rate = exchangeRate.getRate().setScale(2, RoundingMode.HALF_UP);
+        BigDecimal rate = exchangeRate.getRate();
 
-        ExchangeAmountAndRateDto convertedAmountAndCurrentRateDto = determineRateAndConvertAmount(amount, rate);
-        ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate, amount, convertedAmountAndCurrentRateDto);
-        return convertedDto;
+        ConversionData data = calculateAmountAndRate(amount, rate);
+        return buildConvertedDto(exchangeRate, amount, data);
     }
 
     protected abstract Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency);
-    protected abstract ExchangeAmountAndRateDto determineRateAndConvertAmount(BigDecimal amount, BigDecimal rate);
+    protected abstract ConversionData calculateAmountAndRate(BigDecimal amount, BigDecimal rate);
     protected abstract boolean isEndOfChain();
-    protected abstract ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ExchangeAmountAndRateDto amountAndRateDto);
+    protected abstract ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ConversionData data);
 
 }
