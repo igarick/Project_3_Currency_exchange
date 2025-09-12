@@ -22,21 +22,6 @@ public class ExchangeValidator extends AbstractValidator {
     }
 
     private void validateAmount(String amount) {
-//        try {
             validateDecimal(amount, ErrorInfo.AMOUNT_ERROR, MAX_AMOUNT_SCALE);
-//        } catch (ValidationException | NumberFormatException e) {
-//            throw new ValidationException(ErrorInfo.AMOUNT_ERROR, e);
         }
-
-
-//        try {
-//            long l = Long.parseLong(amount);
-//            if (l <= 0 || l > 1999999999) {
-//                throw new ValidationException(ErrorInfo.AMOUNT_ERROR);
-//            }
-//        } catch (NumberFormatException | ValidationException e) {
-//            throw new ValidationException(ErrorInfo.AMOUNT_ERROR, e);
-//        }
-//    }
-
 }

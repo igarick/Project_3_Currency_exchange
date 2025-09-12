@@ -4,6 +4,7 @@ import dao.CurrencyDao;
 import dto.CurrencyCodeDto;
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
+import dtoBuilders.DtoBuilder;
 import entities.Currency;
 import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
@@ -31,9 +32,7 @@ public class CurrencyService {
         return buildCurrencyDto(savedCurrency);
     }
 
-    public List<CurrencyDto> findAll() {        //CurrencyDto
-//        return currencyDao.findAll();
-
+    public List<CurrencyDto> findAll() {
                 return currencyDao.findAll().stream()
                 .map(this::buildCurrencyDto)
                 .toList();
@@ -55,27 +54,14 @@ public class CurrencyService {
     }
 
     private CurrencyDto buildCurrencyDto(Currency currency) {
-        return new CurrencyDto(
-                currency.getId(),
-                currency.getCode(),
-                currency.getFullName(),
-                currency.getSign()
-        );
+        return DtoBuilder.buildCurrencyDto(currency);
+//        return new CurrencyDto(
+//                currency.getId(),
+//                currency.getCode(),
+//                currency.getFullName(),
+//                currency.getSign()
+//        );
     }
-
-//    public Optional<CurrencyDto> findById(Long id) throws ServiceException {
-//        Optional<CurrencyDto> currencyDto = currencyDao.findById(id).stream()
-//                .map(currency -> new CurrencyDto(
-//                        currency.getId(),
-//                        currency.getCode(),
-//                        currency.getFullName(),
-//                        currency.getSign()))
-//                .findFirst();
-//        if (currencyDto.isPresent()) {
-//            return currencyDto;
-//        }
-//        throw new ServiceException(ErrorInfo.CURRENCY_NOT_FOUND);
-//    }
 
     public static CurrencyService getInstance() {
         return INSTANCE;

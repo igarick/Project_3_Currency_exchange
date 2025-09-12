@@ -1,8 +1,7 @@
 package amountConverter;
 
-import amountConverterUtils.DtoBuilder;
+import dtoBuilders.DtoBuilder;
 import dao.ExchangeRateDao;
-import dto.CurrencyDto;
 import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import entities.ExchangeRate;
@@ -46,25 +45,4 @@ public class Reverse extends AmountConverter {
                 dto.convertedAmount()
         );
     }
-
-//    @Override
-//    protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ConversionData dto) {
-//        return new ExchangeConvertedDto(
-//                new CurrencyDto(
-//                        exchangeRate.getTargetCurrencyId().getId(),
-//                        exchangeRate.getTargetCurrencyId().getCode(),
-//                        exchangeRate.getTargetCurrencyId().getFullName(),
-//                        exchangeRate.getTargetCurrencyId().getSign()
-//                ),
-//                new CurrencyDto(
-//                        exchangeRate.getBaseCurrencyId().getId(),
-//                        exchangeRate.getBaseCurrencyId().getCode(),
-//                        exchangeRate.getBaseCurrencyId().getFullName(),
-//                        exchangeRate.getBaseCurrencyId().getSign()
-//                ),
-//                dto.currentRate(),
-//                amount,
-//                dto.convertedAmount()
-//        );
-//    }
 }

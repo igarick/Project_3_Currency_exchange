@@ -36,10 +36,6 @@ public enum ErrorInfo {
     AMOUNT_ERROR("Invalid amount. Must be greater than 0.00 and less than 1999999999.00", SC_BAD_REQUEST),
     EXCHANGE_RATE_NOT_FOUND("Exchange rate for this currency pair not found", SC_NOT_FOUND),
 
-
-    CURRENCY_PAIR_CODES_ERRhOR("There are no currency pair codes in the address", SC_BAD_REQUEST),
-    CURRENCY_PAIR_CODES_ERRgOR("There are no currency pair codes in the address", SC_BAD_REQUEST),
-
     END("END", SC_BAD_REQUEST);
 
 

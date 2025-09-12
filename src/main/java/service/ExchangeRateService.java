@@ -5,11 +5,13 @@ import dto.CurrencyDto;
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
+import dtoBuilders.DtoBuilder;
 import entities.ExchangeRate;
 import exception.ServiceException;
 import exceptionUtils.ErrorInfo;
 import models.ExchangeRateModel;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +23,11 @@ public class ExchangeRateService {
     }
 
     public ExchangeRateDto update(ExchangeRateUpdateDto dto) {
-        ExchangeRateModel model = buildModelToUpdate(dto);
+        String baseCode = dto.pairCode().substring(0, 3).toUpperCase();
+        String targetCode = dto.pairCode().substring(3, 6).toUpperCase();
+        BigDecimal rate = dto.rate();
+        ExchangeRateModel model = buildModelToUpdate(baseCode, targetCode, rate);
+
         exchangeRateDao.update(model);
 
         return findExchangeRate(dto.pairCode());
@@ -67,31 +73,34 @@ public class ExchangeRateService {
         );
     }
 
-    private ExchangeRateModel buildModelToUpdate(ExchangeRateUpdateDto dto) {
-        String baseCode = dto.pairCode().substring(0, 3).toUpperCase();
-        String targetCode = dto.pairCode().substring(3, 6).toUpperCase();
-
+    private ExchangeRateModel buildModelToUpdate(String baseCode, String targetCode, BigDecimal rate) {
         return new ExchangeRateModel (
                 baseCode,
                 targetCode,
-                dto.rate()
+                rate
         );
     }
 
     private ExchangeRateDto buildExchangeRateDto(ExchangeRate exchangeRate) {
         return new ExchangeRateDto(
                 exchangeRate.getId(),
-                new CurrencyDto(
-                        exchangeRate.getBaseCurrencyId().getId(),
-                        exchangeRate.getBaseCurrencyId().getCode(),
-                        exchangeRate.getBaseCurrencyId().getFullName(),
-                        exchangeRate.getBaseCurrencyId().getSign()),
-                new CurrencyDto(
-                        exchangeRate.getTargetCurrencyId().getId(),
-                        exchangeRate.getTargetCurrencyId().getCode(),
-                        exchangeRate.getTargetCurrencyId().getFullName(),
-                        exchangeRate.getTargetCurrencyId().getSign()),
-                exchangeRate.getRate());
+                DtoBuilder.buildBaseCurrencyDto(exchangeRate),
+                DtoBuilder.buildTargetCurrencyDto(exchangeRate),
+                exchangeRate.getRate()
+        );
+//        return new ExchangeRateDto(
+//                exchangeRate.getId(),
+//                new CurrencyDto(
+//                        exchangeRate.getBaseCurrencyId().getId(),
+//                        exchangeRate.getBaseCurrencyId().getCode(),
+//                        exchangeRate.getBaseCurrencyId().getFullName(),
+//                        exchangeRate.getBaseCurrencyId().getSign()),
+//                new CurrencyDto(
+//                        exchangeRate.getTargetCurrencyId().getId(),
+//                        exchangeRate.getTargetCurrencyId().getCode(),
+//                        exchangeRate.getTargetCurrencyId().getFullName(),
+//                        exchangeRate.getTargetCurrencyId().getSign()),
+//                exchangeRate.getRate());
     }
 
     public static ExchangeRateService getInstance() {

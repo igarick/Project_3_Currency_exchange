@@ -37,6 +37,7 @@ public abstract class AmountConverter {
         BigDecimal rate = exchangeRate.getRate();
 
         ConversionData data = calculateAmountAndRate(amount, rate);
+
         return buildConvertedDto(exchangeRate, amount, data);
     }
 

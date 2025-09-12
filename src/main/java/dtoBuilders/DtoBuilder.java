@@ -1,4 +1,4 @@
-package amountConverterUtils;
+package dtoBuilders;
 
 import dto.CurrencyDto;
 import entities.Currency;
@@ -16,12 +16,23 @@ public final class DtoBuilder {
         return buildCurrencyDto(exchangeRate.getBaseCurrencyId());
     }
 
-    private static CurrencyDto buildCurrencyDto(Currency currency) {
+    public static CurrencyDto buildCurrencyDto(Currency currency) {
         return new CurrencyDto(
                 currency.getId(),
                 currency.getCode(),
                 currency.getFullName(),
                 currency.getSign()
+        );
+    }
+
+    public static Currency buildCTargetCurrency(ExchangeRate exchangeRate) {
+        Currency targetCurrencyId = exchangeRate.getTargetCurrencyId();
+
+        return new Currency(
+                targetCurrencyId.getId(),
+                targetCurrencyId.getCode(),
+                targetCurrencyId.getFullName(),
+                targetCurrencyId.getSign()
         );
     }
 }
