@@ -1,0 +1,438 @@
+{
+	"info": {
+		"_postman_id": "528a8f8c-8097-41cc-98d9-1e6b4e946d44",
+		"name": "My Collection",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47745597",
+		"_collection_link": "https://fghdyhgff-9379222.postman.co/workspace/%D0%9F%D0%B5%D0%B4%D0%BE%D0%BB%D0%BB%D0%B8-%D0%98%D0%BE%D0%BB%D0%BF%D0%B0%D1%80's-Workspace~17261193-91df-4acc-891a-276250b60ee5/collection/47745597-528a8f8c-8097-41cc-98d9-1e6b4e946d44?action=share&source=collection_link&creator=47745597"
+	},
+	"item": [
+		{
+			"name": "currencies",
+			"item": [
+				{
+					"name": "currencies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/currencies",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"currencies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "currencies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "code",
+									"value": "lkj",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "zxcv zxcv",
+									"type": "text"
+								},
+								{
+									"key": "sign",
+									"value": "k",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/currencies",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"currencies"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "currency/*",
+			"item": [
+				{
+					"name": "USD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/currency/usd",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"currency",
+								"usd"
+							]
+						},
+						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": []
+				},
+				{
+					"name": "test_USD",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/currency/lkj",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"currency",
+								"lkj"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "exchangeRates",
+			"item": [
+				{
+					"name": "exchangeRates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/exchangeRates",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"exchangeRates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test_exchangeRates",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "baseCurrencyCode",
+									"value": "ccc",
+									"type": "text"
+								},
+								{
+									"key": "targetCurrencyCode",
+									"value": "vvv",
+									"type": "text"
+								},
+								{
+									"key": "rate",
+									"value": "45645612.123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/exchangeRates",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"exchangeRates"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "exchangeRate/*",
+			"item": [
+				{
+					"name": "USDRUB",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/exchangeRate/USDRUB",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"exchangeRate",
+								"USDRUB"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test_USDRUB",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/exchangeRate/cccvvv",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"exchangeRate",
+								"cccvvv"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "putch data",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "rate",
+									"value": "101.12",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/exchangeRate/cccvvv",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"exchangeRate",
+								"cccvvv"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "exchange",
+			"item": [
+				{
+					"name": "exchange",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/exchange?from=usd&to=rub&amount=10",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"exchange"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "usd"
+								},
+								{
+									"key": "to",
+									"value": "rub"
+								},
+								{
+									"key": "amount",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "exchange Rev",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/exchange?from=RUB&to=USD&amount=10",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"exchange"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "RUB"
+								},
+								{
+									"key": "to",
+									"value": "USD"
+								},
+								{
+									"key": "amount",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "exchange Cross",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/exchange?from=nnn&to=bbb&amount=10",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"exchange"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "nnn"
+								},
+								{
+									"key": "to",
+									"value": "bbb"
+								},
+								{
+									"key": "amount",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "exchange Cross Rev",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/exchange?from=bbb&to=nnn&amount=10",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"exchange"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "bbb"
+								},
+								{
+									"key": "to",
+									"value": "nnn"
+								},
+								{
+									"key": "amount",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": ""
+		}
+	]
+}
