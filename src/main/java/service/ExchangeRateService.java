@@ -88,19 +88,6 @@ public class ExchangeRateService {
                 DtoBuilder.buildTargetCurrencyDto(exchangeRate),
                 exchangeRate.getRate()
         );
-//        return new ExchangeRateDto(
-//                exchangeRate.getId(),
-//                new CurrencyDto(
-//                        exchangeRate.getBaseCurrencyId().getId(),
-//                        exchangeRate.getBaseCurrencyId().getCode(),
-//                        exchangeRate.getBaseCurrencyId().getFullName(),
-//                        exchangeRate.getBaseCurrencyId().getSign()),
-//                new CurrencyDto(
-//                        exchangeRate.getTargetCurrencyId().getId(),
-//                        exchangeRate.getTargetCurrencyId().getCode(),
-//                        exchangeRate.getTargetCurrencyId().getFullName(),
-//                        exchangeRate.getTargetCurrencyId().getSign()),
-//                exchangeRate.getRate());
     }
 
     public static ExchangeRateService getInstance() {

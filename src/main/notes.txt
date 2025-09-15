@@ -1,3 +1,0 @@
-currency (USD, RUB, Rate) -> validate -> check if the currency in "Currencies" -> (1) if yes, getCurrencyId() ->
--> create saveExchangeRate(USD(id), RUB(id), Rate) -> json(full - USD, RUB)
-(2) if not -> Exception(CURRENCY_DO_NOT_EXIST)
