@@ -33,11 +33,6 @@ public class ExchangeRateDao {
             JOIN Currencies as target on target.ID = rates.TargetCurrencyId
             """;
 
-    private static final String FIND_BY_CURRENCY_ID = FIND_ALL_SQL + """
-            WHERE rates.BaseCurrencyId = ?
-            AND rates.TargetCurrencyId = ?
-            """;
-
     private static final String FIND_BY_CODE_SQL = FIND_ALL_SQL + """
             WHERE base.Code = ?
             AND target.Code = ?

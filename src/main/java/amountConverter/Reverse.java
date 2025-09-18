@@ -1,8 +1,9 @@
 package amountConverter;
 
+import amountConverterUtils.ConversionData;
 import dtoBuilders.DtoBuilder;
 import dao.ExchangeRateDao;
-import dto.ConversionData;
+//import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import entities.ExchangeRate;
 
@@ -15,18 +16,17 @@ public class Reverse extends AmountConverter {
 
     @Override
     protected Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency) {
-        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(targetCurrency, baseCurrency);
-        return exchangeRate;
+        return exchangeRateDao.findByCode(targetCurrency, baseCurrency);
     }
 
     @Override
     protected ConversionData calculateAmountAndRate(BigDecimal amount, BigDecimal rate) {
-        BigDecimal reverseRate = BigDecimal.ONE.divide(rate, 2, RoundingMode.DOWN);
+        BigDecimal reverseRate = BigDecimal.ONE.divide(rate, 6, RoundingMode.DOWN);
         BigDecimal convertedAmount = reverseRate.multiply(amount).setScale(2, RoundingMode.DOWN);
 
         return new ConversionData(
                 convertedAmount,
-                reverseRate
+                reverseRate.setScale(2, RoundingMode.HALF_UP)
         );
     }
 
@@ -40,7 +40,7 @@ public class Reverse extends AmountConverter {
         return new ExchangeConvertedDto(
                 DtoBuilder.buildTargetCurrencyDto(exchangeRate),
                 DtoBuilder.buildBaseCurrencyDto(exchangeRate),
-                dto.currentRate(),
+                dto.rate(),
                 amount,
                 dto.convertedAmount()
         );

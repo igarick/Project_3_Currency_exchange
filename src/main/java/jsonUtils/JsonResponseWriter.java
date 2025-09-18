@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
-public class JsonResponseWriter {
+public final class JsonResponseWriter {
     private static final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .create();

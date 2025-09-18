@@ -9,8 +9,7 @@ public class Direct extends AmountConverter {
 
     @Override
     protected Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency) {
-        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(baseCurrency, targetCurrency);
-        return exchangeRate;
+        return exchangeRateDao.findByCode(baseCurrency, targetCurrency);
     }
 
     @Override

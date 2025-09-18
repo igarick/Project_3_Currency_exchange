@@ -32,14 +32,6 @@ public class CurrencyDao {     //implements Dao<String, Currency>
             WHERE Code = ?
             """;
 
-//    private final static String UPDATE_SQL = """
-//            UPDATE Currencies
-//            SET Code = ?,
-//                FullName = ?,
-//                Sign = ?
-//            WHERE ID = ?
-//            """;
-
     private CurrencyDao() {
     }
 
@@ -101,28 +93,6 @@ public class CurrencyDao {     //implements Dao<String, Currency>
             throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
         }
     }
-
-
-//    public boolean update(Currency currency) throws DaoException {
-//        try (Connection connection = ConnectionManager.get();
-//             PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
-//            statement.setString(1, currency.getCode());
-//            statement.setString(2, currency.getFullName());
-//            statement.setString(3, currency.getSign());
-//            statement.setLong(4, currency.getId());
-//
-//            int rows = statement.executeUpdate();
-//            if (rows == 0) {
-//                throw new DaoException(ErrorInfo.CURRENCY_NOT_FOUND);
-//            }
-//            return rows == 1;
-//        } catch (SQLException e) {
-//            if (isConstraintUniqueError(e)) {
-//                throw new DaoException(ErrorInfo.CURRENCY_CODE_ALREADY_EXISTS, e);
-//            }
-//            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED);
-//        }
-//    }
 
     private Currency buildCurrency(ResultSet result) throws DaoException {
         try {

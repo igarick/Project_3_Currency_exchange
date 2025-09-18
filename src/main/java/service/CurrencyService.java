@@ -55,12 +55,6 @@ public class CurrencyService {
 
     private CurrencyDto buildCurrencyDto(Currency currency) {
         return DtoBuilder.buildCurrencyDto(currency);
-//        return new CurrencyDto(
-//                currency.getId(),
-//                currency.getCode(),
-//                currency.getFullName(),
-//                currency.getSign()
-//        );
     }
 
     public static CurrencyService getInstance() {

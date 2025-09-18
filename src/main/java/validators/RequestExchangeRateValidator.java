@@ -18,8 +18,10 @@ public class RequestExchangeRateValidator extends AbstractValidator{
         if(isEmpty(baseCode) || isEmpty(targetCode) || isEmpty(rate)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
         }
+
         validateCode(baseCode, ErrorInfo.CURRENCY_CODE_ERROR);
         validateCode(targetCode, ErrorInfo.CURRENCY_CODE_ERROR);
+        validatePairCode(baseCode + targetCode);
         validateRate(rate);
     }
 
@@ -55,6 +57,11 @@ public class RequestExchangeRateValidator extends AbstractValidator{
     private void validatePairCode(String code) throws ValidationException {
         if (!code.matches("[a-zA-Z]{6}")) {
             throw new ValidationException(ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
+        }
+        String baseCode = code.substring(0, 3).toUpperCase();
+        String targetCode = code.substring(3, 6).toUpperCase();
+        if (baseCode.equals(targetCode)) {
+            throw new ValidationException(ErrorInfo.IDENTICAL_CURRENCIES_IN_CURRENCY_PAIR);
         }
     }
 }

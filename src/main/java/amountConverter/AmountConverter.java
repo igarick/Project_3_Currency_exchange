@@ -1,6 +1,7 @@
 package amountConverter;
 
-import dto.ConversionData;
+import amountConverterUtils.ConversionData;
+//import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
 import dtoBuilders.DtoBuilder;
@@ -61,7 +62,7 @@ public abstract class AmountConverter {
         return new ExchangeConvertedDto(
                 DtoBuilder.buildBaseCurrencyDto(exchangeRate),
                 DtoBuilder.buildTargetCurrencyDto(exchangeRate),
-                data.currentRate(),
+                data.rate(),
                 amount,
                 data.convertedAmount()
         );

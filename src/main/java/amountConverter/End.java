@@ -1,6 +1,7 @@
 package amountConverter;
 
-import dto.ConversionData;
+import amountConverterUtils.ConversionData;
+//import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import entities.ExchangeRate;
 

@@ -5,7 +5,11 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.math.BigDecimal;
 
-public class ExchangeMapper {
+public final class ExchangeMapper {
+
+    private ExchangeMapper() {
+    }
+
     public static ExchangeDto fromRequest(HttpServletRequest request) {
         String baseCurrency = request.getParameter("from");
         String targetCurrency = request.getParameter("to");
