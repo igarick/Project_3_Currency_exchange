@@ -1,4 +1,4 @@
-package servletMappers;
+package servlet.servletMappers;
 
 import dto.CurrencyCodeDto;
 import dto.CurrencyCreateDto;

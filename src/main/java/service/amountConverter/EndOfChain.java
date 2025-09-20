@@ -1,6 +1,6 @@
-package amountConverter;
+package service.amountConverter;
 
-import amountConverterUtils.ConversionData;
+import service.amountConverterUtils.ConversionData;
 //import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import entities.ExchangeRate;
@@ -8,7 +8,12 @@ import entities.ExchangeRate;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public class End extends AmountConverter {
+public class EndOfChain extends AmountConverter {
+    private static final EndOfChain INSTANCE = new EndOfChain();
+
+    private EndOfChain() {
+    }
+
     @Override
     protected Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency) {
         return Optional.empty();
@@ -27,5 +32,9 @@ public class End extends AmountConverter {
     @Override
     protected ExchangeConvertedDto buildConvertedDto(ExchangeRate exchangeRate, BigDecimal amount, ConversionData dto) {
         return null;
+    }
+
+    public static EndOfChain getINSTANCE() {
+        return INSTANCE;
     }
 }

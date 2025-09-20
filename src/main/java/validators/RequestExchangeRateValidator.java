@@ -1,7 +1,7 @@
 package validators;
 
 import exception.ValidationException;
-import exceptionUtils.ErrorInfo;
+import exception.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 public class RequestExchangeRateValidator extends AbstractValidator{
     private static final int MAX_EXCHANGE_RATE_SCALE = 6;
 
-    public void validate(HttpServletRequest req) {
-        String baseCode = req.getParameter("baseCurrencyCode");
-        String targetCode = req.getParameter("targetCurrencyCode");
-        String rate = req.getParameter("rate");
+    public void validate(String baseCode, String targetCode, String rate) {
+//        String baseCode = req.getParameter("baseCurrencyCode");
+//        String targetCode = req.getParameter("targetCurrencyCode");
+//        String rate = req.getParameter("rate");
 
         if(isEmpty(baseCode) || isEmpty(targetCode) || isEmpty(rate)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
@@ -21,7 +21,8 @@ public class RequestExchangeRateValidator extends AbstractValidator{
 
         validateCode(baseCode, ErrorInfo.CURRENCY_CODE_ERROR);
         validateCode(targetCode, ErrorInfo.CURRENCY_CODE_ERROR);
-        validatePairCode(baseCode + targetCode);
+        checkIdentity(baseCode, targetCode);
+//        validatePairCode(baseCode + targetCode);
         validateRate(rate);
     }
 
@@ -47,7 +48,7 @@ public class RequestExchangeRateValidator extends AbstractValidator{
     }
 
     public String extractAndValidatePairCode(HttpServletRequest req) {
-        String path = extractPath(req);
+        String path = extractAndValidatePath(req);
 
         String pairCode = path.substring(1);
         validatePairCode(pairCode);
@@ -60,6 +61,12 @@ public class RequestExchangeRateValidator extends AbstractValidator{
         }
         String baseCode = code.substring(0, 3).toUpperCase();
         String targetCode = code.substring(3, 6).toUpperCase();
+        if (baseCode.equals(targetCode)) {
+            throw new ValidationException(ErrorInfo.IDENTICAL_CURRENCIES_IN_CURRENCY_PAIR);
+        }
+    }
+
+    private void checkIdentity(String baseCode, String targetCode) {
         if (baseCode.equals(targetCode)) {
             throw new ValidationException(ErrorInfo.IDENTICAL_CURRENCIES_IN_CURRENCY_PAIR);
         }

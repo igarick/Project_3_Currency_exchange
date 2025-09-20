@@ -1,4 +1,4 @@
-package amountConverter;
+package service.amountConverter;
 
 import dao.ExchangeRateDao;
 import entities.Currency;
@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class Cross extends AmountConverter {
+public class CrossExchangeRate extends AmountConverter {
     ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
 
     private static final String BASE_CURRENCY_FOR_CROSS = "USD";

@@ -1,4 +1,4 @@
-package servletMappers;
+package servlet.servletMappers;
 
 import dto.ExchangeDto;
 import jakarta.servlet.http.HttpServletRequest;

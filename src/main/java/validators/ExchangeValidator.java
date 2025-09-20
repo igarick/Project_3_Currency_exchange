@@ -1,7 +1,7 @@
 package validators;
 
 import exception.ValidationException;
-import exceptionUtils.ErrorInfo;
+import exception.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class ExchangeValidator extends AbstractValidator {

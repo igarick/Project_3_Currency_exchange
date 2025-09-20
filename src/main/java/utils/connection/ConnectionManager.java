@@ -1,7 +1,7 @@
-package utils;
+package utils.connection;
 
 import exception.ConnectionException;
-import exceptionUtils.ErrorInfo;
+import exception.ErrorInfo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

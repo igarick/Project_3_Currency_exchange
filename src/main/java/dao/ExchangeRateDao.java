@@ -1,13 +1,14 @@
 package dao;
 
+import dto.ExchangeRateCreateDto;
 import entities.Currency;
 import entities.ExchangeRate;
 import exception.DaoException;
-import exceptionUtils.ErrorInfo;
+import exception.ErrorInfo;
 import models.ExchangeRateModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.ConnectionManager;
+import utils.connection.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ExchangeRateDao {
+public class ExchangeRateDao {         //implements Dao<String, ExchangeRate>
     private static final ExchangeRateDao INSTANCE = new ExchangeRateDao();
     private final String SQLITE_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
     private final String SQLITE_NOTNULL_ERROR_MESSAGE = "SQLITE_CONSTRAINT_NOTNULL";
@@ -112,12 +113,12 @@ public class ExchangeRateDao {
         }
     }
 
-    public void save(ExchangeRateModel model) {                 //ExchangeRateCreateDto
+    public void save(ExchangeRateCreateDto dto) {                 //ExchangeRateModel model
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL)) {
-            preparedStatement.setString(1, model.baseCurrency());
-            preparedStatement.setString(2, model.targetCurrency());
-            preparedStatement.setBigDecimal(3, model.rate());
+            preparedStatement.setString(1, dto.baseCode());
+            preparedStatement.setString(2, dto.targetCode());
+            preparedStatement.setBigDecimal(3, dto.rate());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

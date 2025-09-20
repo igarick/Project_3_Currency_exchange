@@ -7,7 +7,7 @@ import dto.CurrencyDto;
 import dtoBuilders.DtoBuilder;
 import entities.Currency;
 import exception.ServiceException;
-import exceptionUtils.ErrorInfo;
+import exception.ErrorInfo;
 
 import java.util.List;
 import java.util.NoSuchElementException;

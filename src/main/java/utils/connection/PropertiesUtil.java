@@ -1,10 +1,7 @@
-package utils;
-
-import exception.ConnectionException;
+package utils.connection;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.ConnectException;
 import java.util.Properties;
 
 public final class PropertiesUtil {

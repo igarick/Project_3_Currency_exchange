@@ -1,7 +1,5 @@
 package exception;
 
-import exceptionUtils.ErrorInfo;
-
 public class ValidationException extends AppException {
 
     public ValidationException(ErrorInfo errorInfo, Throwable cause) {

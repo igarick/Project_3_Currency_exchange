@@ -1,4 +1,4 @@
-package servletMappers;
+package servlet.servletMappers;
 
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateUpdateDto;
@@ -25,4 +25,5 @@ public final class ExchangeRateMapper {
                 rate
         );
     }
+
 }

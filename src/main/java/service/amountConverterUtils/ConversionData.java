@@ -1,4 +1,4 @@
-package amountConverterUtils;
+package service.amountConverterUtils;
 
 import java.math.BigDecimal;
 

@@ -1,6 +1,5 @@
-package filterUtils;
+package dto;
 
-import dto.ErrorMessageDto;
 import exception.AppException;
 
 public class ErrorResponseFactory {

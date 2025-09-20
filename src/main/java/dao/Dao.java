@@ -7,5 +7,5 @@ public interface Dao<K, E> {
 //    boolean update(E e);
     List<E> findAll();
     Optional<E> findByCode(K code);
-    E save(E e);
+//    E save(E e);
 }

@@ -1,7 +1,5 @@
 package exception;
 
-import exceptionUtils.ErrorInfo;
-
 import java.io.Serial;
 import java.io.Serializable;
 

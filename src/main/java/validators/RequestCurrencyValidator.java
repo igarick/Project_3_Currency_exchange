@@ -1,7 +1,7 @@
 package validators;
 
 import exception.ValidationException;
-import exceptionUtils.ErrorInfo;
+import exception.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class RequestCurrencyValidator extends AbstractValidator {
@@ -31,11 +31,15 @@ public class RequestCurrencyValidator extends AbstractValidator {
         }
     }
 
-    public String extractAndValidateCode(HttpServletRequest request) { //String code
-        String path = extractPath(request);
+    public String extractAndValidateCode(String path) {
+//        String path = extractAndValidatePath(request);
         String code = path.substring(1);
         validateCode(code, ErrorInfo.CURRENCY_CODE_ERROR);
         return code;
+    }
+
+    public String getValidatedPath(HttpServletRequest request) {
+        return extractAndValidatePath(request);
     }
 
 }

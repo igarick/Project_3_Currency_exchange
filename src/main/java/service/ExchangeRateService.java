@@ -1,14 +1,13 @@
 package service;
 
 import dao.ExchangeRateDao;
-import dto.CurrencyDto;
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
 import dtoBuilders.DtoBuilder;
 import entities.ExchangeRate;
 import exception.ServiceException;
-import exceptionUtils.ErrorInfo;
+import exception.ErrorInfo;
 import models.ExchangeRateModel;
 
 import java.math.BigDecimal;
@@ -22,7 +21,7 @@ public class ExchangeRateService {
     private ExchangeRateService() {
     }
 
-    public ExchangeRateDto update(ExchangeRateUpdateDto dto) {
+    public ExchangeRateDto update(ExchangeRateUpdateDto dto) {      //ExchangeRateUpdateDto dto
         String baseCode = dto.pairCode().substring(0, 3).toUpperCase();
         String targetCode = dto.pairCode().substring(3, 6).toUpperCase();
         BigDecimal rate = dto.rate();
@@ -56,22 +55,24 @@ public class ExchangeRateService {
     }
 
     public ExchangeRateDto save(ExchangeRateCreateDto dto) {
-        ExchangeRateModel model = buildModelToSave(dto);
-        exchangeRateDao.save(model);
+        exchangeRateDao.save(dto);
 
-        String baseCode = dto.baseCurrency();
-        String targetCode = dto.targetCurrency();
+//        ExchangeRateModel model = buildModelToSave(dto);
+//        exchangeRateDao.save(model);
+
+        String baseCode = dto.baseCode();
+        String targetCode = dto.targetCode();
 
         return findExchangeRate(baseCode + targetCode);
     }
 
-    private ExchangeRateModel buildModelToSave(ExchangeRateCreateDto dto) {
-        return new ExchangeRateModel(
-                dto.baseCurrency(),
-                dto.targetCurrency(),
-                dto.rate()
-        );
-    }
+//    private ExchangeRateModel buildModelToSave(ExchangeRateCreateDto dto) {
+//        return new ExchangeRateModel(
+//                dto.baseCode(),
+//                dto.targetCode(),
+//                dto.rate()
+//        );
+//    }
 
     private ExchangeRateModel buildModelToUpdate(String baseCode, String targetCode, BigDecimal rate) {
         return new ExchangeRateModel (

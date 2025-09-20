@@ -1,13 +1,13 @@
-package amountConverter;
+package service.amountConverter;
 
-import amountConverterUtils.ConversionData;
+import service.amountConverterUtils.ConversionData;
 //import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
 import dtoBuilders.DtoBuilder;
 import entities.ExchangeRate;
 import exception.ServiceException;
-import exceptionUtils.ErrorInfo;
+import exception.ErrorInfo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -2,8 +2,8 @@ package dao;
 
 import entities.Currency;
 import exception.DaoException;
-import exceptionUtils.ErrorInfo;
-import utils.ConnectionManager;
+import exception.ErrorInfo;
+import utils.connection.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class CurrencyDao {     //implements Dao<String, Currency>
+public class CurrencyDao implements Dao<String, Currency> {     //implements Dao<String, Currency>
     private final int SQLITE_CONSTRAINT_ERROR_CODE = 19;
     private final String SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
 

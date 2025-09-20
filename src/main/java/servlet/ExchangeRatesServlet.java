@@ -9,11 +9,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
-import servletMappers.ExchangeRateMapper;
+import servlet.servletMappers.ExchangeRateMapper;
 import service.ExchangeRateService;
 import validators.RequestExchangeRateValidator;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @WebServlet("/exchangeRates")
@@ -30,8 +31,21 @@ public class ExchangeRatesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        requestValidator.validate(req);
-        ExchangeRateCreateDto dto = ExchangeRateMapper.fromRequest(req);
+        String baseCode = req.getParameter("baseCurrencyCode");
+        String targetCode = req.getParameter("targetCurrencyCode");
+        String rate = req.getParameter("rate");
+
+        requestValidator.validate(baseCode, targetCode, rate);
+
+        ExchangeRateCreateDto dto = new ExchangeRateCreateDto(
+                baseCode,
+                targetCode,
+                new BigDecimal(rate)
+        );
+
+
+//        requestValidator.validate(req);
+//        ExchangeRateCreateDto dto = ExchangeRateMapper.fromRequest(req);
 
         ExchangeRateDto saved = exchangeRateService.save(dto);
 

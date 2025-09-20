@@ -1,4 +1,4 @@
-package exceptionUtils;
+package exception;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
 

@@ -1,6 +1,6 @@
 package service;
 
-import amountConverter.*;
+import service.amountConverter.*;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
 
@@ -11,10 +11,10 @@ public class ExchangeService {
     }
 
     public ExchangeConvertedDto convertAmount(ExchangeDto exchangeDto) {
-        AmountConverter amountConverter = new Direct();
-        amountConverter.setNext(new Reverse())
-                .setNext(new Cross())
-                .setNext(new End());
+        AmountConverter amountConverter = new DirectExchangeRate();
+        amountConverter.setNext(new ReverseExchangeRate())
+                .setNext(new CrossExchangeRate())
+                .setNext(EndOfChain.getINSTANCE());
 
         ExchangeConvertedDto dto = amountConverter.convert(exchangeDto);
 

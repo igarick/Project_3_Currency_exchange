@@ -1,6 +1,6 @@
-package amountConverter;
+package service.amountConverter;
 
-import amountConverterUtils.ConversionData;
+import service.amountConverterUtils.ConversionData;
 import dtoBuilders.DtoBuilder;
 import dao.ExchangeRateDao;
 //import dto.ConversionData;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class Reverse extends AmountConverter {
+public class ReverseExchangeRate extends AmountConverter {
     ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
 
     @Override
