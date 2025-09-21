@@ -1,6 +1,6 @@
 package validators;
 
-import dto.CurrencyPairCode;
+import dto.CurrencyPairCodeDto;
 import exception.ValidationException;
 import exception.ErrorInfo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +41,7 @@ public class RequestExchangeRateValidator extends AbstractValidator {
         return new BigDecimal(rate);
     }
 
-    public CurrencyPairCode extractAndValidateCurrencyPairCode(String path) {
+    public CurrencyPairCodeDto extractAndValidateCurrencyPairCode(String path) {
         String rawPairCode = path.substring(1);
 
         if (!rawPairCode.matches("[a-zA-Z]{6}")) {
@@ -53,7 +53,7 @@ public class RequestExchangeRateValidator extends AbstractValidator {
 
         checkIdentity(baseCode, targetCode);
 
-        return new CurrencyPairCode(baseCode, targetCode);
+        return new CurrencyPairCodeDto(baseCode, targetCode);
     }
 
     @Override

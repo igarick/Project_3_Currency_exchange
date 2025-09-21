@@ -1,6 +1,6 @@
 package servlet;
 
-import dto.CurrencyPairCode;
+import dto.CurrencyPairCodeDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
 import jakarta.servlet.ServletException;
@@ -33,7 +33,7 @@ public class ExchangeRateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = requestValidator.extractAndValidatePath(req);
-        CurrencyPairCode pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
+        CurrencyPairCodeDto pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
 
         ExchangeRateDto exchangeRate = exchangeRateService.findExchangeRate(pairCode);
 
@@ -43,7 +43,7 @@ public class ExchangeRateServlet extends HttpServlet {
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = requestValidator.extractAndValidatePath(req);
-        CurrencyPairCode pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
+        CurrencyPairCodeDto pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
         BigDecimal rate = requestValidator.extractAndValidateRate(req);
 
         ExchangeRateUpdateDto dto = new ExchangeRateUpdateDto(pairCode, rate);

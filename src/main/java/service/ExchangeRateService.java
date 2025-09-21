@@ -1,7 +1,7 @@
 package service;
 
 import dao.ExchangeRateDao;
-import dto.CurrencyPairCode;
+import dto.CurrencyPairCodeDto;
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
@@ -32,7 +32,7 @@ public class ExchangeRateService {
                 .toList();
     }
 
-    public ExchangeRateDto findExchangeRate(CurrencyPairCode pairCode) {
+    public ExchangeRateDto findExchangeRate(CurrencyPairCodeDto pairCode) {
         Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(
                 pairCode.baseCode(),
                 pairCode.targetCode());
@@ -50,7 +50,7 @@ public class ExchangeRateService {
     public ExchangeRateDto save(ExchangeRateCreateDto dto) {
         exchangeRateDao.save(dto);
 
-        CurrencyPairCode pairCode = new CurrencyPairCode(
+        CurrencyPairCodeDto pairCode = new CurrencyPairCodeDto(
                 dto.baseCode(),
                 dto.targetCode()
         );
