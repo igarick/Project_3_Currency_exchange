@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
-import servlet.servletMappers.CurrencyMapper;
 import service.CurrencyService;
 import validators.RequestCurrencyValidator;
 
@@ -23,13 +22,22 @@ public class CurrenciesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<CurrencyDto> currencies = currencyService.findAll();
+
         JsonResponseWriter.write(currencies, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        requestValidator.validateParam(req);
-        CurrencyCreateDto currencyCreateDto = CurrencyMapper.fromRequest(req);
+        String code = req.getParameter("code");
+        String name = req.getParameter("name");
+        String sign = req.getParameter("sign");
+
+        requestValidator.validateParam(code, name, sign);
+
+        CurrencyCreateDto currencyCreateDto = new CurrencyCreateDto(
+                code.toUpperCase(),
+                name,
+                sign);
 
         CurrencyDto currencySavedDto = currencyService.save(currencyCreateDto);
 

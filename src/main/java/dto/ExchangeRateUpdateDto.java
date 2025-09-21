@@ -2,5 +2,5 @@ package dto;
 
 import java.math.BigDecimal;
 
-public record ExchangeRateUpdateDto(String pairCode, BigDecimal rate) {
+public record ExchangeRateUpdateDto(CurrencyPairCode pairCode, BigDecimal rate) {
 }

@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
-import servlet.servletMappers.ExchangeRateMapper;
 import service.ExchangeRateService;
 import validators.RequestExchangeRateValidator;
 
@@ -38,14 +37,10 @@ public class ExchangeRatesServlet extends HttpServlet {
         requestValidator.validate(baseCode, targetCode, rate);
 
         ExchangeRateCreateDto dto = new ExchangeRateCreateDto(
-                baseCode,
-                targetCode,
+                baseCode.toUpperCase(),
+                targetCode.toUpperCase(),
                 new BigDecimal(rate)
         );
-
-
-//        requestValidator.validate(req);
-//        ExchangeRateCreateDto dto = ExchangeRateMapper.fromRequest(req);
 
         ExchangeRateDto saved = exchangeRateService.save(dto);
 

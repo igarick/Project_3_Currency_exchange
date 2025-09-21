@@ -1,16 +1,15 @@
 package service;
 
 import dao.ExchangeRateDao;
+import dto.CurrencyPairCode;
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
-import dtoBuilders.DtoBuilder;
+import dto.DtoBuilder;
 import entities.ExchangeRate;
 import exception.ServiceException;
 import exception.ErrorInfo;
-import models.ExchangeRateModel;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,14 +20,8 @@ public class ExchangeRateService {
     private ExchangeRateService() {
     }
 
-    public ExchangeRateDto update(ExchangeRateUpdateDto dto) {      //ExchangeRateUpdateDto dto
-        String baseCode = dto.pairCode().substring(0, 3).toUpperCase();
-        String targetCode = dto.pairCode().substring(3, 6).toUpperCase();
-        BigDecimal rate = dto.rate();
-        ExchangeRateModel model = buildModelToUpdate(baseCode, targetCode, rate);
-
-        exchangeRateDao.update(model);
-
+    public ExchangeRateDto update(ExchangeRateUpdateDto dto) {
+        exchangeRateDao.update(dto);
         return findExchangeRate(dto.pairCode());
     }
 
@@ -39,11 +32,11 @@ public class ExchangeRateService {
                 .toList();
     }
 
-    public ExchangeRateDto findExchangeRate(String  pairCode) {
-        String baseCode = pairCode.substring(0, 3).toUpperCase();
-        String targetCode = pairCode.substring(3, 6).toUpperCase();
+    public ExchangeRateDto findExchangeRate(CurrencyPairCode pairCode) {
+        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(
+                pairCode.baseCode(),
+                pairCode.targetCode());
 
-        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCode(baseCode, targetCode);
         if (exchangeRate.isEmpty()) {
             throw new ServiceException(ErrorInfo.CURRENCY_PAIR_CODE_NOT_FOUND);
         }
@@ -57,29 +50,12 @@ public class ExchangeRateService {
     public ExchangeRateDto save(ExchangeRateCreateDto dto) {
         exchangeRateDao.save(dto);
 
-//        ExchangeRateModel model = buildModelToSave(dto);
-//        exchangeRateDao.save(model);
-
-        String baseCode = dto.baseCode();
-        String targetCode = dto.targetCode();
-
-        return findExchangeRate(baseCode + targetCode);
-    }
-
-//    private ExchangeRateModel buildModelToSave(ExchangeRateCreateDto dto) {
-//        return new ExchangeRateModel(
-//                dto.baseCode(),
-//                dto.targetCode(),
-//                dto.rate()
-//        );
-//    }
-
-    private ExchangeRateModel buildModelToUpdate(String baseCode, String targetCode, BigDecimal rate) {
-        return new ExchangeRateModel (
-                baseCode,
-                targetCode,
-                rate
+        CurrencyPairCode pairCode = new CurrencyPairCode(
+                dto.baseCode(),
+                dto.targetCode()
         );
+
+        return findExchangeRate(pairCode);
     }
 
     private ExchangeRateDto buildExchangeRateDto(ExchangeRate exchangeRate) {

@@ -3,7 +3,6 @@ package servlet;
 import dto.CurrencyCodeDto;
 import dto.CurrencyDto;
 import jsonUtils.JsonResponseWriter;
-import servlet.servletMappers.CurrencyMapper;
 import validators.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,18 +15,15 @@ import java.io.IOException;
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
-    private static final RequestCurrencyValidator validator = new RequestCurrencyValidator();
+    private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator();
 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String path = validator.getValidatedPath(request);
-        String code = validator.extractAndValidateCode(path);
+        String path = requestValidator.extractAndValidatePath(request);
+        String code = requestValidator.extractAndValidateCode(path);
 
         CurrencyCodeDto currencyCodeDto = new CurrencyCodeDto(code.toUpperCase());
-
-//        String code = validator.extractAndValidateCode(request);
-//        CurrencyCodeDto codeDto = CurrencyMapper.convertTo(code);
 
         CurrencyDto currencyDto = currencyService.findByCode(currencyCodeDto);
         JsonResponseWriter.write(currencyDto, response);

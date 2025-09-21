@@ -1,13 +1,11 @@
 package dao;
 
 import dto.ExchangeRateCreateDto;
+import dto.ExchangeRateUpdateDto;
 import entities.Currency;
 import entities.ExchangeRate;
 import exception.DaoException;
 import exception.ErrorInfo;
-import models.ExchangeRateModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import utils.connection.ConnectionManager;
 
 import java.sql.Connection;
@@ -18,11 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ExchangeRateDao {         //implements Dao<String, ExchangeRate>
+public class ExchangeRateDao {
     private static final ExchangeRateDao INSTANCE = new ExchangeRateDao();
     private final String SQLITE_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
     private final String SQLITE_NOTNULL_ERROR_MESSAGE = "SQLITE_CONSTRAINT_NOTNULL";
-    private final Logger log = LoggerFactory.getLogger(ExchangeRateDao.class);
 
     private static final String FIND_ALL_SQL = """
             SELECT rates.ID,
@@ -49,25 +46,25 @@ public class ExchangeRateDao {         //implements Dao<String, ExchangeRate>
             """;
 
     private static final String UPDATE_SQL = """
-            UPDATE ExchangeRates
-            SET Rate = ?
-            WHERE (
-                    BaseCurrencyId = ((SELECT ID FROM Currencies WHERE Code = ?))
-                    AND TargetCurrencyId = ((SELECT ID FROM Currencies WHERE Code = ?))
-            )
-""";
+                        UPDATE ExchangeRates
+                        SET Rate = ?
+                        WHERE (
+                                BaseCurrencyId = ((SELECT ID FROM Currencies WHERE Code = ?))
+                                AND TargetCurrencyId = ((SELECT ID FROM Currencies WHERE Code = ?))
+                        )
+            """;
 
 
     private ExchangeRateDao() {
     }
 
-    public void update(ExchangeRateModel model) {
+    public void update(ExchangeRateUpdateDto dto) {
         try (
-            Connection connection = ConnectionManager.get();
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
-            preparedStatement.setBigDecimal(1, model.rate());
-            preparedStatement.setString(2, model.baseCurrency());
-            preparedStatement.setString(3, model.targetCurrency());
+                Connection connection = ConnectionManager.get();
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
+            preparedStatement.setBigDecimal(1, dto.rate());
+            preparedStatement.setString(2, dto.pairCode().baseCode());
+            preparedStatement.setString(3, dto.pairCode().targetCode());
 
             int i = preparedStatement.executeUpdate();
 
@@ -157,7 +154,7 @@ public class ExchangeRateDao {         //implements Dao<String, ExchangeRate>
                     result.getBigDecimal("Rate")
             );
         } catch (SQLException e) {
-            throw new DaoException(ErrorInfo.SQL_QUERY_FAILED, e);
+            throw new DaoException(ErrorInfo.MAPPING_FAILED, e);
         }
     }
 

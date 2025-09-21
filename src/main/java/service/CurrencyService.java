@@ -4,7 +4,7 @@ import dao.CurrencyDao;
 import dto.CurrencyCodeDto;
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
-import dtoBuilders.DtoBuilder;
+import dto.DtoBuilder;
 import entities.Currency;
 import exception.ServiceException;
 import exception.ErrorInfo;
@@ -20,12 +20,12 @@ public class CurrencyService {
     private CurrencyService() {
     }
 
-    public CurrencyDto save(CurrencyCreateDto currencyCreateDto) {
+    public CurrencyDto save(CurrencyCreateDto dto) {
         Currency currencyToSave = new Currency(
                 null,
-                currencyCreateDto.code(),
-                currencyCreateDto.name(),
-                currencyCreateDto.sign());
+                dto.code(),
+                dto.name(),
+                dto.sign());
 
         Currency savedCurrency = currencyDao.save(currencyToSave);
 
@@ -33,13 +33,13 @@ public class CurrencyService {
     }
 
     public List<CurrencyDto> findAll() {
-                return currencyDao.findAll().stream()
+        return currencyDao.findAll().stream()
                 .map(this::buildCurrencyDto)
                 .toList();
     }
 
-    public CurrencyDto findByCode(CurrencyCodeDto codeDto) {
-        String code = codeDto.code();
+    public CurrencyDto findByCode(CurrencyCodeDto dto) {
+        String code = dto.code();
 
         CurrencyDto currencyDto = null;
         try {

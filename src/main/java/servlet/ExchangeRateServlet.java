@@ -1,5 +1,6 @@
 package servlet;
 
+import dto.CurrencyPairCode;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
 import jakarta.servlet.ServletException;
@@ -8,7 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
-import servlet.servletMappers.ExchangeRateMapper;
 import service.ExchangeRateService;
 import validators.RequestExchangeRateValidator;
 
@@ -25,11 +25,15 @@ public class ExchangeRateServlet extends HttpServlet {
         if (req.getMethod().equals("PATCH")) {
             doPatch(req, resp);
         }
+        if (req.getMethod().equals("GET")) {
+            doGet(req, resp);
+        }
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String pairCode = requestValidator.extractAndValidatePairCode(req);
+        String path = requestValidator.extractAndValidatePath(req);
+        CurrencyPairCode pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
 
         ExchangeRateDto exchangeRate = exchangeRateService.findExchangeRate(pairCode);
 
@@ -38,9 +42,11 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String pairCode = requestValidator.extractAndValidatePairCode(req);
+        String path = requestValidator.extractAndValidatePath(req);
+        CurrencyPairCode pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
         BigDecimal rate = requestValidator.extractAndValidateRate(req);
-        ExchangeRateUpdateDto dto = ExchangeRateMapper.convertTo(pairCode, rate);
+
+        ExchangeRateUpdateDto dto = new ExchangeRateUpdateDto(pairCode, rate);
 
         ExchangeRateDto update = exchangeRateService.update(dto);
 

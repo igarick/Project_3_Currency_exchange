@@ -3,6 +3,7 @@ package service.amountConverter;
 import dao.ExchangeRateDao;
 import entities.Currency;
 import entities.ExchangeRate;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
@@ -10,22 +11,22 @@ import java.util.Optional;
 public class CrossExchangeRate extends AmountConverter {
     ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
 
-    private static final String BASE_CURRENCY_FOR_CROSS = "USD";
+    private static final String BASE_CURRENCY_CODE_FOR_CROSS = "USD";
 
     @Override
-    protected Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency) {
-        Optional<ExchangeRate> usdToBaseCurrency = exchangeRateDao.findByCode(BASE_CURRENCY_FOR_CROSS, baseCurrency);
-        Optional<ExchangeRate> usdToTargetCurrency = exchangeRateDao.findByCode(BASE_CURRENCY_FOR_CROSS, targetCurrency);
+    protected Optional<ExchangeRate> findExchangeRate(String baseCode, String targetCode) {
+        Optional<ExchangeRate> usdToBaseExchangeRate = exchangeRateDao.findByCode(BASE_CURRENCY_CODE_FOR_CROSS, baseCode);
+        Optional<ExchangeRate> usdToTargetExchangeRate = exchangeRateDao.findByCode(BASE_CURRENCY_CODE_FOR_CROSS, targetCode);
 
-        if (usdToBaseCurrency.isEmpty() || usdToTargetCurrency.isEmpty()) {
+        if (usdToBaseExchangeRate.isEmpty() || usdToTargetExchangeRate.isEmpty()) {
             return Optional.empty();
         }
 
-        ExchangeRate base = usdToBaseCurrency.get();
-        ExchangeRate target = usdToTargetCurrency.get();
+        ExchangeRate baseExchangeRate = usdToBaseExchangeRate.get();
+        ExchangeRate targetExchangeRate = usdToTargetExchangeRate.get();
 
-        ExchangeRate exchangeRate = buildExchangeRate(base, target);
-        return Optional.of(exchangeRate);
+        ExchangeRate crossExchangeRate = buildExchangeRate(baseExchangeRate, targetExchangeRate);
+        return Optional.of(crossExchangeRate);
     }
 
     @Override
@@ -33,20 +34,20 @@ public class CrossExchangeRate extends AmountConverter {
         return false;
     }
 
-    private ExchangeRate buildExchangeRate(ExchangeRate base, ExchangeRate target) {
-        BigDecimal baseRate = base.getRate();
-        BigDecimal targetRate = target.getRate();
+    private ExchangeRate buildExchangeRate(ExchangeRate baseExchangeRate, ExchangeRate targetExchangeRate) {
+        BigDecimal baseRate = baseExchangeRate.getRate();
+        BigDecimal targetRate = targetExchangeRate.getRate();
         BigDecimal rate = targetRate.divide(baseRate, 6, RoundingMode.HALF_UP);
 
         return new ExchangeRate(
                 null,
-                buildCTargetCurrency(base),
-                buildCTargetCurrency(target),
+                buildTargetCurrency(baseExchangeRate),
+                buildTargetCurrency(targetExchangeRate),
                 rate
         );
     }
 
-    public static Currency buildCTargetCurrency(ExchangeRate exchangeRate) {
+    public static Currency buildTargetCurrency(ExchangeRate exchangeRate) {
         Currency targetCurrencyId = exchangeRate.getTargetCurrencyId();
 
         return new Currency(

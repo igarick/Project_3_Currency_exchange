@@ -1,7 +1,7 @@
 package service.amountConverter;
 
 import service.amountConverterUtils.ConversionData;
-import dtoBuilders.DtoBuilder;
+import dto.DtoBuilder;
 import dao.ExchangeRateDao;
 //import dto.ConversionData;
 import dto.ExchangeConvertedDto;

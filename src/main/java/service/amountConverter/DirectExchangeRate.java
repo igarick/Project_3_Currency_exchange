@@ -2,6 +2,7 @@ package service.amountConverter;
 
 import dao.ExchangeRateDao;
 import entities.ExchangeRate;
+
 import java.util.Optional;
 
 public class DirectExchangeRate extends AmountConverter {

@@ -6,12 +6,11 @@ public enum ErrorInfo {
     // common
 
     CONNECTION_ERROR("Database connection error", SC_INTERNAL_SERVER_ERROR),
-//    UNABLE_TO_SEND_DATA_ERROR("Enable to send data", SC_INTERNAL_SERVER_ERROR),
+    PATH_ERROR("Incorrect page address", SC_BAD_REQUEST),
+    FORM_FIELD_MISSING_ERROR("A required form field is missing", SC_BAD_REQUEST),
 
     SQL_QUERY_FAILED("SQL query failed", SC_INTERNAL_SERVER_ERROR),
-    FORM_FIELD_MISSING_ERROR("A required form field is missing", SC_BAD_REQUEST),
     MAPPING_FAILED("Data mapping failed"),
-    PATH_ERROR("Incorrect page address", SC_BAD_REQUEST),
 
     // currency
 
@@ -62,8 +61,8 @@ public enum ErrorInfo {
     @Override
     public String toString() {
         return "ErrorInfo{" +
-                "message='" + message + '\'' +
-                ", errorCode=" + statusCode +
-                '}';
+               "message='" + message + '\'' +
+               ", errorCode=" + statusCode +
+               '}';
     }
 }

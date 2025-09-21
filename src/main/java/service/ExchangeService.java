@@ -16,9 +16,7 @@ public class ExchangeService {
                 .setNext(new CrossExchangeRate())
                 .setNext(EndOfChain.getINSTANCE());
 
-        ExchangeConvertedDto dto = amountConverter.convert(exchangeDto);
-
-        return dto;
+        return amountConverter.convert(exchangeDto);
     }
 
     public static ExchangeService getInstance() {

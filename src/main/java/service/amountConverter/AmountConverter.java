@@ -4,7 +4,7 @@ import service.amountConverterUtils.ConversionData;
 //import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
-import dtoBuilders.DtoBuilder;
+import dto.DtoBuilder;
 import entities.ExchangeRate;
 import exception.ServiceException;
 import exception.ErrorInfo;
@@ -26,11 +26,11 @@ public abstract class AmountConverter {
             throw new ServiceException(ErrorInfo.EXCHANGE_RATE_NOT_FOUND);
         }
 
-        String baseCurrency = dto.baseCurrency();
-        String targetCurrency = dto.targetCurrency();
+        String baseCode = dto.baseCode();
+        String targetCode = dto.targetCode();
         BigDecimal amount = dto.amount();
 
-        Optional<ExchangeRate> exchangeRateOptional = findExchangeRate(baseCurrency, targetCurrency);
+        Optional<ExchangeRate> exchangeRateOptional = findExchangeRate(baseCode, targetCode);
 
         if (exchangeRateOptional.isEmpty()) {
             return next.convert(dto);
@@ -41,12 +41,10 @@ public abstract class AmountConverter {
 
         ConversionData data = calculateAmountAndRate(amount, rate);
 
-        ExchangeConvertedDto convertedDto = buildConvertedDto(exchangeRate, amount, data);
-
-        return convertedDto;
+        return buildConvertedDto(exchangeRate, amount, data);
     }
 
-    protected abstract Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency);
+    protected abstract Optional<ExchangeRate> findExchangeRate(String baseCode, String targetCode);
 
     protected abstract boolean isEndOfChain();
 

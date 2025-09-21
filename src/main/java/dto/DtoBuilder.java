@@ -1,6 +1,5 @@
-package dtoBuilders;
+package dto;
 
-import dto.CurrencyDto;
 import entities.Currency;
 import entities.ExchangeRate;
 

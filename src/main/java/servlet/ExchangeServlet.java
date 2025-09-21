@@ -8,11 +8,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jsonUtils.JsonResponseWriter;
-import servlet.servletMappers.ExchangeMapper;
 import service.ExchangeService;
 import validators.ExchangeValidator;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @WebServlet("/exchange")
 public class ExchangeServlet extends HttpServlet {
@@ -21,12 +21,20 @@ public class ExchangeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        requestValidator.validateParam(req);
-        ExchangeDto dto = ExchangeMapper.fromRequest(req);
+        String baseCode = req.getParameter("from");
+        String targetCode = req.getParameter("to");
+        String amount = req.getParameter("amount");
 
-        ExchangeConvertedDto convertedAmount = exchangeService.convertAmount(dto);
+        requestValidator.validateParam(baseCode, targetCode, amount);
 
-        JsonResponseWriter.write(convertedAmount, resp);
+        ExchangeDto exchangeDto = new ExchangeDto(
+                baseCode.toUpperCase(),
+                targetCode.toUpperCase(),
+                new BigDecimal(amount)
+        );
 
+        ExchangeConvertedDto converted = exchangeService.convertAmount(exchangeDto);
+
+        JsonResponseWriter.write(converted, resp);
     }
 }

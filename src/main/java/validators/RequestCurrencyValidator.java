@@ -6,15 +6,11 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class RequestCurrencyValidator extends AbstractValidator {
 
-    public void validateParam(HttpServletRequest req) {
-        String code = req.getParameter("code");
-        String name = req.getParameter("name");
-        String sign = req.getParameter("sign");
-
-        if(isEmpty(code) || isEmpty(name) || isEmpty(sign)) {
+    public void validateParam(String code, String name, String sign) {
+        if (isEmpty(code) || isEmpty(name) || isEmpty(sign)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
         }
-        validateCode(code, ErrorInfo.CURRENCY_CODE_ERROR);
+        validateCode(code);
         validateName(name);
         validateSign(sign);
     }
@@ -32,14 +28,13 @@ public class RequestCurrencyValidator extends AbstractValidator {
     }
 
     public String extractAndValidateCode(String path) {
-//        String path = extractAndValidatePath(request);
         String code = path.substring(1);
-        validateCode(code, ErrorInfo.CURRENCY_CODE_ERROR);
+        validateCode(code);
         return code;
     }
 
-    public String getValidatedPath(HttpServletRequest request) {
-        return extractAndValidatePath(request);
+    @Override
+    public String extractAndValidatePath(HttpServletRequest request) {
+        return super.extractAndValidatePath(request);
     }
-
 }

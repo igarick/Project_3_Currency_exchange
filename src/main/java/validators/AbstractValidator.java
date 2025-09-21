@@ -22,9 +22,9 @@ public abstract class AbstractValidator {
         return (parameter == null || parameter.isBlank());
     }
 
-    protected void validateCode(String code, ErrorInfo errorInfo) {
+    protected void validateCode(String code) {
         if (!code.matches("[a-zA-Z]{3}")) {
-            throw new ValidationException(errorInfo);
+            throw new ValidationException(ErrorInfo.CURRENCY_CODE_ERROR);
         }
     }
 
@@ -38,6 +38,12 @@ public abstract class AbstractValidator {
             }
         } catch (NumberFormatException e) {
             throw new ValidationException(errorInfo, e);
+        }
+    }
+
+    protected void checkIdentity(String baseCode, String targetCode) {
+        if (baseCode.equals(targetCode)) {
+            throw new ValidationException(ErrorInfo.IDENTICAL_CURRENCIES_IN_CURRENCY_PAIR);
         }
     }
 }
