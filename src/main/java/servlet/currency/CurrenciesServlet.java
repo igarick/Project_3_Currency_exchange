@@ -1,4 +1,4 @@
-package servlet;
+package servlet.currency;
 
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
@@ -6,7 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jsonUtils.JsonResponseWriter;
+import utils.JsonResponseWriter;
 import service.CurrencyService;
 import validators.RequestCurrencyValidator;
 

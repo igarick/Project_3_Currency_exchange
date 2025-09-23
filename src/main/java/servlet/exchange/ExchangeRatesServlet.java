@@ -1,4 +1,4 @@
-package servlet;
+package servlet.exchange;
 
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
@@ -8,7 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jsonUtils.JsonResponseWriter;
+import utils.JsonResponseWriter;
 import service.ExchangeRateService;
 import validators.RequestExchangeRateValidator;
 

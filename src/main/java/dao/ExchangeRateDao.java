@@ -6,7 +6,7 @@ import entities.Currency;
 import entities.ExchangeRate;
 import exception.DaoException;
 import exception.ErrorInfo;
-import utils.connection.ConnectionManager;
+import utils.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
