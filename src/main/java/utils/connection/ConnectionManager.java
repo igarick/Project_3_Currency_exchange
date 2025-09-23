@@ -2,11 +2,14 @@ package utils.connection;
 
 import exception.ConnectionException;
 import exception.ErrorInfo;
+import lombok.experimental.UtilityClass;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
+@UtilityClass
 public final class ConnectionManager {
 
     private static final String URL_KEY = "db.url";
@@ -23,8 +26,6 @@ public final class ConnectionManager {
         }
     }
 
-    private ConnectionManager() {
-    }
 
     public static Connection get() throws ConnectionException {
         try {
