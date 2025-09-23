@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public final class ConnectionManager {
 
     private static final String URL_KEY = "db.url";
-    
+
     static {
         loadDriver();
     }
@@ -25,7 +25,6 @@ public final class ConnectionManager {
             throw new RuntimeException(e);
         }
     }
-
 
     public static Connection get() throws ConnectionException {
         try {
