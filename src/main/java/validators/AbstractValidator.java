@@ -30,16 +30,36 @@ public abstract class AbstractValidator {
 
     protected void validateDecimal(String value, ErrorInfo errorInfo, int maxScale) {
         BigDecimal bigDecimal = null;
+        if(isBigDecimal(value, errorInfo)) {
+
+        }
+        if ((bigDecimal.compareTo(MAX_DECIMAL) > 0) || (bigDecimal.compareTo(MIN_DECIMAL) < 0)
+            || (bigDecimal.scale() > maxScale)) {
+            throw new ValidationException(errorInfo);
+        }
+    }
+
+    private boolean isBigDecimal(String value, ErrorInfo errorInfo) {
         try {
-            bigDecimal = new BigDecimal(value);
-            if ((bigDecimal.compareTo(MAX_DECIMAL) > 0) || (bigDecimal.compareTo(MIN_DECIMAL) < 0)
-                || (bigDecimal.scale() > maxScale)) {
-                throw new ValidationException(errorInfo);
-            }
+            BigDecimal bigDecimal = new BigDecimal(value);
         } catch (NumberFormatException e) {
             throw new ValidationException(errorInfo, e);
         }
+        return true;
     }
+
+//    protected void validateDecimal(String value, ErrorInfo errorInfo, int maxScale) {
+//        BigDecimal bigDecimal = null;
+//        try {
+//            bigDecimal = new BigDecimal(value);
+//            if ((bigDecimal.compareTo(MAX_DECIMAL) > 0) || (bigDecimal.compareTo(MIN_DECIMAL) < 0)
+//                || (bigDecimal.scale() > maxScale)) {
+//                throw new ValidationException(errorInfo);
+//            }
+//        } catch (NumberFormatException e) {
+//            throw new ValidationException(errorInfo, e);
+//        }
+//    }
 
     protected void checkIdentity(String baseCode, String targetCode) {
         if (baseCode.equals(targetCode)) {
