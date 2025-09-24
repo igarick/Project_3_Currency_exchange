@@ -1,4 +1,4 @@
-package utils;
+package utils.connection;
 
 import exception.ConnectionException;
 import exception.ErrorInfo;
