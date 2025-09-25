@@ -5,7 +5,7 @@ import service.amountConverterUtils.ConversionData;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
 import dto.DtoBuilder;
-import entities.ExchangeRate;
+import entity.ExchangeRate;
 import exception.ServiceException;
 import exception.ErrorInfo;
 

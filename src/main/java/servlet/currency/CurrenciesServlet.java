@@ -6,9 +6,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import utils.json.JsonResponseWriter;
+import util.json.JsonResponseWriter;
 import service.CurrencyService;
-import validators.RequestCurrencyValidator;
+import validator.RequestCurrencyValidator;
 
 import java.io.IOException;
 import java.util.List;

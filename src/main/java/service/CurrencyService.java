@@ -5,7 +5,7 @@ import dto.CurrencyCodeDto;
 import dto.CurrencyCreateDto;
 import dto.CurrencyDto;
 import dto.DtoBuilder;
-import entities.Currency;
+import entity.Currency;
 import exception.ServiceException;
 import exception.ErrorInfo;
 

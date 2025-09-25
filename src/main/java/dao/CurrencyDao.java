@@ -1,9 +1,9 @@
 package dao;
 
-import entities.Currency;
+import entity.Currency;
 import exception.DaoException;
 import exception.ErrorInfo;
-import utils.connection.ConnectionManager;
+import util.connection.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;

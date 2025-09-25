@@ -6,7 +6,7 @@ import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
 import dto.DtoBuilder;
-import entities.ExchangeRate;
+import entity.ExchangeRate;
 import exception.ServiceException;
 import exception.ErrorInfo;
 

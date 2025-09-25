@@ -8,9 +8,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import utils.json.JsonResponseWriter;
+import util.json.JsonResponseWriter;
 import service.ExchangeRateService;
-import validators.RequestExchangeRateValidator;
+import validator.RequestExchangeRateValidator;
 
 import java.io.IOException;
 import java.math.BigDecimal;

@@ -5,7 +5,7 @@ import dto.DtoBuilder;
 import dao.ExchangeRateDao;
 //import dto.ConversionData;
 import dto.ExchangeConvertedDto;
-import entities.ExchangeRate;
+import entity.ExchangeRate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

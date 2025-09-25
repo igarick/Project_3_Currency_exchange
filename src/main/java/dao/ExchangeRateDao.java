@@ -2,11 +2,11 @@ package dao;
 
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateUpdateDto;
-import entities.Currency;
-import entities.ExchangeRate;
+import entity.Currency;
+import entity.ExchangeRate;
 import exception.DaoException;
 import exception.ErrorInfo;
-import utils.connection.ConnectionManager;
+import util.connection.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

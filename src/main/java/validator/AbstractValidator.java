@@ -1,4 +1,4 @@
-package validators;
+package validator;
 
 import exception.ValidationException;
 import exception.ErrorInfo;
@@ -10,7 +10,7 @@ public abstract class AbstractValidator {
     private static final BigDecimal MAX_DECIMAL = new BigDecimal(1999999999);
     private static final BigDecimal MIN_DECIMAL = new BigDecimal(0.000001);
 
-    protected String extractAndValidatePath(HttpServletRequest request) {
+    public String extractAndValidatePath(HttpServletRequest request) {
         String path = request.getPathInfo();
         if (isEmpty(path) || path.length() <= 1) {
             throw new ValidationException(ErrorInfo.PATH_ERROR);

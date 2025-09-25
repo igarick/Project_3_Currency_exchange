@@ -2,8 +2,8 @@ package servlet.currency;
 
 import dto.CurrencyCodeDto;
 import dto.CurrencyDto;
-import utils.json.JsonResponseWriter;
-import validators.*;
+import util.json.JsonResponseWriter;
+import validator.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

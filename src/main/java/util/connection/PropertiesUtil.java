@@ -1,4 +1,4 @@
-package utils.connection;
+package util.connection;
 
 import lombok.experimental.UtilityClass;
 

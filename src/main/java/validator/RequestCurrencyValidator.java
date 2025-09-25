@@ -1,4 +1,4 @@
-package validators;
+package validator;
 
 import exception.ValidationException;
 import exception.ErrorInfo;
@@ -33,8 +33,8 @@ public class RequestCurrencyValidator extends AbstractValidator {
         return code;
     }
 
-    @Override
-    public String extractAndValidatePath(HttpServletRequest request) {
-        return super.extractAndValidatePath(request);
-    }
+//    @Override
+//    public String extractAndValidatePath(HttpServletRequest request) {
+//        return super.extractAndValidatePath(request);
+//    }
 }

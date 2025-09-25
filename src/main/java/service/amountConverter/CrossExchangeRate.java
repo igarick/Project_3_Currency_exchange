@@ -1,8 +1,8 @@
 package service.amountConverter;
 
 import dao.ExchangeRateDao;
-import entities.Currency;
-import entities.ExchangeRate;
+import entity.Currency;
+import entity.ExchangeRate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -1,7 +1,7 @@
 package dto;
 
-import entities.Currency;
-import entities.ExchangeRate;
+import entity.Currency;
+import entity.ExchangeRate;
 
 public final class DtoBuilder {
     private DtoBuilder() {
