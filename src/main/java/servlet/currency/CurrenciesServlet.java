@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import util.json.JsonResponseWriter;
 import service.CurrencyService;
+import validator.BaseValidator;
 import validator.RequestCurrencyValidator;
 
 import java.io.IOException;
@@ -16,7 +17,8 @@ import java.util.List;
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
-    private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator();
+    private static final BaseValidator baseValidator = new BaseValidator();
+    private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator(baseValidator);
 
 
     @Override

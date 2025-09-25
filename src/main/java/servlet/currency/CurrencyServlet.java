@@ -15,12 +15,13 @@ import java.io.IOException;
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyService.getInstance();
-    private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator();
+    private static final BaseValidator baseValidator = new BaseValidator();
+    private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator(baseValidator);
 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String path = requestValidator.extractAndValidatePath(request);
+        String path = baseValidator.extractAndValidatePath(request);
         String code = requestValidator.extractAndValidateCode(path);
 
         CurrencyCodeDto currencyCodeDto = new CurrencyCodeDto(code.toUpperCase());

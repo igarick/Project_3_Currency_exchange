@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import util.json.JsonResponseWriter;
 import service.ExchangeRateService;
+import validator.BaseValidator;
 import validator.RequestExchangeRateValidator;
 
 import java.io.IOException;
@@ -19,7 +20,8 @@ import java.util.List;
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
     private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
-    private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator();
+    private static final BaseValidator baseValidator = new BaseValidator();
+    private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator(baseValidator);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ValidationException, IOException {
@@ -34,7 +36,7 @@ public class ExchangeRatesServlet extends HttpServlet {
         String targetCode = req.getParameter("targetCurrencyCode");
         String rate = req.getParameter("rate");
 
-        requestValidator.validate(baseCode, targetCode, rate);
+        requestValidator.validateParams(baseCode, targetCode, rate);
 
         ExchangeRateCreateDto dto = new ExchangeRateCreateDto(
                 baseCode.toUpperCase(),

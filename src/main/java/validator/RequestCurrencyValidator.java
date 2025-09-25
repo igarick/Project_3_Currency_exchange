@@ -2,15 +2,19 @@ package validator;
 
 import exception.ValidationException;
 import exception.ErrorInfo;
-import jakarta.servlet.http.HttpServletRequest;
 
-public class RequestCurrencyValidator extends AbstractValidator {
+public class RequestCurrencyValidator {   //extends BaseValidator
+    private final BaseValidator baseValidator;
+
+    public RequestCurrencyValidator(BaseValidator baseValidator) {
+        this.baseValidator = baseValidator;
+    }
 
     public void validateParam(String code, String name, String sign) {
-        if (isEmpty(code) || isEmpty(name) || isEmpty(sign)) {
+        if (baseValidator.isEmpty(code) || baseValidator.isEmpty(name) || baseValidator.isEmpty(sign)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
         }
-        validateCode(code);
+        baseValidator.validateCode(code);
         validateName(name);
         validateSign(sign);
     }
@@ -29,7 +33,7 @@ public class RequestCurrencyValidator extends AbstractValidator {
 
     public String extractAndValidateCode(String path) {
         String code = path.substring(1);
-        validateCode(code);
+        baseValidator.validateCode(code);
         return code;
     }
 }

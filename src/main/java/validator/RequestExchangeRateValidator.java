@@ -8,21 +8,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class RequestExchangeRateValidator extends AbstractValidator {
+public class RequestExchangeRateValidator {
     private static final int MAX_EXCHANGE_RATE_SCALE = 6;
 
-    public void validate(String baseCode, String targetCode, String rate) {
-        if (isEmpty(baseCode) || isEmpty(targetCode) || isEmpty(rate)) {
-            throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
-        }
-        validateCode(baseCode);
-        validateCode(targetCode);
-        checkIdentity(baseCode, targetCode);
-        validateRate(rate);
+    private final BaseValidator baseValidator;
+
+    public RequestExchangeRateValidator(BaseValidator baseValidator) {
+        this.baseValidator = baseValidator;
     }
 
-    private void validateRate(String rate) {
-        validateDecimal(rate, ErrorInfo.EXCHANGE_RATE_ERROR, MAX_EXCHANGE_RATE_SCALE);
+    public void validateParams(String baseCode, String targetCode, String rate) {
+        if (baseValidator.isEmpty(baseCode) || baseValidator.isEmpty(targetCode) || baseValidator.isEmpty(rate)) {
+            throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
+        }
+        baseValidator.validateCode(baseCode);
+        baseValidator.validateCode(targetCode);
+        baseValidator.checkIdentity(baseCode, targetCode);
+        baseValidator.validateDecimal(rate, ErrorInfo.EXCHANGE_RATE_ERROR, MAX_EXCHANGE_RATE_SCALE);
     }
 
     public BigDecimal extractAndValidateRate(HttpServletRequest req) throws IOException {
@@ -34,10 +36,10 @@ public class RequestExchangeRateValidator extends AbstractValidator {
 
         String rate = parameter.replace("rate=", "");
 
-        if (isEmpty(rate)) {
+        if (baseValidator.isEmpty(rate)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
         }
-        validateRate(rate);
+        baseValidator.validateDecimal(rate, ErrorInfo.EXCHANGE_RATE_ERROR, MAX_EXCHANGE_RATE_SCALE);
         return new BigDecimal(rate);
     }
 
@@ -51,7 +53,7 @@ public class RequestExchangeRateValidator extends AbstractValidator {
         String baseCode = rawPairCode.substring(0, 3).toUpperCase();
         String targetCode = rawPairCode.substring(3, 6).toUpperCase();
 
-        checkIdentity(baseCode, targetCode);
+        baseValidator.checkIdentity(baseCode, targetCode);
 
         return new CurrencyPairCodeDto(baseCode, targetCode);
     }

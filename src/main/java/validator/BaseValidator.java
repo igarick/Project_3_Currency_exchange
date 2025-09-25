@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.math.BigDecimal;
 
-public abstract class AbstractValidator {
+public class BaseValidator {
     private static final BigDecimal MAX_DECIMAL = new BigDecimal(1999999999);
     private static final BigDecimal MIN_DECIMAL = new BigDecimal(0.000001);
 

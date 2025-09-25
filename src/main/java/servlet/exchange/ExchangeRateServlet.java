@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import util.json.JsonResponseWriter;
 import service.ExchangeRateService;
+import validator.BaseValidator;
 import validator.RequestExchangeRateValidator;
 
 import java.io.IOException;
@@ -18,7 +19,8 @@ import java.math.BigDecimal;
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
     private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
-    private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator();
+    private static final BaseValidator baseValidator = new BaseValidator();
+    private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator(baseValidator);
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,7 +34,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = requestValidator.extractAndValidatePath(req);
+        String path = baseValidator.extractAndValidatePath(req);
         CurrencyPairCodeDto pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
 
         ExchangeRateDto exchangeRate = exchangeRateService.findExchangeRate(pairCode);
@@ -42,7 +44,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = requestValidator.extractAndValidatePath(req);
+        String path = baseValidator.extractAndValidatePath(req);
         CurrencyPairCodeDto pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
         BigDecimal rate = requestValidator.extractAndValidateRate(req);
 

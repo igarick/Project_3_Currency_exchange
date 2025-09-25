@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import util.json.JsonResponseWriter;
 import service.ExchangeService;
+import validator.BaseValidator;
 import validator.ExchangeValidator;
 
 import java.io.IOException;
@@ -16,7 +17,8 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchange")
 public class ExchangeServlet extends HttpServlet {
-    private static final ExchangeValidator requestValidator = new ExchangeValidator();
+    private static final BaseValidator baseValidator = new BaseValidator();
+    private static final ExchangeValidator requestValidator = new ExchangeValidator(baseValidator);
     ExchangeService exchangeService = ExchangeService.getInstance();
 
     @Override
@@ -25,7 +27,7 @@ public class ExchangeServlet extends HttpServlet {
         String targetCode = req.getParameter("to");
         String amount = req.getParameter("amount");
 
-        requestValidator.validateParam(baseCode, targetCode, amount);
+        requestValidator.validateParams(baseCode, targetCode, amount);
 
         ExchangeDto exchangeDto = new ExchangeDto(
                 baseCode.toUpperCase(),
