@@ -55,9 +55,4 @@ public class RequestExchangeRateValidator extends AbstractValidator {
 
         return new CurrencyPairCodeDto(baseCode, targetCode);
     }
-
-    @Override
-    public String extractAndValidatePath(HttpServletRequest request) {
-        return super.extractAndValidatePath(request);
-    }
 }

@@ -32,9 +32,4 @@ public class RequestCurrencyValidator extends AbstractValidator {
         validateCode(code);
         return code;
     }
-
-//    @Override
-//    public String extractAndValidatePath(HttpServletRequest request) {
-//        return super.extractAndValidatePath(request);
-//    }
 }
