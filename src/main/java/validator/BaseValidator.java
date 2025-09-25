@@ -10,6 +10,8 @@ public class BaseValidator {
     private static final BigDecimal MAX_DECIMAL = new BigDecimal(1999999999);
     private static final BigDecimal MIN_DECIMAL = new BigDecimal(0.000001);
 
+    private static final String CODE_PATTERN = "[a-zA-Z]{3}";
+
     public String extractAndValidatePath(HttpServletRequest request) {
         String path = request.getPathInfo();
         if (isEmpty(path) || path.length() <= 1) {
@@ -23,7 +25,7 @@ public class BaseValidator {
     }
 
     protected void validateCode(String code) {
-        if (!code.matches("[a-zA-Z]{3}")) {
+        if (!code.matches(CODE_PATTERN)) {
             throw new ValidationException(ErrorInfo.CURRENCY_CODE_ERROR);
         }
     }
