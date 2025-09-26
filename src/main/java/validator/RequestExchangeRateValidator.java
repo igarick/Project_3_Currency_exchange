@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 public class RequestExchangeRateValidator {
     private static final int MAX_EXCHANGE_RATE_SCALE = 6;
     private static final String PAIR_CODES_PATTERN = "[a-zA-Z]{6}";
+    private static final String RATE_PARAM_PREFIX = "rate=";
 
 
     private final BaseValidator baseValidator;
@@ -32,11 +33,11 @@ public class RequestExchangeRateValidator {
     public BigDecimal extractAndValidateRate(HttpServletRequest req) throws IOException {
         String parameter = req.getReader().readLine();
 
-        if (parameter == null || !parameter.contains("rate=")) {
+        if (parameter == null || !parameter.contains(RATE_PARAM_PREFIX)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
         }
 
-        String rate = parameter.replace("rate=", "");
+        String rate = parameter.replace(RATE_PARAM_PREFIX, "");
 
         if (baseValidator.isEmpty(rate)) {
             throw new ValidationException(ErrorInfo.FORM_FIELD_MISSING_ERROR);
