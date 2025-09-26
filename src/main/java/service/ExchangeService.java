@@ -1,25 +1,23 @@
 package service;
 
-import service.amountConverter.*;
+import dao.ExchangeRateDao;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
+import service.amountConverter.*;
 
 public class ExchangeService {
-    private static final ExchangeService INSTANCE = new ExchangeService();
+    private final ExchangeRateDao exchangeRateDao;
 
-    private ExchangeService() {
+    public ExchangeService(ExchangeRateDao exchangeRateDao) {
+        this.exchangeRateDao = exchangeRateDao;
     }
 
     public ExchangeConvertedDto convertAmount(ExchangeDto exchangeDto) {
-        AmountConverter amountConverter = new DirectExchangeRate();
-        amountConverter.setNext(new ReverseExchangeRate())
-                .setNext(new CrossExchangeRate())
+        AmountConverter amountConverter = new DirectExchangeRate(exchangeRateDao);
+        amountConverter.setNext(new ReverseExchangeRate(exchangeRateDao))
+                .setNext(new CrossExchangeRate(exchangeRateDao))
                 .setNext(EndOfChain.getINSTANCE());
 
         return amountConverter.convert(exchangeDto);
-    }
-
-    public static ExchangeService getInstance() {
-        return INSTANCE;
     }
 }

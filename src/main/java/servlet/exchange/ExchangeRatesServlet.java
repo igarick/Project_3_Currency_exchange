@@ -1,5 +1,6 @@
 package servlet.exchange;
 
+import dao.ExchangeRateDao;
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
 import exception.ValidationException;
@@ -19,9 +20,16 @@ import java.util.List;
 
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
-    private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
+//    private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
     private static final BaseValidator baseValidator = new BaseValidator();
     private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator(baseValidator);
+
+    private final ExchangeRateService exchangeRateService;
+
+    public ExchangeRatesServlet() {
+        ExchangeRateDao dao = new ExchangeRateDao();
+        this.exchangeRateService = new ExchangeRateService(dao);
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ValidationException, IOException {

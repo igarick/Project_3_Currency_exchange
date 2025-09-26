@@ -1,5 +1,6 @@
 package servlet.exchange;
 
+import dao.ExchangeRateDao;
 import dto.CurrencyPairCodeDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
@@ -18,9 +19,16 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
-    private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
+//    private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
     private static final BaseValidator baseValidator = new BaseValidator();
     private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator(baseValidator);
+
+    private final ExchangeRateService exchangeRateService;
+
+    public ExchangeRateServlet() {
+        ExchangeRateDao dao = new ExchangeRateDao();
+        this.exchangeRateService = new ExchangeRateService(dao);
+    }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

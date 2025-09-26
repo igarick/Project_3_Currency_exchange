@@ -1,18 +1,21 @@
 package service.amountConverter;
 
-import service.amountConverterUtils.ConversionData;
-import dto.DtoBuilder;
 import dao.ExchangeRateDao;
-//import dto.ConversionData;
+import dto.DtoBuilder;
 import dto.ExchangeConvertedDto;
 import entity.ExchangeRate;
+import service.amountConverterUtils.ConversionData;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
 public class ReverseExchangeRate extends AmountConverter {
-    ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
+    private final ExchangeRateDao exchangeRateDao;
+
+    public ReverseExchangeRate(ExchangeRateDao exchangeRateDao) {
+        this.exchangeRateDao = exchangeRateDao;
+    }
 
     @Override
     protected Optional<ExchangeRate> findExchangeRate(String baseCurrency, String targetCurrency) {

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRateDao {
-    private static final ExchangeRateDao INSTANCE = new ExchangeRateDao();
+//    private static final ExchangeRateDao INSTANCE = new ExchangeRateDao();
     private final String SQLITE_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
     private final String SQLITE_NOTNULL_ERROR_MESSAGE = "SQLITE_CONSTRAINT_NOTNULL";
 
@@ -54,9 +54,9 @@ public class ExchangeRateDao {
                         )
             """;
 
-
-    private ExchangeRateDao() {
-    }
+//
+//    private ExchangeRateDao() {
+//    }
 
     public void update(ExchangeRateUpdateDto dto) {
         try (
@@ -158,7 +158,7 @@ public class ExchangeRateDao {
         }
     }
 
-    public static ExchangeRateDao getInstance() {
-        return INSTANCE;
-    }
+//    public static ExchangeRateDao getInstance() {
+//        return INSTANCE;
+//    }
 }

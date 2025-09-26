@@ -14,10 +14,15 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRateService {
-    private static final ExchangeRateService INSTANCE = new ExchangeRateService();
-    private final ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
+//    private static final ExchangeRateService INSTANCE = new ExchangeRateService();
+//    private final ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
 
-    private ExchangeRateService() {
+//    private ExchangeRateService() {
+//    }
+    private final ExchangeRateDao exchangeRateDao;
+
+    public ExchangeRateService(ExchangeRateDao exchangeRateDao) {
+        this.exchangeRateDao = exchangeRateDao;
     }
 
     public ExchangeRateDto update(ExchangeRateUpdateDto dto) {
@@ -67,7 +72,7 @@ public class ExchangeRateService {
         );
     }
 
-    public static ExchangeRateService getInstance() {
-        return INSTANCE;
-    }
+//    public static ExchangeRateService getInstance() {
+//        return INSTANCE;
+//    }
 }

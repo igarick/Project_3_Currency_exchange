@@ -1,14 +1,16 @@
 package service.amountConverter;
 
-import service.amountConverterUtils.ConversionData;
-//import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import entity.ExchangeRate;
+import lombok.Getter;
+import service.amountConverterUtils.ConversionData;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 public class EndOfChain extends AmountConverter {
+
+    @Getter
     private static final EndOfChain INSTANCE = new EndOfChain();
 
     private EndOfChain() {
@@ -34,7 +36,4 @@ public class EndOfChain extends AmountConverter {
         return null;
     }
 
-    public static EndOfChain getINSTANCE() {
-        return INSTANCE;
-    }
 }

@@ -1,5 +1,6 @@
 package servlet.exchange;
 
+import dao.ExchangeRateDao;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
 import jakarta.servlet.ServletException;
@@ -19,7 +20,13 @@ import java.math.BigDecimal;
 public class ExchangeServlet extends HttpServlet {
     private static final BaseValidator baseValidator = new BaseValidator();
     private static final ExchangeValidator requestValidator = new ExchangeValidator(baseValidator);
-    ExchangeService exchangeService = ExchangeService.getInstance();
+//    ExchangeService exchangeService = ExchangeService.getInstance();
+    private final ExchangeService exchangeService;
+
+    public ExchangeServlet() {
+        ExchangeRateDao dao = new ExchangeRateDao();
+        this.exchangeService = new ExchangeService(dao);
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

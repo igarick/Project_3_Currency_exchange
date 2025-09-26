@@ -9,7 +9,11 @@ import java.math.RoundingMode;
 import java.util.Optional;
 
 public class CrossExchangeRate extends AmountConverter {
-    ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
+    private final ExchangeRateDao exchangeRateDao;
+
+    public CrossExchangeRate(ExchangeRateDao exchangeRateDao) {
+        this.exchangeRateDao = exchangeRateDao;
+    }
 
     private static final String BASE_CURRENCY_CODE_FOR_CROSS = "USD";
 

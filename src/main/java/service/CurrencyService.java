@@ -13,21 +13,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class CurrencyService {
+    private final CurrencyDao currencyDao;
 
-//    private static final CurrencyService INSTANCE = new CurrencyService();
-//    private final CurrencyDao currencyDao = CurrencyDao.getInstance();
-
-
-    private final CurrencyDao currencyDaoEx;
-
-
-//    public CurrencyService(CurrencyDao currencyDaoEx) {
-//        this.currencyDaoEx = currencyDaoEx;
-//    }
-
-
-    public CurrencyService(CurrencyDao currencyDaoEx) {
-        this.currencyDaoEx = currencyDaoEx;
+    public CurrencyService(CurrencyDao currencyDao) {
+        this.currencyDao = currencyDao;
     }
 
     public CurrencyDto save(CurrencyCreateDto dto) {
@@ -37,13 +26,13 @@ public class CurrencyService {
                 dto.name(),
                 dto.sign());
 
-        Currency savedCurrency = currencyDaoEx.save(currencyToSave);
+        Currency savedCurrency = currencyDao.save(currencyToSave);
 
         return buildCurrencyDto(savedCurrency);
     }
 
     public List<CurrencyDto> findAll() {
-        return currencyDaoEx.findAll().stream()
+        return currencyDao.findAll().stream()
                 .map(this::buildCurrencyDto)
                 .toList();
     }
@@ -53,7 +42,7 @@ public class CurrencyService {
 
         CurrencyDto currencyDto = null;
         try {
-            currencyDto = currencyDaoEx.findByCode(code).stream()
+            currencyDto = currencyDao.findByCode(code).stream()
                     .map(this::buildCurrencyDto)
                     .findFirst()
                     .get();
@@ -66,8 +55,4 @@ public class CurrencyService {
     private CurrencyDto buildCurrencyDto(Currency currency) {
         return DtoBuilder.buildCurrencyDto(currency);
     }
-
-//    public static CurrencyService getInstance() {
-//        return INSTANCE;
-//    }
 }

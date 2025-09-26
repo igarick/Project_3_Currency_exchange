@@ -15,8 +15,6 @@ public class CurrencyDao {
     private final int SQLITE_CONSTRAINT_ERROR_CODE = 19;
     private final String SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
 
-//    private final static CurrencyDao INSTANCE = new CurrencyDao();
-
     private final static String SAVE_SQL = """
             INSERT INTO Currencies
             (Code, FullName, Sign)
@@ -31,13 +29,6 @@ public class CurrencyDao {
     private final static String FIND_BY_CODE_SQL = FIND_ALL_SQL + """
             WHERE Code = ?
             """;
-
-//    private CurrencyDao() {
-//    }
-
-//    public static CurrencyDao getInstance() {
-//        return INSTANCE;
-//    }
 
     public Currency save(Currency currency) throws DaoException {
         try (Connection connection = ConnectionManager.get();
