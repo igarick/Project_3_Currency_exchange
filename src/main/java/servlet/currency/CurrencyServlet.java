@@ -1,5 +1,6 @@
 package servlet.currency;
 
+import dao.CurrencyDao;
 import dto.CurrencyCodeDto;
 import dto.CurrencyDto;
 import util.json.JsonResponseWriter;
@@ -14,10 +15,15 @@ import java.io.IOException;
 
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
-    private final CurrencyService currencyService = CurrencyService.getInstance();
     private static final BaseValidator baseValidator = new BaseValidator();
     private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator(baseValidator);
 
+    private final CurrencyService currencyService;
+
+    public CurrencyServlet() {
+        CurrencyDao dao = new CurrencyDao();
+        this.currencyService = new CurrencyService(dao);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

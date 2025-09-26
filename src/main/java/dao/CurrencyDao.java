@@ -15,7 +15,7 @@ public class CurrencyDao {
     private final int SQLITE_CONSTRAINT_ERROR_CODE = 19;
     private final String SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
 
-    private final static CurrencyDao INSTANCE = new CurrencyDao();
+//    private final static CurrencyDao INSTANCE = new CurrencyDao();
 
     private final static String SAVE_SQL = """
             INSERT INTO Currencies
@@ -32,12 +32,12 @@ public class CurrencyDao {
             WHERE Code = ?
             """;
 
-    private CurrencyDao() {
-    }
+//    private CurrencyDao() {
+//    }
 
-    public static CurrencyDao getInstance() {
-        return INSTANCE;
-    }
+//    public static CurrencyDao getInstance() {
+//        return INSTANCE;
+//    }
 
     public Currency save(Currency currency) throws DaoException {
         try (Connection connection = ConnectionManager.get();
@@ -107,6 +107,14 @@ public class CurrencyDao {
         }
     }
 
+    // & - побитовая операция
+    //2. Обработка ошибок
+    //Метод isConstraintUniqueError использует & вместо &&:
+    //
+    //java
+    //return (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE &
+    //        e.getMessage().contains(SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE));
+    //🔧 Лучше заменить на && — это логическое И, а не побитовая операция.
     private boolean isConstraintUniqueError(SQLException e) {
         return (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE &
                 e.getMessage().contains(SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE));
