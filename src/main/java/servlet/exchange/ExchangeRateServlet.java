@@ -25,7 +25,7 @@ public class ExchangeRateServlet extends HttpServlet {
     private final ExchangeRateService exchangeRateService = AppConfig.getExchangeRateService();
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getMethod().equals("PATCH")) {
             doPatch(req, resp);
         }

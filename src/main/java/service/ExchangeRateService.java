@@ -1,24 +1,15 @@
 package service;
 
 import dao.ExchangeRateDao;
-import dto.CurrencyPairCodeDto;
-import dto.ExchangeRateCreateDto;
-import dto.ExchangeRateDto;
-import dto.ExchangeRateUpdateDto;
-import dto.DtoBuilder;
+import dto.*;
 import entity.ExchangeRate;
-import exception.ServiceException;
 import exception.ErrorInfo;
+import exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRateService {
-//    private static final ExchangeRateService INSTANCE = new ExchangeRateService();
-//    private final ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
-
-//    private ExchangeRateService() {
-//    }
     private final ExchangeRateDao exchangeRateDao;
 
     public ExchangeRateService(ExchangeRateDao exchangeRateDao) {
@@ -71,8 +62,4 @@ public class ExchangeRateService {
                 exchangeRate.getRate()
         );
     }
-
-//    public static ExchangeRateService getInstance() {
-//        return INSTANCE;
-//    }
 }

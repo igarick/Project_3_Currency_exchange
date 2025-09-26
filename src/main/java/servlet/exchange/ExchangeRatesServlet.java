@@ -25,7 +25,7 @@ public class ExchangeRatesServlet extends HttpServlet {
     private final ExchangeRateService exchangeRateService = AppConfig.getExchangeRateService();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ValidationException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<ExchangeRateDto> all = exchangeRateService.findAll();
 
         JsonResponseWriter.write(all, resp);
