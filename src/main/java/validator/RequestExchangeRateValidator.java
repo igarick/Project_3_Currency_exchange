@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 
 public class RequestExchangeRateValidator {
     private static final int MAX_EXCHANGE_RATE_SCALE = 6;
+    private static final String PAIR_CODES_PATTERN = "[a-zA-Z]{6}";
+
 
     private final BaseValidator baseValidator;
 
@@ -46,7 +48,7 @@ public class RequestExchangeRateValidator {
     public CurrencyPairCodeDto extractAndValidateCurrencyPairCode(String path) {
         String rawPairCode = path.substring(1);
 
-        if (!rawPairCode.matches("[a-zA-Z]{6}")) {
+        if (!rawPairCode.matches(PAIR_CODES_PATTERN)) {
             throw new ValidationException(ErrorInfo.CURRENCY_PAIR_CODES_ERROR);
         }
 
