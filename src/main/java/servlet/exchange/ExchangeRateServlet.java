@@ -1,6 +1,5 @@
 package servlet.exchange;
 
-import dao.ExchangeRateDao;
 import dto.CurrencyPairCodeDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
@@ -9,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import util.config.AppConfig;
 import util.json.JsonResponseWriter;
 import service.ExchangeRateService;
 import validator.BaseValidator;
@@ -19,16 +19,10 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
-//    private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
     private static final BaseValidator baseValidator = new BaseValidator();
     private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator(baseValidator);
 
-    private final ExchangeRateService exchangeRateService;
-
-    public ExchangeRateServlet() {
-        ExchangeRateDao dao = new ExchangeRateDao();
-        this.exchangeRateService = new ExchangeRateService(dao);
-    }
+    private final ExchangeRateService exchangeRateService = AppConfig.getExchangeRateService();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,7 +35,7 @@ public class ExchangeRateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = baseValidator.extractAndValidatePath(req);
         CurrencyPairCodeDto pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
 
@@ -51,7 +45,7 @@ public class ExchangeRateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = baseValidator.extractAndValidatePath(req);
         CurrencyPairCodeDto pairCode = requestValidator.extractAndValidateCurrencyPairCode(path);
         BigDecimal rate = requestValidator.extractAndValidateRate(req);

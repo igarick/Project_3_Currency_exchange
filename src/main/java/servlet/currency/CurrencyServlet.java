@@ -1,8 +1,8 @@
 package servlet.currency;
 
-import dao.CurrencyDao;
 import dto.CurrencyCodeDto;
 import dto.CurrencyDto;
+import util.config.AppConfig;
 import util.json.JsonResponseWriter;
 import validator.*;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,12 +18,7 @@ public class CurrencyServlet extends HttpServlet {
     private static final BaseValidator baseValidator = new BaseValidator();
     private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator(baseValidator);
 
-    private final CurrencyService currencyService;
-
-    public CurrencyServlet() {
-        CurrencyDao dao = new CurrencyDao();
-        this.currencyService = new CurrencyService(dao);
-    }
+    private final CurrencyService currencyService = AppConfig.getCurrencyService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -1,13 +1,12 @@
 package servlet.exchange;
 
-import dao.ExchangeRateDao;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import util.config.AppConfig;
 import util.json.JsonResponseWriter;
 import service.ExchangeService;
 import validator.BaseValidator;
@@ -20,16 +19,11 @@ import java.math.BigDecimal;
 public class ExchangeServlet extends HttpServlet {
     private static final BaseValidator baseValidator = new BaseValidator();
     private static final ExchangeValidator requestValidator = new ExchangeValidator(baseValidator);
-//    ExchangeService exchangeService = ExchangeService.getInstance();
-    private final ExchangeService exchangeService;
 
-    public ExchangeServlet() {
-        ExchangeRateDao dao = new ExchangeRateDao();
-        this.exchangeService = new ExchangeService(dao);
-    }
+    private final ExchangeService exchangeService = AppConfig.getExchangeService();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String baseCode = req.getParameter("from");
         String targetCode = req.getParameter("to");
         String amount = req.getParameter("amount");

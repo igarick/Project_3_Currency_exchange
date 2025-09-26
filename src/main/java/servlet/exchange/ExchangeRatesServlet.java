@@ -1,14 +1,13 @@
 package servlet.exchange;
 
-import dao.ExchangeRateDao;
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
 import exception.ValidationException;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import util.config.AppConfig;
 import util.json.JsonResponseWriter;
 import service.ExchangeRateService;
 import validator.BaseValidator;
@@ -20,16 +19,10 @@ import java.util.List;
 
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
-//    private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
     private static final BaseValidator baseValidator = new BaseValidator();
     private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator(baseValidator);
 
-    private final ExchangeRateService exchangeRateService;
-
-    public ExchangeRatesServlet() {
-        ExchangeRateDao dao = new ExchangeRateDao();
-        this.exchangeRateService = new ExchangeRateService(dao);
-    }
+    private final ExchangeRateService exchangeRateService = AppConfig.getExchangeRateService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ValidationException, IOException {
@@ -39,7 +32,7 @@ public class ExchangeRatesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String baseCode = req.getParameter("baseCurrencyCode");
         String targetCode = req.getParameter("targetCurrencyCode");
         String rate = req.getParameter("rate");
