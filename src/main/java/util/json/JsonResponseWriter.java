@@ -27,7 +27,7 @@ public final class JsonResponseWriter {
             writer.print(json);
         } catch (IOException ex) {
             log.error("Unable to send data", ex);
-            throw ex;
+            throw new IOException("Failed to write JSON response", ex);
         }
     }
 }
