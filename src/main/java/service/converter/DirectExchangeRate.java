@@ -1,4 +1,4 @@
-package service.amountConverter;
+package service.converter;
 
 import dao.ExchangeRateDao;
 import entity.ExchangeRate;

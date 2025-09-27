@@ -1,4 +1,4 @@
-package service.amountConverterUtils;
+package dto;
 
 import java.math.BigDecimal;
 

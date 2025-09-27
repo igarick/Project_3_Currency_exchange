@@ -1,10 +1,10 @@
-package service.amountConverter;
+package service.converter;
 
 import dao.ExchangeRateDao;
 import dto.DtoBuilder;
 import dto.ExchangeConvertedDto;
 import entity.ExchangeRate;
-import service.amountConverterUtils.ConversionData;
+import dto.ConversionData;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -1,6 +1,6 @@
-package service.amountConverter;
+package service.converter;
 
-import service.amountConverterUtils.ConversionData;
+import dto.ConversionData;
 //import dto.ConversionData;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;

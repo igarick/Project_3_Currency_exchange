@@ -1,9 +1,9 @@
-package service.amountConverter;
+package service.converter;
 
 import dto.ExchangeConvertedDto;
 import entity.ExchangeRate;
 import lombok.Getter;
-import service.amountConverterUtils.ConversionData;
+import dto.ConversionData;
 
 import java.math.BigDecimal;
 import java.util.Optional;

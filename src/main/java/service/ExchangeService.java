@@ -3,7 +3,7 @@ package service;
 import dao.ExchangeRateDao;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
-import service.amountConverter.*;
+import service.converter.*;
 
 public class ExchangeService {
     private final ExchangeRateDao exchangeRateDao;
