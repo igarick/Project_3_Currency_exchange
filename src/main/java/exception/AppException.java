@@ -1,13 +1,9 @@
 package exception;
 
-import java.io.Serial;
-import java.io.Serializable;
+import lombok.Getter;
 
-public abstract class AppException extends RuntimeException implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+@Getter
+public abstract class AppException extends RuntimeException {
     private final ErrorInfo errorInfo;
 
     public AppException(ErrorInfo errorInfo, Throwable cause) {
@@ -19,9 +15,4 @@ public abstract class AppException extends RuntimeException implements Serializa
         super(errorInfo.getMessage());
         this.errorInfo = errorInfo;
     }
-
-    public ErrorInfo getErrorInfo() {
-        return errorInfo;
-    }
-
 }
