@@ -5,7 +5,9 @@ import static jakarta.servlet.http.HttpServletResponse.*;
 public enum ErrorInfo {
     // common
 
+    PROPERTIES_ERROR("Properties not found", SC_INTERNAL_SERVER_ERROR),
     CONNECTION_ERROR("Database connection error", SC_INTERNAL_SERVER_ERROR),
+    DRIVER_ERROR("Driver not found", SC_INTERNAL_SERVER_ERROR),
     PATH_ERROR("Incorrect page address", SC_BAD_REQUEST),
     FORM_FIELD_MISSING_ERROR("A required form field is missing", SC_BAD_REQUEST),
 

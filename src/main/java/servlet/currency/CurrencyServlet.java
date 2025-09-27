@@ -2,23 +2,25 @@ package servlet.currency;
 
 import dto.CurrencyCodeDto;
 import dto.CurrencyDto;
-import util.config.AppConfig;
-import util.json.JsonResponseWriter;
-import validator.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.CurrencyService;
+import util.config.AppConfig;
+import util.json.JsonResponseWriter;
+import util.registry.ValidatorRegistry;
+import validator.BaseValidator;
+import validator.RequestCurrencyValidator;
 
 import java.io.IOException;
 
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
-    private static final BaseValidator baseValidator = new BaseValidator();
-    private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator(baseValidator);
+    private static final BaseValidator baseValidator = ValidatorRegistry.getBaseValidator();
+    private static final RequestCurrencyValidator requestValidator = ValidatorRegistry.getRequestCurrencyValidator();
 
-    private final CurrencyService currencyService = AppConfig.getCurrencyService();
+    private static final CurrencyService currencyService = AppConfig.getCurrencyService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

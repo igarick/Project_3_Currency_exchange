@@ -6,10 +6,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import service.ExchangeService;
 import util.config.AppConfig;
 import util.json.JsonResponseWriter;
-import service.ExchangeService;
-import validator.BaseValidator;
+import util.registry.ValidatorRegistry;
 import validator.ExchangeValidator;
 
 import java.io.IOException;
@@ -17,10 +17,8 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchange")
 public class ExchangeServlet extends HttpServlet {
-    private static final BaseValidator baseValidator = new BaseValidator();
-    private static final ExchangeValidator requestValidator = new ExchangeValidator(baseValidator);
-
-    private final ExchangeService exchangeService = AppConfig.getExchangeService();
+    private static final ExchangeValidator requestValidator = ValidatorRegistry.getExchangeValidator();
+    private static final ExchangeService exchangeService = AppConfig.getExchangeService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

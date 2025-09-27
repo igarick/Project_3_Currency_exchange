@@ -20,17 +20,17 @@ public class BaseValidator {
         return path;
     }
 
-    protected boolean isEmpty(String parameter) {
+    public boolean isEmpty(String parameter) {
         return (parameter == null || parameter.isBlank());
     }
 
-    protected void validateCode(String code) {
+    public void validateCode(String code) {
         if (!code.matches(CODE_PATTERN)) {
             throw new ValidationException(ErrorInfo.CURRENCY_CODE_ERROR);
         }
     }
 
-    protected void validateDecimal(String value, ErrorInfo errorInfo, int maxScale) {
+    public void validateDecimal(String value, ErrorInfo errorInfo, int maxScale) {
         BigDecimal bigDecimal = parseDecimal(value, errorInfo);
 
         checkDecimalRange(bigDecimal, errorInfo);
@@ -60,7 +60,7 @@ public class BaseValidator {
         }
     }
 
-    protected void checkIdentity(String baseCode, String targetCode) {
+    public void checkIdentity(String baseCode, String targetCode) {
         if (baseCode.equals(targetCode)) {
             throw new ValidationException(ErrorInfo.IDENTICAL_CURRENCIES_IN_CURRENCY_PAIR);
         }

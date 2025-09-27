@@ -2,15 +2,14 @@ package servlet.exchange;
 
 import dto.ExchangeRateCreateDto;
 import dto.ExchangeRateDto;
-import exception.ValidationException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import service.ExchangeRateService;
 import util.config.AppConfig;
 import util.json.JsonResponseWriter;
-import service.ExchangeRateService;
-import validator.BaseValidator;
+import util.registry.ValidatorRegistry;
 import validator.RequestExchangeRateValidator;
 
 import java.io.IOException;
@@ -19,10 +18,8 @@ import java.util.List;
 
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
-    private static final BaseValidator baseValidator = new BaseValidator();
-    private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator(baseValidator);
-
-    private final ExchangeRateService exchangeRateService = AppConfig.getExchangeRateService();
+    private static final RequestExchangeRateValidator requestValidator = ValidatorRegistry.getRequestExchangeRateValidator();
+    private static final ExchangeRateService exchangeRateService = AppConfig.getExchangeRateService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

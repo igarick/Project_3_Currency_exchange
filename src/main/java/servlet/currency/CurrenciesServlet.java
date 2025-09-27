@@ -6,10 +6,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import service.CurrencyService;
 import util.config.AppConfig;
 import util.json.JsonResponseWriter;
-import service.CurrencyService;
-import validator.BaseValidator;
+import util.registry.ValidatorRegistry;
 import validator.RequestCurrencyValidator;
 
 import java.io.IOException;
@@ -17,10 +17,8 @@ import java.util.List;
 
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
-    private static final BaseValidator baseValidator = new BaseValidator();
-    private static final RequestCurrencyValidator requestValidator = new RequestCurrencyValidator(baseValidator);
-
-    private final CurrencyService currencyService = AppConfig.getCurrencyService();
+    private static final RequestCurrencyValidator requestValidator = ValidatorRegistry.getRequestCurrencyValidator();
+    private static final CurrencyService currencyService = AppConfig.getCurrencyService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

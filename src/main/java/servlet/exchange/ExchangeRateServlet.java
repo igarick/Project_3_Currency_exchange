@@ -3,14 +3,14 @@ package servlet.exchange;
 import dto.CurrencyPairCodeDto;
 import dto.ExchangeRateDto;
 import dto.ExchangeRateUpdateDto;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import service.ExchangeRateService;
 import util.config.AppConfig;
 import util.json.JsonResponseWriter;
-import service.ExchangeRateService;
+import util.registry.ValidatorRegistry;
 import validator.BaseValidator;
 import validator.RequestExchangeRateValidator;
 
@@ -19,10 +19,10 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
-    private static final BaseValidator baseValidator = new BaseValidator();
-    private static final RequestExchangeRateValidator requestValidator = new RequestExchangeRateValidator(baseValidator);
+    private static final BaseValidator baseValidator = ValidatorRegistry.getBaseValidator();
+    private static final RequestExchangeRateValidator requestValidator = ValidatorRegistry.getRequestExchangeRateValidator();
 
-    private final ExchangeRateService exchangeRateService = AppConfig.getExchangeRateService();
+    private static final ExchangeRateService exchangeRateService = AppConfig.getExchangeRateService();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
