@@ -12,8 +12,8 @@ import java.sql.SQLException;
 
 @UtilityClass
 public final class ConnectionManager {
-    private static HikariDataSource DATA_SOURCE;
-    private static HikariConfig config = new HikariConfig();
+    private static final HikariDataSource DATA_SOURCE;
+    private static final HikariConfig config = new HikariConfig();
 
     private static final String DRIVER_KEY = "org.sqlite.JDBC";
     private static final String URL_KEY = "db.url";

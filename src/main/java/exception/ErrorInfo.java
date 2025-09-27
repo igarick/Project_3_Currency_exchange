@@ -1,7 +1,10 @@
 package exception;
 
+import lombok.Getter;
+
 import static jakarta.servlet.http.HttpServletResponse.*;
 
+@Getter
 public enum ErrorInfo {
     // common
 
@@ -50,14 +53,6 @@ public enum ErrorInfo {
     ErrorInfo(String message, int statusCode) {
         this.message = message;
         this.statusCode = statusCode;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public int getStatusCode() {
-        return statusCode;
     }
 
     @Override
