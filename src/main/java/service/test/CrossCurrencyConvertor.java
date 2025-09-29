@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class CrossStrategy implements Strategy {
+public class CrossCurrencyConvertor implements CurrencyConvertor {
     private final ExchangeRateDao exchangeRateDao;
 
     private final String baseCode;
@@ -21,7 +21,7 @@ public class CrossStrategy implements Strategy {
 
     private static final String BASE_CURRENCY_CODE_FOR_CROSS = "USD";
 
-    public CrossStrategy(ExchangeRateDao exchangeRateDao, ExchangeDto exchangeDto) {
+    public CrossCurrencyConvertor(ExchangeRateDao exchangeRateDao, ExchangeDto exchangeDto) {
         this.exchangeRateDao = exchangeRateDao;
         this.baseCode = exchangeDto.baseCode();
         this.targetCode = exchangeDto.targetCode();
@@ -29,7 +29,7 @@ public class CrossStrategy implements Strategy {
     }
 
     @Override
-    public Optional<ExchangeConvertedDto> convertAmount() {
+    public Optional<ExchangeConvertedDto> convert() {
         Optional<ExchangeRate> exchangeRateOptional = findExchangeRate();
 
         if (exchangeRateOptional.isEmpty()) {

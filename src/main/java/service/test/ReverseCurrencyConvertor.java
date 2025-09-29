@@ -11,14 +11,14 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class ReverseStrategy implements Strategy {
+public class ReverseCurrencyConvertor implements CurrencyConvertor {
     private final ExchangeRateDao exchangeRateDao;
 
     private final String baseCode;
     private final String targetCode;
     private final BigDecimal amount;
 
-    public ReverseStrategy(ExchangeRateDao exchangeRateDao, ExchangeDto exchangeDto) {
+    public ReverseCurrencyConvertor(ExchangeRateDao exchangeRateDao, ExchangeDto exchangeDto) {
         this.exchangeRateDao = exchangeRateDao;
         this.baseCode = exchangeDto.baseCode();
         this.targetCode = exchangeDto.targetCode();
@@ -26,7 +26,7 @@ public class ReverseStrategy implements Strategy {
     }
 
     @Override
-    public Optional<ExchangeConvertedDto> convertAmount() {
+    public Optional<ExchangeConvertedDto> convert() {
         Optional<ExchangeRate> exchangeRateOptional = findExchangeRate();
 
         if (exchangeRateOptional.isEmpty()) {

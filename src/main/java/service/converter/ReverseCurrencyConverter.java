@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class ReverseExchangeRate extends AmountConverter {
+public class ReverseCurrencyConverter extends CurrencyConverter {
     private final ExchangeRateDao exchangeRateDao;
 
-    public ReverseExchangeRate(ExchangeRateDao exchangeRateDao) {
+    public ReverseCurrencyConverter(ExchangeRateDao exchangeRateDao) {
         this.exchangeRateDao = exchangeRateDao;
     }
 

@@ -5,10 +5,10 @@ import entity.ExchangeRate;
 
 import java.util.Optional;
 
-public class DirectExchangeRate extends AmountConverter {
+public class DirectCurrencyConverter extends CurrencyConverter {
     private final ExchangeRateDao exchangeRateDao;
 
-    public DirectExchangeRate(ExchangeRateDao exchangeRateDao) {
+    public DirectCurrencyConverter(ExchangeRateDao exchangeRateDao) {
         this.exchangeRateDao = exchangeRateDao;
     }
 

@@ -11,20 +11,20 @@ import java.util.Optional;
 
 public class ExchangeServiceEx {
 
-    private final List<Strategy> strategies;
+    private final List<CurrencyConvertor> strategies;
 
     public ExchangeServiceEx(ExchangeRateDao exchangeRateDao, ExchangeDto exchangeDto) {
         this.strategies = List.of(
-                new DirectStrategy(exchangeRateDao, exchangeDto),
-                new ReverseStrategy(exchangeRateDao, exchangeDto),
-                new CrossStrategy(exchangeRateDao, exchangeDto)
+                new DirectCurrencyConvertor(exchangeRateDao, exchangeDto),
+                new ReverseCurrencyConvertor(exchangeRateDao, exchangeDto),
+                new CrossCurrencyConvertor(exchangeRateDao, exchangeDto)
         );
     }
 
     public ExchangeConvertedDto convertAmountByStrategy() {
         Optional<ExchangeConvertedDto> convertedDto = Optional.empty();
-        for (Strategy strategy : strategies) {
-            Optional<ExchangeConvertedDto> exchangeConvertedDto = strategy.convertAmount();
+        for (CurrencyConvertor currencyConvertor : strategies) {
+            Optional<ExchangeConvertedDto> exchangeConvertedDto = currencyConvertor.convert();
             if (exchangeConvertedDto.isPresent()) {
                 convertedDto = exchangeConvertedDto;
             }

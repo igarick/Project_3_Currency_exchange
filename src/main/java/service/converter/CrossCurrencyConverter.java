@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class CrossExchangeRate extends AmountConverter {
+public class CrossCurrencyConverter extends CurrencyConverter {
     private final ExchangeRateDao exchangeRateDao;
 
-    public CrossExchangeRate(ExchangeRateDao exchangeRateDao) {
+    public CrossCurrencyConverter(ExchangeRateDao exchangeRateDao) {
         this.exchangeRateDao = exchangeRateDao;
     }
 

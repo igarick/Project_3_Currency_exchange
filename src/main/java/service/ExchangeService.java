@@ -3,7 +3,14 @@ package service;
 import dao.ExchangeRateDao;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
-import service.converter.*;
+import exception.ErrorInfo;
+import exception.ServiceException;
+import service.converter.CrossCurrencyConverter;
+import service.converter.CurrencyConverter;
+import service.converter.DirectCurrencyConverter;
+import service.converter.ReverseCurrencyConverter;
+
+import java.util.Optional;
 
 public class ExchangeService {
     private final ExchangeRateDao exchangeRateDao;
@@ -13,12 +20,25 @@ public class ExchangeService {
     }
 
     public ExchangeConvertedDto convertAmount(ExchangeDto exchangeDto) {
-        AmountConverter amountConverter = new DirectExchangeRate(exchangeRateDao);
-        amountConverter.setNext(new ReverseExchangeRate(exchangeRateDao))
-                .setNext(new CrossExchangeRate(exchangeRateDao))
-                .setNext(EndOfChain.getINSTANCE());
+        CurrencyConverter converter = new DirectCurrencyConverter(exchangeRateDao);
+        Optional<ExchangeConvertedDto> dto = converter.convert(exchangeDto);
+        if (dto.isPresent()) {
+            return dto.get();
+        }
 
-        return amountConverter.convert(exchangeDto);
+         converter = new ReverseCurrencyConverter(exchangeRateDao);
+        dto = converter.convert(exchangeDto);
+        if (dto.isPresent()) {
+            return dto.get();
+        }
+
+        converter = new CrossCurrencyConverter(exchangeRateDao);
+        dto = converter.convert(exchangeDto);
+        if (dto.isPresent()) {
+            return dto.get();
+        }
+
+        throw new ServiceException(ErrorInfo.EXCHANGE_RATE_NOT_FOUND);
     }
 
 //    private final ExchangeRateDao exchangeRateDao;

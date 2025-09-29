@@ -13,27 +13,19 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public abstract class AmountConverter {
-    protected AmountConverter next;
+public abstract class CurrencyConverter {
 
-    public AmountConverter setNext(AmountConverter next) {
-        this.next = next;
-        return next;
+    public CurrencyConverter() {
     }
 
-    public ExchangeConvertedDto convert(ExchangeDto dto) {
-        if (isEndOfChain()) {
-            throw new ServiceException(ErrorInfo.EXCHANGE_RATE_NOT_FOUND);
-        }
-
+    public Optional<ExchangeConvertedDto> convert(ExchangeDto dto) {
         String baseCode = dto.baseCode();
         String targetCode = dto.targetCode();
         BigDecimal amount = dto.amount();
 
         Optional<ExchangeRate> exchangeRateOptional = findExchangeRate(baseCode, targetCode);
-
         if (exchangeRateOptional.isEmpty()) {
-            return next.convert(dto);
+            return Optional.empty();
         }
 
         ExchangeRate exchangeRate = exchangeRateOptional.get();
@@ -41,7 +33,7 @@ public abstract class AmountConverter {
 
         ConversionData data = calculateAmountAndRate(amount, rate);
 
-        return buildConvertedDto(exchangeRate, amount, data);
+        return Optional.ofNullable(buildConvertedDto(exchangeRate, amount, data));
     }
 
     protected abstract Optional<ExchangeRate> findExchangeRate(String baseCode, String targetCode);

@@ -17,7 +17,7 @@ import validator.ExchangeValidator;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-@WebServlet("/exchange")
+@WebServlet("/exchange1")
 public class ExchangeServlet_2 extends HttpServlet {
     private static final ExchangeValidator requestValidator = ValidatorRegistry.getExchangeValidator();
     private static final ExchangeService exchangeService = AppConfig.getExchangeService();
