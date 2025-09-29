@@ -10,7 +10,6 @@ import exception.ErrorInfo;
 import exception.ServiceException;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class CurrencyService {
     private final CurrencyDao currencyDao;
@@ -28,31 +27,18 @@ public class CurrencyService {
 
         Currency savedCurrency = currencyDao.save(currencyToSave);
 
-        return buildCurrencyDto(savedCurrency);
+        return DtoBuilder.buildCurrencyDto(savedCurrency);
     }
 
     public List<CurrencyDto> findAll() {
         return currencyDao.findAll().stream()
-                .map(this::buildCurrencyDto)
+                .map(DtoBuilder::buildCurrencyDto)
                 .toList();
     }
 
     public CurrencyDto findByCode(CurrencyCodeDto dto) {
-        String code = dto.code();
-
-        CurrencyDto currencyDto = null;
-        try {
-            currencyDto = currencyDao.findByCode(code).stream()
-                    .map(this::buildCurrencyDto)
-                    .findFirst()
-                    .get();
-        } catch (NoSuchElementException e) {
-            throw new ServiceException(ErrorInfo.CURRENCY_CODE_NOT_FOUND);
-        }
-        return currencyDto;
-    }
-
-    private CurrencyDto buildCurrencyDto(Currency currency) {
-        return DtoBuilder.buildCurrencyDto(currency);
+        return currencyDao.findByCode(dto.code())
+                .map(DtoBuilder::buildCurrencyDto)
+                .orElseThrow(() -> new ServiceException(ErrorInfo.CURRENCY_CODE_NOT_FOUND));
     }
 }
