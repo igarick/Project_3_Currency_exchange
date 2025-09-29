@@ -15,18 +15,18 @@ public class CurrencyDao {
     private final int SQLITE_CONSTRAINT_ERROR_CODE = 19;
     private final String SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
 
-    private final static String SAVE_SQL = """
+    private static final String SAVE_SQL = """
             INSERT INTO Currencies
             (Code, FullName, Sign)
             VALUES (?, ?, ?)
             """;
 
-    private final static String FIND_ALL_SQL = """
+    private static final String FIND_ALL_SQL = """
             SELECT ID, Code, FullName, Sign
             FROM Currencies
             """;
 
-    private final static String FIND_BY_CODE_SQL = FIND_ALL_SQL + """
+    private static final String FIND_BY_CODE_SQL = FIND_ALL_SQL + """
             WHERE Code = ?
             """;
 
@@ -97,18 +97,8 @@ public class CurrencyDao {
             throw new DaoException(ErrorInfo.MAPPING_FAILED, e);
         }
     }
-
-    // & - побитовая операция
-    //2. Обработка ошибок
-    //Метод isConstraintUniqueError использует & вместо &&:
-    //
-    //java
-    //return (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE &
-    //        e.getMessage().contains(SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE));
-    //🔧 Лучше заменить на && — это логическое И, а не побитовая операция.
     private boolean isConstraintUniqueError(SQLException e) {
-        return (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE &
+        return (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE &&
                 e.getMessage().contains(SQLITE_CONSTRAINT_UNIQUE_ERROR_MESSAGE));
     }
-
 }
