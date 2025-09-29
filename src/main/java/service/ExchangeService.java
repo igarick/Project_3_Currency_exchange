@@ -10,49 +10,33 @@ import service.converter.CurrencyConverter;
 import service.converter.DirectCurrencyConverter;
 import service.converter.ReverseCurrencyConverter;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ExchangeService {
     private final ExchangeRateDao exchangeRateDao;
+    private static final List<Function<ExchangeRateDao, CurrencyConverter>> MAPPERS = List.of(
+            (dao) -> new DirectCurrencyConverter(dao),
+            (dao) -> new ReverseCurrencyConverter(dao),
+            (dao) -> new CrossCurrencyConverter(dao)
+    );
 
     public ExchangeService(ExchangeRateDao exchangeRateDao) {
         this.exchangeRateDao = exchangeRateDao;
     }
 
     public ExchangeConvertedDto convertAmount(ExchangeDto exchangeDto) {
-        CurrencyConverter converter = new DirectCurrencyConverter(exchangeRateDao);
-        Optional<ExchangeConvertedDto> dto = converter.convert(exchangeDto);
-        if (dto.isPresent()) {
-            return dto.get();
-        }
-
-         converter = new ReverseCurrencyConverter(exchangeRateDao);
-        dto = converter.convert(exchangeDto);
-        if (dto.isPresent()) {
-            return dto.get();
-        }
-
-        converter = new CrossCurrencyConverter(exchangeRateDao);
-        dto = converter.convert(exchangeDto);
-        if (dto.isPresent()) {
-            return dto.get();
+        for (var mapper : MAPPERS) {
+            CurrencyConverter converter = mapper.apply(exchangeRateDao);
+            Optional<ExchangeConvertedDto> dto = converter.convert(exchangeDto);
+            if (dto.isPresent()) {
+                return dto.get();
+            }
         }
 
         throw new ServiceException(ErrorInfo.EXCHANGE_RATE_NOT_FOUND);
     }
 
-//    private final ExchangeRateDao exchangeRateDao;
-//
-//    public ExchangeService(ExchangeRateDao exchangeRateDao) {
-//        this.exchangeRateDao = exchangeRateDao;
-//    }
-//
-//    public ExchangeConvertedDto convertAmount(ExchangeDto exchangeDto) {
-//        AmountConverter amountConverter = new DirectExchangeRate(exchangeRateDao);
-//        amountConverter.setNext(new ReverseExchangeRate(exchangeRateDao))
-//                .setNext(new CrossExchangeRate(exchangeRateDao))
-//                .setNext(EndOfChain.getINSTANCE());
-//
-//        return amountConverter.convert(exchangeDto);
-//    }
 }
