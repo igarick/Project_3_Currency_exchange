@@ -18,8 +18,8 @@ import java.util.Optional;
 
 public class ExchangeRateDao {
 //    private static final ExchangeRateDao INSTANCE = new ExchangeRateDao();
-    private final String SQLITE_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
-    private final String SQLITE_NOTNULL_ERROR_MESSAGE = "SQLITE_CONSTRAINT_NOTNULL";
+    private static final String SQLITE_UNIQUE_ERROR_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE";
+    private static final String SQLITE_NOTNULL_ERROR_MESSAGE = "SQLITE_CONSTRAINT_NOTNULL";
 
     private static final String FIND_ALL_SQL = """
             SELECT rates.ID,
