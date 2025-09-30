@@ -31,7 +31,7 @@ public class ExchangeServlet extends HttpServlet {
         ExchangeDto exchangeDto = new ExchangeDto(
                 baseCode.toUpperCase(),
                 targetCode.toUpperCase(),
-                new BigDecimal(amount)
+                new BigDecimal(amount).setScale(2)
         );
 
         ExchangeConvertedDto converted = exchangeService.convertAmount(exchangeDto);

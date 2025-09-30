@@ -33,11 +33,6 @@ public class CrossCurrencyConverter extends CurrencyConverter {
         return Optional.of(crossExchangeRate);
     }
 
-    @Override
-    protected boolean isEndOfChain() {
-        return false;
-    }
-
     private ExchangeRate buildExchangeRate(ExchangeRate baseExchangeRate, ExchangeRate targetExchangeRate) {
         BigDecimal baseRate = baseExchangeRate.getRate();
         BigDecimal targetRate = targetExchangeRate.getRate();

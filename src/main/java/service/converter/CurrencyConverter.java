@@ -1,13 +1,10 @@
 package service.converter;
 
 import dto.ConversionData;
-//import dto.ConversionData;
+import dto.DtoBuilder;
 import dto.ExchangeConvertedDto;
 import dto.ExchangeDto;
-import dto.DtoBuilder;
 import entity.ExchangeRate;
-import exception.ServiceException;
-import exception.ErrorInfo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -37,8 +34,6 @@ public abstract class CurrencyConverter {
     }
 
     protected abstract Optional<ExchangeRate> findExchangeRate(String baseCode, String targetCode);
-
-    protected abstract boolean isEndOfChain();
 
     protected ConversionData calculateAmountAndRate(BigDecimal amount, BigDecimal rate) {
         BigDecimal convertedAmount = rate.multiply(amount).setScale(2, RoundingMode.DOWN);

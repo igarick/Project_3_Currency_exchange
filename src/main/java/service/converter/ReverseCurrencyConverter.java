@@ -1,10 +1,10 @@
 package service.converter;
 
 import dao.ExchangeRateDao;
+import dto.ConversionData;
 import dto.DtoBuilder;
 import dto.ExchangeConvertedDto;
 import entity.ExchangeRate;
-import dto.ConversionData;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,11 +31,6 @@ public class ReverseCurrencyConverter extends CurrencyConverter {
                 convertedAmount,
                 reverseRate.setScale(2, RoundingMode.HALF_UP)
         );
-    }
-
-    @Override
-    protected boolean isEndOfChain() {
-        return false;
     }
 
     @Override
